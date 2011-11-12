@@ -106,15 +106,29 @@ class Order_Model extends Base_Model {
 			 return FALSE;
 			}
 
+			$order_total = $this->calc_order_total($data);
+
+			/*
+			 * for handling order status: if order status was passed in then it takes, otherwise we check if a 
+			 * plan happens to have a cost of 0 - hence free and then status should be 'paid' to flag that it's
+			 * an active ("paid") order.
+			 */
+			if (isset($order['status']))
+				$status = $order['status'];
+			else if ($order_total == 0)
+				$status = 'paid';
+			else
+				$status = 'open';
+
     	    $order_id = $this->insert(
     	        array(
     	        	'operator_id' => $order['operator_id'],
     	        	'created_time' => isset($order['created_time']) ? $order['created_time'] : date('Y-m-d H:i:s'),
-    	            'status' => isset($order['status']) ? $order['status'] : 'open',
+    	            'status' => $status,
     	            'sales_rep_id' => isset($order['sales_rep_id']) ? $order['sales_rep_id'] : NULL,
     	            'promotion_id' => isset($order['promotion_id']) && $order['promotion_id'] ? $order['promotion_id'] : NULL,
     	            //'order_total' => isset($order['order_total']) ? $order['order_total'] : '0',
-    	            'order_total' => $this->calc_order_total($data),
+    	            'order_total' => $order_total,
     	            'strategy_id' => $order['strategy_id'],
     	            'expiration_date' => isset($order['expiration_date']) ? $order['expiration_date'] : '0000-00-00 00:00:00',
     	        )
