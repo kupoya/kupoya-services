@@ -1,0 +1,594 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"arr",
+				"array_product"
+			],
+			[
+				"auth",
+				"auth_brand"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "application/modules/advertisement/views/advertisement_create.php",
+			"settings":
+			{
+				"buffer_size": 658,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/modules/signup_wizard/controllers/signup_wizard.php",
+			"settings":
+			{
+				"buffer_size": 3896,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/modules/advertisement/controllers/advertisement_manage.php",
+			"settings":
+			{
+				"buffer_size": 4057,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/modules/advertisement/config/routes.php",
+			"settings":
+			{
+				"buffer_size": 101,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/modules/advertisement/controllers/advertisement.php",
+			"settings":
+			{
+				"buffer_size": 4096,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/core/MY_Controller.php",
+			"settings":
+			{
+				"buffer_size": 7813,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/libraries/Ion_auth.php",
+			"settings":
+			{
+				"buffer_size": 9973,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/models/ion_auth_model.php",
+			"settings":
+			{
+				"buffer_size": 30350,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application/controllers/auth.php",
+			"settings":
+			{
+				"buffer_size": 13019,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 50.0,
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"list ",
+				"Package Control: List Packages"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"Install",
+				"Package Control: Install Package"
+			],
+			[
+				"class",
+				"Preferences: User Global Settings"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"console",
+				"Set Syntax: R Console"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 220.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/liran/Projects/kupoya/services/services/application/config/development/database.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/signup_wizard/config/routes.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/advertisement/controllers/advertisement.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/advertisement/controllers/advertisement_manage.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/advertisement/config/routes.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/signup_wizard/views/signup_wizard.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/strategy/controllers/strategy_manage.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/order/views/order_create.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/order/views/operator_create.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/order/models/order_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/order/models/operator_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/order/controllers/operator_manage.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/order/controllers/order_manage.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/strategy/views/operator_create.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/strategy/models/strategy_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/brand/models/brand_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/campaign/models/campaign_strategies_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/strategy/models/operator_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/strategy/controllers/operator_manage.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/operator/models/operator_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/operator/controllers/operator_manage.php",
+		"/home/liran/Projects/kupoya/services/services/application/libraries/Ion_auth.php",
+		"/home/liran/Projects/kupoya/services/services/application/config/development/email.php",
+		"/home/liran/Projects/kupoya/services/services/application/config/database.php",
+		"/home/liran/Projects/kupoya/services/services/application/config/foreign_chars.php",
+		"/home/liran/Projects/kupoya/services/services/application/config/autoload.php",
+		"/home/liran/Projects/kupoya/services/services/application/config/development/ion_auth.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/signup_wizard/controllers/signup_wizard.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/signup_wizard/models/signup_wizard_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/core/MY_Controller.php",
+		"/home/liran/Projects/kupoya/services/services/application/controllers/signup_wizard.php",
+		"/home/liran/Projects/kupoya/services/services/application/controllers/auth.php",
+		"/home/liran/Projects/kupoya/services/services/application/models/ion_auth_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/models/signup_wizard_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/views/signup_wizard.php",
+		"/home/liran/Projects/kupoya/services/services/application/views/campaign_create_fail.php",
+		"/home/liran/Projects/kupoya/services/services/application/views/campaign_create_success.php",
+		"/home/liran/Projects/kupoya/services/services/application/views/auth/login.php",
+		"/home/liran/Projects/kupoya/services/services/application/views/auth/index.php",
+		"/home/liran/Projects/kupoya/services/services/application/views/auth/create_user.php",
+		"/home/liran/Projects/kupoya/services/services/application/core/MY_Model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/customer/models/customer_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/contact/models/contact_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/campaign/controllers/campaign_manage.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/campaign/views/campaign_list.php",
+		"/home/liran/Projects/kupoya/services/services/themes/admin/views/layouts/admin.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/campaign/models/campaign_mode_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/modules/campaign/models/campaign_model.php",
+		"/home/liran/Projects/kupoya/services/services/application/config/development/config.php",
+		"/home/liran/Projects/kupoya/services/services/application/controllers/welcome.php",
+		"/home/liran/Projects/kupoya/services/services/application/third_party/MX/Controller.php",
+		"/home/liran/Projects/kupoya/services/services/application/libraries/Template.php",
+		"/home/liran/.config/sublime-text-2/Packages/Default/Base File.sublime-settings",
+		"/home/liran/.config/sublime-text-2/Packages/User/PHP.sublime-settings",
+		"/home/liran/.config/sublime-text-2/Packages/User/Global.sublime-settings"
+	],
+	"find":
+	{
+		"height": 33.0
+	},
+	"find_in_files":
+	{
+		"height": 88.0,
+		"include_history":
+		[
+			""
+		],
+		"location_history":
+		[
+			"/home/liran/Projects/kupoya/services/services/application/modules/signup_wizard/controllers"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"date",
+			"form",
+			"helper",
+			"date",
+			"customer",
+			"operator",
+			"opera",
+			"operator",
+			"build",
+			"model",
+			"*",
+			"group_id",
+			"registere",
+			"register",
+			"_ion_where",
+			"_filter_data",
+			"this->errors",
+			"set_error",
+			"function set_error",
+			"function set_error(",
+			"set_error(",
+			"error",
+			"update(",
+			"post_account_creation_successful",
+			"account_creation_successful",
+			"regis",
+			"register(",
+			"refresh(",
+			"ip_address",
+			"last_nam",
+			"first_na",
+			"meta",
+			"users",
+			"meta",
+			"event",
+			"set_hoo",
+			"trigger_events",
+			"join",
+			"meta",
+			"welcome",
+			"data"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"order",
+			"strategy"
+		],
+		"reverse": true,
+		"show_context": true,
+		"use_buffer": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 8,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "application/modules/advertisement/views/advertisement_create.php",
+					"settings":
+					{
+						"buffer_size": 658,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								369,
+								369
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "application/modules/signup_wizard/controllers/signup_wizard.php",
+					"settings":
+					{
+						"buffer_size": 3896,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1475,
+								1475
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 561.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "application/modules/advertisement/controllers/advertisement_manage.php",
+					"settings":
+					{
+						"buffer_size": 4057,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								329,
+								329
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4.0,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "application/modules/advertisement/config/routes.php",
+					"settings":
+					{
+						"buffer_size": 101,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								99,
+								99
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "application/modules/advertisement/controllers/advertisement.php",
+					"settings":
+					{
+						"buffer_size": 4096,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								205,
+								205
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4.0,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "application/core/MY_Controller.php",
+					"settings":
+					{
+						"buffer_size": 7813,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5055,
+								5063
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3128.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "application/libraries/Ion_auth.php",
+					"settings":
+					{
+						"buffer_size": 9973,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1041,
+								1041
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 571.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "application/models/ion_auth_model.php",
+					"settings":
+					{
+						"buffer_size": 30350,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2163,
+								2163
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2441.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "application/controllers/auth.php",
+					"settings":
+					{
+						"buffer_size": 13019,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								407,
+								407
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 102.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 42.0
+	},
+	"input":
+	{
+		"height": 30.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"ion",
+				"application/libraries/Ion_auth.php"
+			],
+			[
+				"brand_model",
+				"application/modules/brand/models/brand_model.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 227.0,
+	"status_bar_visible": true
+}

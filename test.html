@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+<select id="ComboBox" >
+       <option value="1">Value 1</option>
+       <option value="2">Value 2</option>
+       <option value="3">Value 3</option>
+       <option value="4">Value 4</option>
+</select>
+
+
+
+<script type="text/javascript">
+
+	$("#ComboBox").bind('click', 
+		function() {
+			var test = $(this).find(':selected').val();
+			var test = $(this).val();
+			console.log(test);
+			alert('tested selectbox: '+test);
+		}	
+	);
+
+</script>
+
+</body>
+</html>
+
