@@ -16,6 +16,8 @@ class Advertisement_Model extends Base_Model
 	 */
 	protected $primary_key = 'strategy_id';
 
+	protected $strategy_type = 'advertisement';
+
 
 	/**
 	 * Constructor
@@ -45,10 +47,21 @@ class Advertisement_Model extends Base_Model
 	}
 
 
-	public function advertisement_load($strategy_id)
+	public function advertisement_load_blocks($strategy_id, $view)
 	{
 		$this->load->model('strategy/strategy_model');
-		$strategy = $this->strategy_model->get($strategy_id);
+
+		$blocks = $this->strategy_model->get_blocks($strategy_id, $view);
+		return $blocks;
+	}
+
+
+	public function advertisement_load($strategy_id)
+	{
+		$options['strategy_type'] = $this->strategy_type;
+
+		$this->load->model('strategy/strategy_model');
+		$strategy = $this->strategy_model->get($strategy_id, $options);
 		if (!$strategy)
 			return FALSE;
 
@@ -60,9 +73,13 @@ class Advertisement_Model extends Base_Model
 		}
 
 		$advertisement = $this->get($strategy_id);
+
+		// get strategy blocks
+		$advertisement_blocks = $this->advertisement_load_blocks($strategy_id, 'advertisement');
 		
 		$data['strategy'] = (array) $strategy;
 		$data['advertisement'] = (array) $advertisement;
+		$data['advertisement_blocks'] = (array) $advertisement_blocks;
 		$data['plan'] = (array) $plan;
 		return $data;
 	}
@@ -122,12 +139,17 @@ class Advertisement_Model extends Base_Model
 	    if (isset($advertisement['strategy_id']) && $new === FALSE)
 	    {
 	        // confirm user access to this record
-            // $ret = $this->authorize_action($data);
-            // if (!$ret)
-            //     return FALSE;
+            $ret = $this->authorize_action($data);
+            if (!$ret)
+            	return FALSE;
 	        
 	        $strategy_id = $advertisement['strategy_id'];
 	        
+	        // updates the strategy blocks in mongo
+	        $this->load->model('strategy/strategy_model');
+	        $blocks['blocks'] = $data['advertisement_blocks'];
+			$ret = $this->strategy_model->save_blocks($advertisement['strategy_id'], 'advertisement', $blocks);
+
 	        if (isset($advertisement['redirect_url']))
 	            $record['redirect_url'] = $advertisement['redirect_url'];
 	            
