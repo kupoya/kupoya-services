@@ -2,10 +2,25 @@
 class Plan_Model extends Base_Model {
 	
     /**
-     * @var string		model table name
+     * @var string
+     * 	model table name
      */
 	protected $_table = 'plan';
 	
+
+	/**
+	 * @var integer
+	 * 	specify how many free plans are allowed for each operator
+	 */
+	protected $_plans_free_allow = 3;
+
+
+	/**
+	 * @var string
+	 * 	specify the SQL LIKE clause value for finding free plans
+	 */
+	protected $_plans_free_name = 'FREE_%';
+
 	
 	/**
 	 * Constructor
@@ -75,7 +90,7 @@ class Plan_Model extends Base_Model {
 	public function save_plan($data)
 	{
 	    if (!isset($data['strategy']))
-	        return false;
+	        return FALSE;
 	        
 	    $strategy = $data['strategy'];
 	    
@@ -85,7 +100,7 @@ class Plan_Model extends Base_Model {
 	        // confirm user access to this record
             $ret = $this->authorize_action($data);
             if (!$ret)
-                return false;
+                return FALSE;
 	        
 	        $strategy_id = $strategy['id'];
 	        
@@ -117,7 +132,7 @@ class Plan_Model extends Base_Model {
 	        if (!$ret)
 	        {
 	            log_message('debug', ' - Strategy => Save => error updating record');
-	            return false;
+	            return FALSE;
 	        }
 
 	    }
@@ -129,7 +144,7 @@ class Plan_Model extends Base_Model {
 	         if (!isset($strategy['plan_id']))
 	         {
 	             log_message('error', ' - Strategy => Save => Insert => missing plan_id');
-	             return false;
+	             return FALSE;
 	         }   
 	        
     	    $strategy_id = $this->insert(
@@ -146,7 +161,7 @@ class Plan_Model extends Base_Model {
 	    }
 	    
 	    if (!$strategy_id)
-	        return false;
+	        return FALSE;
 	        
 	    log_message('debug', ' + Strategy => Save => saved record');
 	    
@@ -157,6 +172,93 @@ class Plan_Model extends Base_Model {
 	}
 	
 	
+
+	public function check_free_plans(&$data = NULL)
+	{
+		/*
+		 *
+			SELECT  `strategy`.`name` , p . cost
+			FROM (
+			`strategy`
+			)
+			JOIN  `plan` AS p ON  `p`.`id` =  `strategy`.`plan_id` 
+			JOIN  `campaign_strategies` AS cs ON  `cs`.`strategy_id` =  `strategy`.`id` 
+			JOIN  `code` AS code ON  `code`.`campaign_id` =  `cs`.`campaign_id` 
+			JOIN  `brand` AS  `b` ON  `b`.`id` =  `code`.`brand_id` 
+			JOIN  `operator` AS  `op` ON  `op`.`brand_id` =  `b`.`id` 
+			WHERE 
+			 `op`.`id` =  '1'
+			AND
+			 p.cost = 0
+		 *
+		 *
+
+		$this->db->select('strategy.id');
+		$this->db->distinct(); // @TODO needs to fix cause this doesnt work
+		$this->db->select('p.cost');
+        $this->db->from('strategy');
+        $this->db->join('plan AS p', 'p.id = strategy.plan_id');
+		$this->db->join('campaign_strategies AS cs', 'cs.strategy_id = strategy.id');
+		$this->db->join('code AS code', 'code.campaign_id = cs.campaign_id');
+        $this->db->join('brand AS b', 'b.id = code.brand_id');
+        $this->db->join('operator AS op', 'op.brand_id = b.id');
+
+        // search for all plans that start with FREE_ - these are our free plans
+        $this->db->like('p.name', 'FREE_');
+
+        // operator stuff...
+
+        $this->db->where('op.id', $operator_id);
+
+        //$ret = $this->db->get()->row_array();
+        $ret = $this->db->count_all_results();
+        */
+
+        $query = "
+        SELECT  COUNT(DISTINCT(strategy.id)) AS count
+			FROM (`strategy`)
+			JOIN  `plan` AS p ON  `p`.`id` =  `strategy`.`plan_id` 
+			JOIN  `campaign_strategies` AS cs ON  `cs`.`strategy_id` =  `strategy`.`id` 
+			JOIN  `code` AS code ON  `code`.`campaign_id` =  `cs`.`campaign_id` 
+			JOIN  `brand` AS  `b` ON  `b`.`id` =  `code`.`brand_id` 
+			JOIN  `operator` AS  `op` ON  `op`.`brand_id` =  `b`.`id` 
+			WHERE 
+			 `op`.`id` =  ?
+			AND
+			 `p`.`name` LIKE ?
+        ";
+
+        if (!isset($data['operator_id']))
+        {
+            $operator_id = $this->get_operator_id();
+        }
+        else
+        {
+            $operator_id = $data['operator_id'];
+        }
+        
+        if (!$operator_id)
+            return FALSE;
+            
+        $res = $this->db->query($query, array($operator_id, $this->_plans_free_name));
+        
+        if (!$res)
+            return FALSE;
+
+        // get result row from query
+        $row = $res->row_array();
+        
+        // free query result
+        $res->free_result();
+
+		// check amount of currently used free plans against 
+        if ($row['count'] >= $this->_plans_free_allow)
+        	return FALSE;
+        
+        return (int) $row['count'];
+	}
+
+
 	
 	public function authorize_action(&$data)
 	{
@@ -166,6 +268,38 @@ class Plan_Model extends Base_Model {
 	    return $bool;
 	}
 	
+
+
+	public function check_plan_is_free($plan_id)
+	{	
+		if (!isset($plan_id))
+			return FALSE;
+
+		/*
+		Sadly not fun to use AR cause it attempts to escape the $this->_plans_free_name string
+
+		$this->db->select('p.id');
+		$this->db->from('plan AS p');
+		$this->db->where('p.id', $plan_id);
+		$this->db->like('p.name', $this->_plans_free_name);
+		$ret = $this->db->get()->row_array();
+		*/
+
+		$query = '
+		SELECT p.id
+		FROM plan as p
+		WHERE
+			p.id = ?
+		AND
+			p.name LIKE ?
+		';
+
+		$res = $this->db->query($query, array($plan_id, $this->_plans_free_name));
+		if (!$res)
+			return FALSE;
+
+		return (bool) $res->num_rows();
+	}
 
 
 	/**
@@ -203,7 +337,7 @@ class Plan_Model extends Base_Model {
         }
         else
         {
-            return false;
+            return FALSE;
         }
         
         if (!isset($data['operator_id']))
@@ -216,7 +350,7 @@ class Plan_Model extends Base_Model {
         }
         
         if (!$operator_id)
-            return false;
+            return FALSE;
             
         $this->db->where('op.id', $operator_id);
         
@@ -224,7 +358,7 @@ class Plan_Model extends Base_Model {
         $ret = $this->db->get()->row_array();
         
         if (!$ret)
-            return false;
+            return FALSE;
         
         return $ret;
 	}
