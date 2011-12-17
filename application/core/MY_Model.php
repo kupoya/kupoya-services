@@ -569,7 +569,7 @@ class Base_Model extends MY_Model {
         	return $operator['id'];
 
 	    log_message('error', 'checking now operator_id: could not find');
-	    return false;
+	    return FALSE;
 	}
 
 	public function get_operator()
@@ -580,7 +580,7 @@ class Base_Model extends MY_Model {
         	return $operator;
 
 	    log_message('error', 'checking now operator: could not find');
-	    return false;
+	    return FALSE;
 	}
 	
 
@@ -596,7 +596,7 @@ class Base_Model extends MY_Model {
 	    // check that brand is not disabled
 	    // check that campaign strategy has been paid for (is active via the order table)
 	    
-	    return true;
+	    return TRUE;
 	}
     
 }
