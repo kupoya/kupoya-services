@@ -16,13 +16,152 @@ class Strategy_Model extends Base_Model {
 	{
 		parent::__construct();
 	}
+
+
+	/**
+	 * Get the brand the code information associated with a specific campaign/strategy mapping
+	 * 
+	 * @param array $info
+	 * 	elements: $info['strategy']['id'] and $info['campaign']['id']
+	 * @param bool $load
+	 * 	@TODO if $load is set to TRUE it will return the result by loading the code and brand info
+	 * 
+	 * @return array $ret
+	 * elements: $ret['code']['id'] and $ret['brand']['id']
+	 */
+	public function get_parents($info, $load = FALSE)
+	{
+		if (!isset($info['strategy']['id']) || !isset($info['campaign']['id']))
+			return FALSE;
+		/*
+		SELECT code.brand_id
+		FROM strategy AS s
+		JOIN campaign_strategies AS cs ON cs.strategy_id = s.id
+		JOIN code AS code ON code.campaign_id = cs.campaign_id
+		WHERE 
+		s.id = 2
+		AND
+		cs.campaign_id = 1
+		*/
+
+		// confirm user access to this record
+	    $ret = $this->authorize_action($info);
+	    if (!$ret)
+	        return FALSE;
+
+		$this->db->select('code.id, code.brand_id');
+		$this->db->from('strategy AS s');
+		$this->db->join('campaign_strategies AS cs', 'cs.strategy_id = s.id');
+		$this->db->join('code AS code', 'code.campaign_id = cs.campaign_id');
+		$this->db->where('s.id', $info['strategy']['id']);
+		$this->db->where('cs.campaign_id', $info['campaign']['id']);
+
+		// we don't really need anymore than 1 row returned and actually that would be a bug if that's the case
+		$this->db->limit(1);
+
+		$row = $this->db->get()->row_array();
+		$result['brand']['id'] = $row['brand_id'];
+		$result['code']['id'] = $row['id'];
+
+		return $result;
+
+	}
 	
 
 
-	public function get($strategy_id = NULL)
+	public function get_blocks($strategy_id = NULL, $view = 'login')
+	{
+		if (!isset($strategy_id))
+			return FALSE;
+
+		$this->load->library('mongo_db');
+
+		$where['strategy_id'] = (int) $strategy_id;
+		
+		if ($view != NULL)
+			$where['view'] = $view;
+		
+		$blocks = $this->mongo_db->get_where('strategy_template', $where);
+
+		if (isset($blocks[0]['blocks']))
+			return $blocks[0]['blocks'];
+		
+		return FALSE;
+	}
+
+
+	public function save_blocks($strategy_id = NULL, $view, $data)
+	{
+		if (!isset($strategy_id) || !isset($view) || !isset($data))
+			return FALSE;
+
+		$this->load->library('mongo_db');
+
+		// set where criteria
+		$this->mongo_db->where('strategy_id', (int) $strategy_id);
+		$this->mongo_db->where('view', $view);
+
+		// set the fields to update
+		$this->mongo_db->set($data);
+
+		$ret = $this->mongo_db->update('strategy_template');
+
+		return $ret;
+	}
+
+
+
+	/**
+	 * Validate the strategy being loaded is of a specific type
+	 * 
+	 * @param integer $strategy_id
+	 * 	the strategy_id to load
+	 * @param mixed $type
+	 * 	the strategy type in either numeric/integer (the id row in the db) or the string as the name of it
+	 */
+	public function validate_strategy_type($strategy_id, $type = '')
+	{
+		/*
+		SELECT s.id, st.id, st.name
+		FROM strategy AS s
+		JOIN plan AS p ON p.id = s.plan_id
+		JOIN strategy_type AS st ON st.id = p.strategy_type
+		WHERE s.id =2
+		AND st.name =  'advertisement'
+		*/
+
+		if (!$type || !$strategy_id)
+			return FALSE;
+
+		$this->db->select('s.id');
+		$this->db->from('strategy AS s');
+		$this->db->join('plan AS p', 'p.id = s.plan_id');
+		$this->db->join('strategy_type AS st', 'st.id = p.strategy_type');
+		$this->db->where('s.id', $strategy_id);
+
+		if (is_numeric($type))
+			$this->db->where('st.id', $type);
+		else
+			$this->db->where('st.name', $type);
+
+		// we don't really need anymore than 1 row returned and actually that would be a bug if that's the case
+		$this->db->limit(1);
+
+		return $this->db->get()->row_array();
+	}
+
+
+	public function get($strategy_id = NULL, $options)
 	{
 		
 		if (!isset($strategy_id))
+			return FALSE;
+
+		// verify the strategy type
+		// make sure the strategy_id that we're going to load matches the strategy type
+		// that we are actually loading...
+		$ret = $this->validate_strategy_type($strategy_id, $options['strategy_type']);
+		if (!$ret)
 			return FALSE;
 
 		// verify access to this record
@@ -77,15 +216,7 @@ class Strategy_Model extends Base_Model {
 	    if (!$this->promotion_validate($data)) {
 	    	//$this->session->set_flashdata('error', 'promotion id is not correct');
 	    	return FALSE;
-	    }
-
-	    // creates the campaign name if wasn't provided - which is a derived copy of the strategy name
-	    if (!isset($data['campaign']['name']) && isset($data['strategy']['name']))
-	    {
-	    	$data['campaign']['name'] = mb_substr($data['strategy']['name'], 0, 44);
-	    }
-
-	    // @TODO check that user is allowed to create another strategy
+	    } 
 
 	    // get operator session
 	    $operator = $this->get_operator();
@@ -98,6 +229,16 @@ class Strategy_Model extends Base_Model {
 	    $this->load->model('code/code_model');
 	    $this->load->model('order/order_model');
 	    $this->load->model('operator/operator_model');
+
+	    // validate plans order
+	    //$data['plan']['id']
+
+
+		// creates the campaign name if wasn't provided - which is a derived copy of the strategy name
+	    if (!isset($data['campaign']['name']) && isset($data['strategy']['name']))
+	    {
+	    	$data['campaign']['name'] = mb_substr($data['strategy']['name'], 0, 44);
+	    }  
 
 	    // set brand information
 	    $data['brand']['id'] = $operator['brand_id'];
@@ -193,6 +334,9 @@ class Strategy_Model extends Base_Model {
 	        if (isset($strategy['language']))
 	            $record['language'] = $strategy['language'];
 
+	        if (!isset($record))
+	        	return FALSE;
+
 	        $ret = $this->update($strategy_id, $record);
 	        if (!$ret)
 	        {
@@ -207,13 +351,14 @@ class Strategy_Model extends Base_Model {
 	         
 	         // @TODO
 	         // do we always allow users to create strategies? maybe we need to check for something first?
+	         // like to limit them to X strategies per campaign or something?
 
 	         // if no associated record ids provided then we quit
 	         if (!isset($strategy['plan_id']))
 	         {
 	             log_message('error', ' - Strategy => Save => Insert => missing plan_id');
 	             return FALSE;
-	         }   
+	         }
 	        
     	    $strategy_id = $this->insert(
     	        array(
