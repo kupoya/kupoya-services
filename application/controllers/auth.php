@@ -75,7 +75,7 @@ class Auth extends Base_Controller {
 				{
 					// get the operator base information
 					$this->load->model('operator/operator_model');
-					$record_operator = $this->operator_model->get($user_id);
+					$record_operator = $this->operator_model->get($user_id, TRUE);
 
 					$operator = array(
 						'id' => $record_operator->id,
@@ -149,7 +149,9 @@ class Auth extends Base_Controller {
 		{
 			redirect('auth/login', 'refresh');
 		}
-		$user = $this->ion_auth->get_user($this->session->userdata('user_id'));
+		//$user = $this->ion_auth->get_user($this->session->userdata('user_id'));
+		$operator = $this->session->userdata('operator');
+		$user = $this->ion_auth->get_user($operator['id']);
 
 		if ($this->form_validation->run() == false)
 		{ //display the form
@@ -179,19 +181,22 @@ class Auth extends Base_Controller {
 		}
 		else
 		{
+			$this->load->model('ion_auth_model');
 			$identity = $this->session->userdata($this->config->item('identity', 'ion_auth'));
 
 			$change = $this->ion_auth->change_password($identity, $this->input->post('old'), $this->input->post('new'));
 
 			if ($change)
-			{ //if the password was successfully changed
+			{ 	
+				//if the password was successfully changed
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				$this->logout();
+				// logout the user?
+				//$this->logout();
 			}
 			else
 			{
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				redirect('auth/change_password', 'refresh');
+				//redirect('auth/change_password', 'refresh');
 			}
 		}
 	}

@@ -218,7 +218,7 @@ class Ion_auth_model extends CI_Model
 	   }
 
 	   $this->trigger_events('extra_where');
-		
+
 	   $query = $this->db->select('password')
 			     ->select('salt')
 			     ->where('id', $id)
@@ -239,7 +239,6 @@ class Ion_auth_model extends CI_Model
 	    else
 	    {
 			$salt = substr($hash_password_db->password, 0, $this->salt_length);
-
 			return $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
 	    }
 	}
@@ -380,16 +379,15 @@ class Ion_auth_model extends CI_Model
 	    $this->trigger_events('extra_where');
 		
 	    $query = $this->db->select('password, salt')
-			      ->where($this->identity_column, $identity)
+			      //->where($this->identity_column, $identity)
+			      ->where('id', $identity)
 			      ->limit(1)
 			      ->get($this->tables['users']);
 
 	    $result = $query->row();
-
 	    $db_password = $result->password;
 	    $old	     = $this->hash_password_db($identity, $old);
 	    $new	     = $this->hash_password($new, $result->salt);
-
 	    if ($db_password === $old)
 	    {
 	    	//store the new password and reset the remember code so all remembered instances have to re-login
@@ -400,7 +398,7 @@ class Ion_auth_model extends CI_Model
 
 
 			$this->trigger_events('extra_where');
-			$this->db->update($this->tables['users'], $data, array($this->identity_column => $identity));
+			$this->db->update($this->tables['users'], $data, array('id' => $identity));
 
 			
 			$return = $this->db->affected_rows() == 1;
