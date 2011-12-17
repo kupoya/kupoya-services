@@ -17,6 +17,27 @@ class Brand_Model extends Base_Model {
 		parent::__construct();
 	}
 	
+
+	/**
+	 * 
+	 * @param array $data
+	 * 	array of data, at least expecting brand element with id element
+	 * 
+	 */
+	public function get($data = NULL)
+	{
+		if (!isset($data['brand']['id']))
+			return FALSE;
+
+		// verify access to this record
+		//$data['brand']['id'] = $record_id;
+		if ($this->authorize_action($data))
+		{
+			return parent::get($data['brand']['id']);
+		}
+
+		return FALSE;
+	}
 	
 	
 	/**
@@ -36,7 +57,7 @@ class Brand_Model extends Base_Model {
 	    elseif (isset($data['brand']['id']))
 	        $brand_id = $data['brand']['id'];
 	    else
-	        return false;
+	        return FALSE;
 
 	    $ret = $this->update($brand_id, array('blocked' => $status));
 	    
@@ -53,7 +74,7 @@ class Brand_Model extends Base_Model {
 	public function save_brand($data)
 	{
 		if (!isset($data['brand']))
-	        return false;
+	        return FALSE;
 	        
 	    $brand = $data['brand'];
 
@@ -63,7 +84,7 @@ class Brand_Model extends Base_Model {
 	        // confirm user access to this record
             $ret = $this->authorize_action($data);
             if (!$ret)
-                return false;
+                return FALSE;
 	        
 	        $brand_id = $brand['id'];
 	        if (isset($brand['name']))
@@ -87,11 +108,15 @@ class Brand_Model extends Base_Model {
 	        if (isset($brand['service_id']))
 	            $record['service_id'] = $brand['service_id'];	            
   
+  			// nothing to update?
+  			if (!$record)
+  				return FALSE;
+
 	        $ret = $this->update($brand_id, $record);
 	        if (!$ret)
 	        {
 	            log_message('debug', ' - Brand => Save => error updating brand');
-	            return false;
+	            return FALSE;
 	        }
 
 	    }
@@ -103,7 +128,7 @@ class Brand_Model extends Base_Model {
 	         if (!isset($brand['contact_id']) || !isset($brand['customer_id']) || !isset($brand['service_id']))
 	         {
 	             log_message('error', ' - Brand => Save => Insert => missing one of contact_id, customer_id or service_id');
-	             return false;
+	             return FALSE;
 	         }   
 	        
     	    $brand_id = $this->insert(
@@ -121,7 +146,7 @@ class Brand_Model extends Base_Model {
 	    }
 	    
 	    if (!$brand_id)
-	        return false;
+	        return FALSE;
 	        
 	    log_message('debug', ' + Brand => Save => saved brand');
 	    
@@ -147,9 +172,9 @@ class Brand_Model extends Base_Model {
 	    /*
          * SQL Example:
          * 
-			SELECT op.id, op.brand_id
-     		FROM operator op
-     		JOIN brand b ON op.brand_id = b.id
+			SELECT b.id
+     		FROM brand AS b
+     		JOIN operator op ON op.brand_id = b.id
      		WHERE
      			op.id = 1
      		AND
@@ -157,16 +182,19 @@ class Brand_Model extends Base_Model {
      	 *
      	 *
          */
-        $this->db->select('op.id');
-        $this->db->select('op.brand_id');
-        $this->db->from('operator AS op');
-        $this->db->join('brand AS b', 'op.brand_id = b.id');
         
-        if (isset($data['id']))
-            $this->db->where('b.id', $data['id']);
-        else
-            return false;
+        if (!isset($data['brand']))
+        	return FALSE;
+
+        $brand = $data['brand'];
+        if (!$brand || !isset($brand['id']))
+        	return FALSE;
         
+        $this->db->select('b.id');
+        $this->db->from('brand AS b');
+        $this->db->join('operator AS op', 'op.brand_id = b.id');
+
+        $this->db->where('b.id', $brand['id']);        
         
         if (!isset($data['operator_id']))
         {
@@ -178,15 +206,15 @@ class Brand_Model extends Base_Model {
         }
         
         if (!$operator_id)
-            return false;
+            return FALSE;
             
-        $this->db->where('op.id', $data['operator_id']);
+        $this->db->where('op.id', $operator_id);
         
         
         $ret = $this->db->get()->row_array();
         
         if (!$ret)
-            return false;
+            return FALSE;
         
         return $ret;
 	}
