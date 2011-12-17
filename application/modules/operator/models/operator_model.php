@@ -60,6 +60,62 @@ class Operator_Model extends Base_Model {
 	}
 	
 
+	public function get($record_id = NULL, $override = FALSE)
+	{
+		if (!isset($record_id) || !$record_id)
+			return FALSE;
+
+		// this is required because in controllers/auth.php:78 we're trying to get the operator records
+		// but unable to pass through operator_auth() because no operator session object is set yet
+		if ($override === TRUE)
+			return parent::get($record_id);
+
+		// verify access to this record
+		$data['operator_id'] = $record_id;
+		if ($this->authorize_action($data['operator_id']))
+		{
+			return parent::get($record_id);
+		}
+
+		return FALSE;
+	}
+
+
+	public function load_operator($data)
+	{
+		if (!isset($data['operator_id']))
+		{
+			return FALSE;
+		}
+
+        $operator = $this->get($data['operator_id']);
+        if ($operator)
+        {
+        	$data['operator'] = (array) $operator;
+        }
+        else
+        	return FALSE;
+		
+		// also load contact information for this operator
+		if (isset($data['operator']))
+		{
+			$this->load->model('contact/contact_model');
+			$options['operator']['id'] = $data['operator_id'];
+			$options['contact']['id'] = $data['operator']['contact_id'];
+			$contact = $this->contact_model->get($options);
+			if ($contact)
+			{
+				$data['contact'] = (array) $contact;
+			}
+		}
+
+		if (!$data)
+			return FALSE;
+
+		return $data;
+	}
+
+
 	/**
 	 * Save an Operator
 	 * 
@@ -79,7 +135,7 @@ class Operator_Model extends Base_Model {
 	        // confirm user access to this record
             $ret = $this->authorize_action($data);
             if (!$ret)
-                return false;
+                return FALSE;
 	        
 	        $operator_id = $operator['id'];
 	        
@@ -155,9 +211,13 @@ class Operator_Model extends Base_Model {
 	    return $bool;
 	}
 	
-		
+	
 	public function auth_operator(&$data)
 	{
+		// make sure loaded operator is the same as current operator
+		if ($this->get_operator_id() != $data['operator_id'])
+			return FALSE;
+
 	    /*
          * SQL Example:
          * 
@@ -168,8 +228,8 @@ class Operator_Model extends Base_Model {
      	 *
      	 *
          */
-	    
-	    $operator = $data['operator'];
+
+	    // $operator = $data['operator'];
 	    
         $this->db->select('op.id');
         $this->db->select('op.brand_id');
@@ -185,7 +245,7 @@ class Operator_Model extends Base_Model {
         }
         
         if (!$operator_id)
-            return false;
+            return FALSE;
             
         $this->db->where('op.id', $operator_id);
         
@@ -193,7 +253,7 @@ class Operator_Model extends Base_Model {
         $ret = $this->db->get()->row_array();
         
         if (!$ret)
-            return false;
+            return FALSE;
         
         return $ret;
 	}
