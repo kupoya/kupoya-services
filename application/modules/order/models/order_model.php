@@ -145,6 +145,37 @@ class Order_Model extends Base_Model {
 	    );
 
 	}
+
+
+
+	public function validate_plan_order(&$data)
+	{
+		
+		$plan = array();
+
+		// checking to see if we received the plan id
+		if (is_numeric($data))
+		{
+			$plan['id'] = $data;
+		}
+		else
+		{
+			$plan = $data['plan'];
+		}
+
+		if (!isset($plan['id']) || !is_numeric($plan['id']))
+			return FALSE;
+
+		$this->load->model('plan/plan_model');
+
+		// check if ordered plan is the 'free' plan
+
+
+		// get how many free plans
+		
+        //$ret = $this->plan_model->check_free_plans();
+
+	}
 	
 	
 
