@@ -17,6 +17,23 @@ class Contact_Model extends Base_Model {
 		parent::__construct();
 	}
 	
+
+	public function get($data = NULL)
+	{
+		if (!isset($data) || !$data)
+			return FALSE;
+
+		if (!isset($data['contact']['id']))
+			return FALSE;
+
+		// verify access to this record
+		if ($this->authorize_action($data))
+		{
+			return parent::get($data['contact']['id']);
+		}
+
+		return FALSE;
+	}
 	
 	/**
 	 * Save a Contact
@@ -27,7 +44,9 @@ class Contact_Model extends Base_Model {
 	public function save_contact(&$data)
 	{
 	    if (!isset($data['contact']))
-	        return false;
+	    {
+	        return FALSE;
+	    }
 	        
 	    $contact = $data['contact'];
 	    
@@ -37,7 +56,7 @@ class Contact_Model extends Base_Model {
 	        // confirm user access to this record
             $ret = $this->authorize_action($data);
             if (!$ret)
-                return false;
+                return FALSE;
 	        
 	        $contact_id = $contact['id'];
 	        
@@ -75,7 +94,7 @@ class Contact_Model extends Base_Model {
 	        if (!$ret)
 	        {
 	            log_message('debug', ' - Contact => Save => error updating record');
-	            return false;
+	            return FALSE;
 	        }
 
 	    }
@@ -100,7 +119,7 @@ class Contact_Model extends Base_Model {
 	    
 	    if (!$contact_id) {
 	        log_message('debug', ' - Contact => Save => error inserting record');
-	        return false;
+	        return FALSE;
 	    }
 	        
 	    log_message('debug', ' + Contact => Save => saved record');
@@ -121,70 +140,85 @@ class Contact_Model extends Base_Model {
 	    return $bool;
 	}
 	
-		
+	
+	/**
+	 * 
+	 * @param array $data
+	 * 	one of the elements for each contact record
+	 * 	['operator']['id']
+	 *  ['customer']['id']
+	 *  ['brand']['id']
+	 * 
+	 */
 	public function auth_contact(&$data)
 	{
 	    /*
          * SQL Example:
          * 
-			SELECT op.id, op.brand_id
-     		FROM operator op
-     		JOIN brand b ON op.brand_id = b.id
-     		JOIN customer cust ON b.customer_id = cust.id
+         	SELECT contact.id
+     		FROM contact 
+     		JOIN operator op ON op.contact_id = contact.id
      		WHERE
      			op.id = 1
      		AND
-     			cust.id = 1
+     			contact.id = 1
      	 *
      	 *
          */
 	    
 	    $contact = $data['contact'];
 	    
-        $this->db->select('op.id');
-        $this->db->select('op.brand_id');
-        $this->db->from('operator AS op');
-        $this->db->join('brand AS b', 'op.brand_id = b.id');
-        $this->db->join('customer AS cust', 'b.customer_id = cust.id');
-        
+	    $this->db->select('contact.id');
+	    $this->db->from('contact');
+
+	    // join whichever table is required to get the correct contact entry
         // we need to choose which table to join for the contact id
         // it can either be operator, brand or customer and we verify this by
         // checking which of them is set in the $data payload
-        if (isset($data['operator']))
-            $this->db->join('contact AS contact', 'op.contact_id = contact.id');
-        elseif (isset($data['brand']))
-            $this->db->join('contact AS contact', 'b.contact_id = contact.id');
-        elseif (isset($data['customer']))
-            $this->db->join('contact AS contact', 'cust.contact_id = contact.id');
-        else
-            return false;
-        
-        
+	    if (isset($data['operator']['id']))
+	    {
+	    	$this->db->join('operator AS op', 'op.contact_id = contact.id');
+	    }
+	    elseif (isset($data['brand']['id']))
+	    {
+	    	$this->db->join('brand AS b', 'b.contact_id = contact.id');
+			$this->db->join('operator AS op', 'op.brand_id = b.id');
+	    	$this->db->where('b.id', $data['brand']['id']);
+	    }
+	    else if (isset($data['customer']['id']))
+	    {
+	    	$this->db->join('customer AS cust', 'cust.contact_id = contact.id');
+	    	$this->db->join('brand AS b', 'b.customer_id = cust.id');
+	    	$this->db->join('operator AS op', 'op.brand_id = b.id');
+	    	$this->db->where('cust.id', $data['customer']['id']);
+	    }
+	    else
+	    	return FALSE;
+       
         if (isset($contact['id']))
             $this->db->where('contact.id', $contact['id']);
         else
-            return false;
+            return FALSE;
         
-        
-        if (!isset($data['operator_id']))
+        if (!isset($data['operator']['id']))
         {
             $operator_id = $this->get_operator_id();
         }
         else
         {
-            $operator_id = $data['operator_id'];
+            $operator_id = $data['operator']['id'];
         }
         
         if (!$operator_id)
-            return false;
+            return FALSE;
             
-        $this->db->where('op.id', $data['operator_id']);
+		$this->db->where('op.id', $operator_id);
         
         
         $ret = $this->db->get()->row_array();
         
         if (!$ret)
-            return false;
+            return FALSE;
         
         return $ret;
 	}
