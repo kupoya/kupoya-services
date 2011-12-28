@@ -18,6 +18,65 @@ class Strategy_Model extends Base_Model {
 	}
 
 
+
+	/**
+	 * Get all strategies with extended information for a specific brand id
+	 * 
+	 * @param array $data
+	 * 	$data['brand']['id'] = the brand id
+	 * 
+	 * @return array $results mysql result array 
+	 */
+	public function get_strategies(&$data)
+	{
+		if (!isset($data['brand']['id']) || empty($data['brand']['id']) || !is_numeric($data['brand']['id']))
+			return FALSE;
+
+		$brand_id = $data['brand']['id'];
+
+		/*
+		SELECT
+			code.id, code.brand_id, cs.campaign_id, s.id as strategy_id, s.name as strategy_name, st.name as strategy_type, p.bank as bank_size, p.plan_type as plan_type 
+		FROM code
+		JOIN campaign_strategies cs ON cs.campaign_id = code.campaign_id
+		JOIN strategy s ON s.id = cs.strategy_id
+		JOIN plan p ON p.id = s.plan_id
+		JOIN strategy_type st ON st.id = p.strategy_type
+		WHERE
+			code.brand_id = 1
+		AND
+			cs.active = 1
+		*/
+
+		// confirm user access to this record
+		$this->load->model('brand/brand_model');
+	    $ret = $this->brand_model->authorize_action($data);
+	    if (!$ret)
+	        return FALSE;
+
+		$this->db->select('code.id, code.brand_id, cs.campaign_id, s.id as strategy_id, s.name as strategy_name, st.name as strategy_type, p.bank as bank_size, p.plan_type as plan_type');
+		$this->db->from('code');
+
+		$this->db->join('campaign_strategies AS cs', 'campaign_id = code.campaign_id');
+		$this->db->join('strategy AS s', 's.id = cs.strategy_id');
+		$this->db->join('plan AS p', 'p.id = s.plan_id');
+		$this->db->join('strategy_type AS st', 'st.id = p.strategy_type');
+
+		$this->db->where('code.brand_id', $brand_id);
+		$this->db->where('cs.active', '1');
+
+		// we don't really need anymore than 1 row returned and actually that would be a bug if that's the case
+		//$this->db->limit(1);
+
+		return $this->db->get()->result_array();
+		// $row = $this->db->get()->row_array();
+		// $result['brand']['id'] = $row['brand_id'];
+		// $result['code']['id'] = $row['id'];
+
+		return $result;
+
+	}
+
 	/**
 	 * Get the brand the code information associated with a specific campaign/strategy mapping
 	 * 
