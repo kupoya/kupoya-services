@@ -169,8 +169,6 @@ class Public_Controller extends Base_Controller {
 */
 class Authenticated_Controller extends Base_Controller {
 
-	
-
 	/**
 	 * Logged In 
 	 * 
@@ -213,10 +211,29 @@ class Authenticated_Controller extends Base_Controller {
 			return $this->uri->segment(1, base_url());
 	}
 	
+
 	public function __construct()
 	{
 		parent::__construct();
 		
+		// menu system
+		$this->load->library('menu/menu');
+
+		// load necessary libraries for an authenticated user
+		$this->load->library('session');
+		$this->load->library('ion_auth');
+		$this->load->library('form_validation');
+		$this->load->database();
+		// load necessary helpers
+		$this->load->helper('url');
+
+		// require user to be logged in to the system
+		$this->logged_in();
+
+		// load language file
+		$this->lang->load('app', 'english');
+
+
 		Events::trigger('system:authenticated:before');
 		
 		// decide on theme to show up
@@ -228,22 +245,12 @@ class Authenticated_Controller extends Base_Controller {
 		// template settings
 		$this->template->set_layout('admin');
 
-		// menu system
-		$this->load->library('menu/menu');
-
-		// load necessary libraries for an authenticated user
-		$this->load->library('session');
-		$this->load->library('ion_auth');
-		$this->load->library('form_validation');
-		$this->load->database();
-		// load necessary helpers
-		$this->load->helper('url');
-		// require user to be logged in to the system
-		$this->logged_in();
+		// template partials
+		$this->template->set_partial('header', 'layouts/partials/header');
+		$this->template->set_partial('footer', 'layouts/partials/footer');
+		$this->template->set_partial('notifications', 'layouts/partials/notifications');
 
 
-		//$this->template->set_partial('header', 'layouts/partials/header');
-		//$this->template->set_partial('footer', 'layouts/partials/footer');
 
 		//Asset::add_asset('css', css('1.css', 'test'), 'test');
 		//Asset::add_asset('css', css('2.css', 'test'), 'test');

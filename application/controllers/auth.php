@@ -17,6 +17,15 @@ class Auth extends Base_Controller {
 		$this->load->library('form_validation');
 		$this->load->database();
 		$this->load->helper('url');
+
+		// decide on theme to show up
+		$theme = 'public';
+
+		$this->asset->set_theme($theme);
+		$this->template->set_theme($theme);
+
+		// template settings
+		$this->template->set_layout('public');
 	}
 
 	//redirect if needed, otherwise display the user list
@@ -85,13 +94,32 @@ class Auth extends Base_Controller {
 						'last_login' => $record_operator->last_login,
 					);
 
-					// get operator contact information
+					// get operator's contact information
 					$this->load->model('contact/contact_model');
 
-					$record_contact = $this->contact_model->get($record_operator->contact_id);
-					$operator['name'] = $record_contact->name;
-					$operator['city'] = $record_contact->city;
-					$operator['state'] = $record_contact->state;
+					$contact_info = array();
+					$contact_info['contact']['id'] = $record_operator->contact_id;
+					$contact_info['operator']['id'] = $record_operator->id;
+
+					$record_contact = $this->contact_model->get($contact_info);
+					if ($record_contact)
+					{
+						$operator['name'] = $record_contact->name;
+						$operator['city'] = $record_contact->city;
+						$operator['state'] = $record_contact->state;
+					}
+
+					// get operator's brand information
+					$this->load->model('brand/brand_model');
+					$brand_info = array();
+					$brand_info['brand']['id'] = $record_operator->brand_id;
+					$brand_info['operator']['id'] = $record_operator->id;
+					$record_brand = $this->brand_model->get($brand_info);
+					if ($record_brand)
+					{
+						$operator['brand_name'] = $record_brand->name;
+						$operator['brand_picture'] = $record_brand->picture;
+					}
 
 					// set the operator data in session
 					$this->session->set_userdata('operator', $operator);
@@ -108,7 +136,8 @@ class Auth extends Base_Controller {
 			}
 		}
 		else
-		{  //the user is not logging in so display the login page
+		{  
+			//the user is not logging in so display the login page
 			//set the flash data error message if there is one
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
@@ -122,7 +151,8 @@ class Auth extends Base_Controller {
 				'type' => 'password',
 			);
 
-			$this->load->view('auth/login', $this->data);
+			//$this->load->view('auth/login', $this->data);
+			$this->template->build('auth/login', $this->data);
 		}
 	}
 
