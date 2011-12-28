@@ -196,13 +196,13 @@ class Brand_Model extends Base_Model {
 
         $this->db->where('b.id', $brand['id']);        
         
-        if (!isset($data['operator_id']))
+        if (!isset($data['operator']['id']))
         {
             $operator_id = $this->get_operator_id();
         }
         else
         {
-            $operator_id = $data['operator_id'];
+            $operator_id = $data['operator']['id'];
         }
         
         if (!$operator_id)

@@ -1,21 +1,34 @@
 <?php
 class Brand_Manage extends Authenticated_Controller {
     
-    
+    protected $_data = array();
+
+    protected $_menu = array();
+
+    protected $_notifications = array();
     
     public function __construct()
     {
         parent::__construct();
+
+        $this->load->library('form_validation');
+        $this->load->language('brand', 'english');
+
+        $this->_menu['context'] = 'account';
     }
     
     
     public function index()
     {
+
+        // @TODO this is a place holder for the main /brand URI but it's not functional yet
+        // so forwarding to edit_brand
+        redirect('brand/edit_brand');
         
-        //$this->load->model('brand/brand_model');
+        // $this->load->model('brand/brand_model');
         
-        $data['data'] = $ret;
-        $this->template->build('brand_list', $data);
+        // $data['data'] = $ret;
+        // $this->template->build('brand_list', $data);
     }
     
 
@@ -28,13 +41,12 @@ class Brand_Manage extends Authenticated_Controller {
         $this->form_validation->set_rules('brand_id', 'Brand ID', 'required');
         //$this->form_validation->set_rules('brand_picture', 'Brand Picture', 'required');
 
+        $success = FALSE;
+
         if ($this->form_validation->run() === FALSE)
         {
-            //error
-            log_message('debug', '==> 2');
-
+            // missing brand_id
             
-            //$this->template->build('brand_edit', $data);
             redirect($this->redirect_back());
         }
         else
@@ -72,18 +84,20 @@ class Brand_Manage extends Authenticated_Controller {
                 // attempt to create path for the brand
                 if (!mkdir($upload_config['upload_path']))
                 {
+                    $this->_notifications['error'][] = $this->lang->line("We apologize but we are unable to process brand logos at the moment");
+                    
                     // error, could not create directory for some reason... 
-                    redirect('brand/edit_brand');
+                    $success = FALSE;
+                    //redirect('brand/edit_brand#tab_');
                 }
             }
 
             if (!$this->upload->do_upload('brand_picture'))
             {
-                log_message('debug', '==> 5');
-                //$error = array('error' => $this->upload->display_errors());
+                $this->_notifications['error'][] = $this->upload->display_errors();
 
-                //$this->load->view('upload_form', $error);
-                redirect('brand/edit_brand');
+                //redirect('brand/edit_brand#tab_logo');
+                $success = FALSE;
             }
             else
             {
@@ -99,18 +113,28 @@ class Brand_Manage extends Authenticated_Controller {
                 if (!$ret)
                 {
                     // show error, saving image failed
-                    redirect('brand/edit_brand');                    
+                    //redirect('brand/edit_brand#tab_logo');
+                    $success = FALSE;
+                    $this->_notifications['error'][] = $this->lang->line('Could not process uploaded image');
                 }
 
-                redirect('brand/edit_brand');
+                //redirect('brand/edit_brand#tab_logo');
+                $success = TRUE;
+                $this->_notifications['success'][] = $this->lang->line('Settings saved');
             }
 
         }
+
+        $this->session->set_flashdata('notifications', $this->_notifications);
+        redirect('brand/edit_brand#tab_logo', 'refresh');
         
     }
     
     public function edit_brand($brand_id = NULL)
     {
+        $this->_menu['page'] = 'my_brands';
+        $this->template->set('menu', $this->_menu);
+
         $this->load->model('operator/operator_model');
         $this->load->model('brand/brand_model');
 
@@ -142,7 +166,10 @@ class Brand_Manage extends Authenticated_Controller {
         $payload['brand']['id'] = $brand_id;
         $brand = (array) $this->brand_model->get($payload);
         if (!$brand) {
-            // @TODO notify the user that there has been a problem loading this strategy
+            // @TODO notify the user that there has been a problem loading this brand
+            $this->_notifications['error'][] = $this->lang->line('Cant load brand information');
+            $this->session->set_flashdata('notifications', $this->_notifications);
+
             redirect($this->redirect_back());
         }
 
@@ -150,28 +177,14 @@ class Brand_Manage extends Authenticated_Controller {
 
         if ($this->form_validation->run() === FALSE)
         {
-            //error
-            log_message('debug', '==> 2');
-
+            // post was probably not submitted or validation failed
             
-            $this->template->build('brand_edit', $data);
+            $this->_data = array_merge($this->_data, $data);
+            $this->template->build('brand_edit', $this->_data);
             // redirect($this->redirect_back());
         }
         else
         {
-            log_message('debug', '==> 3');
-
-            // save strategy info
-            //$this->load->model('advertisement/advertisement_model');
-            //$data = $this->advertisement_model->save_advertisement($data);
-
-            //$this->load->model('ion_auth_model');
-
-            //$operator = $this->session->userdata('operator');
-
-            //$change = $this->ion_auth_model->change_password($operator['id'], $this->input->post('old_password'), $this->input->post('new_password'));
-            //$change = $this->ion_auth_model->change_password($identity, $this->input->post('old_password'), $this->input->post('new_password'));
-
             $payload['operator_id'] = $operator_id;
             $tmp_brand = $this->input->post('brand');
             $brand = array(
@@ -185,21 +198,18 @@ class Brand_Manage extends Authenticated_Controller {
 
             if ($change)
             {
-                //if the password was successfully changed
-                //$this->session->set_flashdata('message', $this->ion_auth->messages());
-                // logout the user afterwards?
-                log_message('debug', '==> 4');
-                //$this->logout();
+                $this->_notifications['success'][] = $this->lang->line('Settings saved');
             }
             else
             {
                 // notify the user something bad happened
-                //$this->session->set_flashdata('message', $this->ion_auth->errors());
-                //redirect('auth/change_password', 'refresh');
+                $this->_notifications['error'][] = $this->lang->line('Can not save brand information');
             }
 
-            $this->template->build('brand_edit', $data);
-            //redirect($this->redirect_back());
+            $this->session->set_flashdata('notifications', $this->_notifications);
+
+            $this->_data = array_merge($this->_data, $data);
+            $this->template->build('brand_edit', $this->_data);
         }
     }
      
