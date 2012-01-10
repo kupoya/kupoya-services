@@ -1,13 +1,21 @@
 <?php
 class Operator_Manage extends Authenticated_Controller {
     
-    
+    protected $_data = array();
+
+    protected $_menu = array();
+
+    protected $_notifications = array();
+
     
     public function __construct()
     {
         parent::__construct();
 
         $this->load->library('form_validation');
+        $this->load->language('operator', 'english');
+
+        $this->_menu['context'] = 'account';
 
         $this->load->helper('form');
         $this->load->helper('url');
@@ -17,16 +25,22 @@ class Operator_Manage extends Authenticated_Controller {
     public function index()
     {
         
-        //$this->load->model('operator/operator_model');
+        // @TODO this is a place holder for the main /brand URI but it's not functional yet
+        // so forwarding to edit_brand
+        redirect('operator/view_contact');
+
+        // //$this->load->model('operator/operator_model');
         
-        $data['data'] = $ret;
-        $this->template->build('operator_list', $data);
+        // $data['data'] = $ret;
+        // $this->template->build('operator_list', $data);
     }
     
 
 
     public function change_password($operator_id = NULL)
     {
+        $this->_menu['page'] = 'profile';
+        $this->template->set('menu', $this->_menu);
 
         $this->load->model('operator/operator_model');
 
@@ -43,7 +57,7 @@ class Operator_Manage extends Authenticated_Controller {
         $data['operator'] = (array) $this->operator_model->get($operator_id);
 
         if (!$data) {
-            // @TODO notify the user that there has been a problem loading this strategy
+            // @TODO notify the user that there has been a problem loading this operator
             redirect($this->redirect_back());
         }
 
@@ -55,15 +69,11 @@ class Operator_Manage extends Authenticated_Controller {
         if ($this->form_validation->run() === FALSE)
         {
             //error
-            log_message('debug', '==> 2');
 
             $this->template->build('operator_edit', $data);
-            // redirect($this->redirect_back());
         }
         else
         {
-            log_message('debug', '==> 3');
-
             // save strategy info
             //$this->load->model('advertisement/advertisement_model');
             //$data = $this->advertisement_model->save_advertisement($data);
@@ -81,7 +91,7 @@ class Operator_Manage extends Authenticated_Controller {
                 //if the password was successfully changed
                 //$this->session->set_flashdata('message', $this->ion_auth->messages());
                 // logout the user afterwards?
-                log_message('debug', '==> 4');
+                $this->_notifications['success'][] = $this->lang->line('Settings saved');
                 //$this->logout();
             }
             else
@@ -89,17 +99,22 @@ class Operator_Manage extends Authenticated_Controller {
                 // notify the user something bad happened
                 //$this->session->set_flashdata('message', $this->ion_auth->errors());
                 //redirect('auth/change_password', 'refresh');
+                $this->_notifications['error'][] = $this->lang->line('operator:error:saving_password');
             }
 
-            $this->template->build('operator_edit', $data);
-            //redirect($this->redirect_back());
+            $this->session->set_flashdata('notifications', $this->_notifications);
+            redirect('operator/change_password');
+            //$this->template->build('operator_edit', $data);
         }
-
 
     }
 
+
     public function view_contact($operator_id = NULL)
     {
+        $this->_menu['page'] = 'profile';
+        $this->template->set('menu', $this->_menu);
+
         $this->load->model('operator/operator_model');
 
         $this->form_validation->set_rules('operator_id', 'Operator ID', 'required');
@@ -131,7 +146,7 @@ class Operator_Manage extends Authenticated_Controller {
 
         $data = $this->operator_model->load_operator(array('operator_id' => $operator_id));
         if (!$data) {
-            // @TODO notify the user that there has been a problem loading this strategy
+            // @TODO notify the user that there has been a problem loading this operator
             redirect($this->redirect_back());
         }
 
@@ -142,27 +157,11 @@ class Operator_Manage extends Authenticated_Controller {
 
         if ($this->form_validation->run() === FALSE)
         {
-            //error
-            log_message('debug', '==> 2');
-
             $this->template->build('operator_view_contact', $data);
             // redirect($this->redirect_back());
         }
         else
         {
-            log_message('debug', '==> 3');
-
-            // save strategy info
-            //$this->load->model('advertisement/advertisement_model');
-            //$data = $this->advertisement_model->save_advertisement($data);
-
-            //$this->load->model('ion_auth_model');
-
-            //$operator = $this->session->userdata('operator');
-
-            //$change = $this->ion_auth_model->change_password($operator['id'], $this->input->post('old_password'), $this->input->post('new_password'));
-            //$change = $this->ion_auth_model->change_password($identity, $this->input->post('old_password'), $this->input->post('new_password'));
-
             $this->load->model('contact/contact_model');
             $payload['operator'] = $operator;
             $payload['contact'] = $contact;
@@ -170,21 +169,19 @@ class Operator_Manage extends Authenticated_Controller {
 
             if ($change)
             {
-                //if the password was successfully changed
-                //$this->session->set_flashdata('message', $this->ion_auth->messages());
-                // logout the user afterwards?
-                log_message('debug', '==> 4');
-                //$this->logout();
+                $this->_notifications['success'][] = $this->lang->line('Settings saved');
             }
             else
             {
                 // notify the user something bad happened
-                //$this->session->set_flashdata('message', $this->ion_auth->errors());
-                //redirect('auth/change_password', 'refresh');
+                $this->_notifications['error'][] = $this->lang->line('operator:error:saving_profile_contact');
             }
 
+            //$this->session->set_flashdata('notifications', $this->_notifications);
+            //redirect('operator/view_contact');
+            
+            $this->template->set('notifications', $this->_notifications);
             $this->template->build('operator_view_contact', $data);
-            //redirect($this->redirect_back());
         }
     }
      

@@ -125,6 +125,10 @@ class Brand_Manage extends Authenticated_Controller {
 
         }
 
+        
+        //$this->template->set('notifications', $this->_notifications);
+        // we anyway need to do a re-load due to file upload so we don't rebuild
+        
         $this->session->set_flashdata('notifications', $this->_notifications);
         redirect('brand/edit_brand#tab_logo', 'refresh');
         
@@ -181,7 +185,6 @@ class Brand_Manage extends Authenticated_Controller {
             
             $this->_data = array_merge($this->_data, $data);
             $this->template->build('brand_edit', $this->_data);
-            // redirect($this->redirect_back());
         }
         else
         {
@@ -206,7 +209,8 @@ class Brand_Manage extends Authenticated_Controller {
                 $this->_notifications['error'][] = $this->lang->line('Can not save brand information');
             }
 
-            $this->session->set_flashdata('notifications', $this->_notifications);
+            //$this->session->set_flashdata('notifications', $this->_notifications);
+            $this->template->set('notifications', $this->_notifications);
 
             $this->_data = array_merge($this->_data, $data);
             $this->template->build('brand_edit', $this->_data);
