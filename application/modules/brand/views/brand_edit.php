@@ -77,7 +77,7 @@ echo "<br/><br/>";
 										</dd>
 									</dl>
 								</fieldset>
-								<button type="submit">Submit</button>
+								<button type="submit"><?=lang('Submit')?></button>
 							</form>
 
 					</div>
@@ -107,8 +107,12 @@ echo "<br/><br/>";
 										</dd>
 									</dl>
 								</fieldset>
-								<button type="submit">Submit</button>
+								<button type="submit"><?=lang('Submit')?></button>
 							</form>
 
 					</div>
 					<!-- /Tab Content #tab_logo -->
+
+				
+				</section>
+				<!-- /Article Content -->
