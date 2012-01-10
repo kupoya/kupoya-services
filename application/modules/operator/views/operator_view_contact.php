@@ -1,83 +1,166 @@
 <?php
 
-echo "<br/><br/>";
-if (isset($message)) echo $message;
-echo "<br/><br/>";
+// echo "<br/><br/>";
+// if (isset($message)) echo $message;
+// echo "<br/><br/>";
 
-echo validation_errors();
-echo "<br/><br/>";
-echo "<br/><br/>";
+// echo validation_errors();
+// echo "<br/><br/>";
+// echo "<br/><br/>";
 
-var_dump($operator);
-echo "<br/><br/>";
-var_dump($contact);
+// var_dump($operator);
+// echo "<br/><br/>";
+// var_dump($contact);
 
-echo "<br/><br/>";
-echo "<br/><br/>";
+// echo "<br/><br/>";
+// echo "<br/><br/>";
 
-//var_dump($error);
+// //var_dump($error);
 
 
-echo "<br/><br/>";
+// echo "<br/><br/>";
 ?>
 
-<form name='operator' action='<?php echo base_url().'operator/view_contact'?>' method='post'>
 
-	operator id
-	<input type='text' name='operator_id'
-			value='<?= set_value('operator_id', isset($operator['id']) ? $operator['id'] : '')  ?>' />
-	<br/>
 
-	contact name
-	<input type='text' name='contact[name]'
-			value='<?= set_value('contact[name]', isset($contact['name']) ? $contact['name'] : '')  ?>' />
-	<br/>
+				<!-- Article Header -->
+				<header>
+					<h2><?=lang('operator:my_profile')?></h2>
+					<!-- Article Header Tab Navigation -->
+					<nav>
+						<ul class="tab-switch-url">
+							<li><a href="<?=base_url().'operator/view_contact'?>" class="default-tab current" rel="tooltip" title="Switch to next tab"><?=lang('operator:view_contact')?></a></li>
+							<li><a href="<?=base_url().'operator/change_password'?>" rel="tooltip" title="Switch to next tab"><?=lang('operator:change_password')?></a></li>
+						</ul>
+					</nav>
+					<!-- /Article Header Tab Navigation -->
+				</header>
+				<!-- /Article Header -->
 
-	contact first_name
-	<input type='text' name='contact[first_name]'
-			value='<?= set_value('contact[first_name]', isset($contact['first_name']) ? $contact['first_name'] : '')  ?>' />
-	<br/>
+				<!-- Article Content -->
+				<section>
 
-	contact last_name
-	<input type='text' name='contact[last_name]'
-			value='<?= set_value('contact[last_name]', isset($contact['last_name']) ? $contact['last_name'] : '')  ?>' />
-	<br/>
+					<!-- Tab Content #tab0 -->
+					<div class="tab default-tab" id="tab0">
 
-	contact address
-	<input type='text' name='contact[address]'
-			value='<?= set_value('contact[address]', isset($contact['address']) ? $contact['address'] : '')  ?>' />
-	<br/>
+							<form name='operator' action='<?php echo base_url().'operator/view_contact'?>' method='post'>
+								<!-- Inputs -->
+								<!-- Use class .small, .medium or .large for predefined size -->
+								<input type='hidden' name='operator_id'
+									value='<?= set_value('operator_id', isset($operator['id']) ? $operator['id'] : '')  ?>' />
+								<fieldset>
+									<legend><?=lang('settings')?></legend>
+									<dl>
+										<dt>
+											<label><?=lang('Name')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[name]'); ?>
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+												name="contact[name]" maxlength='45'
+												value='<?= set_value('contact[name]', isset($contact['name']) ? $contact['name'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
 
-	contact city
-	<input type='text' name='contact[city]'
-			value='<?= set_value('contact[city]', isset($contact['city']) ? $contact['city'] : '')  ?>' />
-	<br/>
+										<dt>
+											<label><?=lang('First_Name')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[first_name]'); ?>
+											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
+												name="contact[first_name]" maxlength='100'
+												value='<?= set_value('contact[first_name]', isset($contact['first_name']) ? $contact['first_name'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
 
-	contact state
-	<input type='text' name='contact[state]'
-			value='<?= set_value('contact[state]', isset($contact['state']) ? $contact['state'] : '')  ?>' />
-	<br/>
+										<dt>
+											<label><?=lang('Last_Name')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[last_name]'); ?>
+											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
+												name="contact[last_name]" maxlength='100'
+												value='<?= set_value('contact[last_name]', isset($contact['last_name']) ? $contact['last_name'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
 
-	contact country
-	<input type='text' name='contact[country]'
-			value='<?= set_value('contact[country]', isset($contact['country']) ? $contact['country'] : '')  ?>' />
-	<br/>
+										<dt>
+											<label><?=lang('Address')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[address]'); ?>
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+												name="contact[address]" maxlength='45'
+												value='<?= set_value('contact[address]', isset($contact['address']) ? $contact['address'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
 
-	contact phone
-	<input type='text' name='contact[phone]'
-			value='<?= set_value('contact[phone]', isset($contact['phone']) ? $contact['phone'] : '')  ?>' />
-	<br/>
+										<dt>
+											<label><?=lang('City')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[city]'); ?>
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+												name="contact[city]" maxlength='45'
+												value='<?= set_value('contact[city]', isset($contact['city']) ? $contact['city'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
 
-	contact gender
-	<input type='text' name='contact[gender]'
-			value='<?= set_value('contact[gender]', isset($contact['gender']) ? $contact['gender'] : '')  ?>' />
-	<br/>
+										<dt>
+											<label><?=lang('State')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[state]'); ?>
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+												name="contact[state]" maxlength='45'
+												value='<?= set_value('contact[state]', isset($contact['state']) ? $contact['city'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
 
-	contact email
-	<input type='text' name='contact[email]'
-			value='<?= set_value('contact[email]', isset($contact['email']) ? $contact['email'] : '')  ?>' />
-	<br/>
 
-	<input type='submit' name='submit' value='submit' />
+										<dt>
+											<label><?=lang('Country')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[country]'); ?>
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+												name="contact[country]" maxlength='45'
+												value='<?= set_value('contact[country]', isset($contact['country']) ? $contact['country'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
 
-</form>
+										<dt>
+											<label><?=lang('Email')?></label>
+										</dt>
+										<dd>
+											<?php $err = form_error('contact[email]'); ?>
+											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
+												name="contact[email]" maxlength='45'
+												value='<?= set_value('contact[email]', isset($contact['email']) ? $contact['email'] : '')  ?>'
+												>
+											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+										</dd>
+
+										<dt>
+											<label><?=lang('operator:contact:purpose')?></label>
+										</dt>
+										<dd class="text">
+											<p><?=lang('operator:contact:purpose:text')?></p>
+										</dd>
+									</dl>
+								</fieldset>
+								<button type="submit"><?=lang('Submit')?></button>
+							</form>
+
+					</div>
+					<!-- /Tab Content #tab0 -->
+
+				</section>
+				<!-- /Article Content -->
