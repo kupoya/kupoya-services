@@ -84,16 +84,13 @@
 		<!-- Main Navigation -->
 		<nav id="main-nav">
 			<ul>
-				<li><a href="<?= base_url() ?>" title="" class="dashboard no-submenu">Dashboard</a></li> <!-- Use class .no-submenu to open link instead of a sub menu-->
+				<li><a href="<?= base_url() ?>" title="" class="dashboard no-submenu"><?=lang('menu:dashboard');?></a></li> <!-- Use class .no-submenu to open link instead of a sub menu-->
 				<!-- Use class .current to open submenu on page load -->
 				<li class="<?= (isset($menu['context']) && $menu['context'] == 'campaigns') ? 'current' : '' ?>">
-					<a href="" title="" class="events">Campaigns</a>
+					<a href="" title="" class="events"><?=lang('menu:campaigns');?></a>
 					<ul>
-						<li><a href="" title="">My Events</a></li>
-						<li><a href="" title="">Add Event</a></li>
-						<li><a href="" title="">Edit Event</a></li>
-						<li><a href="" title="">Event Management</a></li>
-						<li><a href="" title="">Settings</a></li>
+						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'my_campaigns') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/index'?>" title=""><?=lang('menu:campaigns:my_campaigns');?></a></li>
+						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'new_campaign') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/new'?>" title=""><?=lang('menu:campaigns:new_campaign');?></a></li>
 					</ul>
 				</li>
 				<li>
@@ -126,7 +123,6 @@
 					</ul>
 				</li>
 				<li><a href="" title="" class="gallery">Image Gallery</a><span title="You have 47 new tasks">47</span></li>
-				<li><a href="" title="" class="settings">Settings</a></li>
 			</ul>
 		</nav>
 		<!-- /Main Navigation -->
@@ -2501,6 +2497,11 @@
 	<script src="js/script.js"></script>
 	-->
 
+	<?php
+		$txt = (isset($template['partials']['pre_jquery'])) ? $template['partials']['pre_jquery'] : '';
+		echo $txt;
+	?>
+
 	<?=	theme_js('libs/selectivizr.js'); ?>
 	<?=	theme_js('jquery/jquery.nyromodal.js'); ?>
 	<?=	theme_js('jquery/jquery.tipsy.js'); ?>
@@ -2513,6 +2514,11 @@
 	<?=	theme_js('jquery/jquery.visualize.js'); ?>
 	<?=	theme_js('jquery/jquery.visualize.tooltip.js'); ?>
 	<?=	theme_js('script.js'); ?>
+
+	<?php
+		$txt = (isset($template['partials']['post_jquery'])) ? $template['partials']['post_jquery'] : '';
+		echo $txt;
+	?>
 
 	<!--
 	<script>
