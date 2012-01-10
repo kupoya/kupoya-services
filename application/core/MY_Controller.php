@@ -245,6 +245,10 @@ class Authenticated_Controller extends Base_Controller {
 		// template settings
 		$this->template->set_layout('admin');
 
+		// set parsing to disabled
+		//$this->template->parser = FALSE;
+		$this->template->enable_parser(FALSE);
+
 		// template partials
 		$this->template->set_partial('header', 'layouts/partials/header');
 		$this->template->set_partial('footer', 'layouts/partials/footer');
