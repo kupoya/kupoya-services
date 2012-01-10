@@ -1,7 +1,16 @@
-
 <!-- Error Notifications -->
 <?php
-	$notifications = $this->session->flashdata('notifications');
+	// @TODO also add support for combining notifications coming from session...
+	$notifications_session = $this->session->flashdata('notifications');
+	if (isset($notifications_session) && count ($notifications_session))
+	{
+		//$notifications += array_merge($notifications, $this->session->flashdata('notifications'));
+		if (isset($notifications))
+			$notifications += $notifications_session;
+		else
+			$notifications = $notifications_session;
+	}
+
 	if (isset($notifications['error'])):
 ?>
 		<div class="notification error">
@@ -21,7 +30,6 @@
 
 <!-- Success Notifications -->
 <?php
-	$notifications = $this->session->flashdata('notifications');
 	if (isset($notifications['success'])):
 ?>
 		<div class="notification success">
@@ -41,7 +49,6 @@
 
 <!-- Information Notifications -->
 <?php
-	$notifications = $this->session->flashdata('notifications');
 	if (isset($notifications['information'])):
 ?>
 		<div class="notification information">
@@ -61,7 +68,6 @@
 
 <!-- Attention Notifications -->
 <?php
-	$notifications = $this->session->flashdata('notifications');
 	if (isset($notifications['attention'])):
 ?>
 		<div class="notification attention">
