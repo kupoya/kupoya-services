@@ -1,6 +1,7 @@
 <?php
 class Advertisement_Manage extends Authenticated_Controller {
     
+    protected $_data = array();
     
     
     public function __construct()
@@ -9,18 +10,33 @@ class Advertisement_Manage extends Authenticated_Controller {
 
         $this->load->library('form_validation');
 
+        $this->load->language('advertisement', 'english');
+
         $this->load->helper('form');
         $this->load->helper('url');
+
+        $this->_data['menu']['context'] = 'campaigns';
+
     }
     
     
     public function index()
     {
-        
-        //$this->load->model('advertisement/advertisement_model');
-        
-        $data['data'] = $ret;
-        $this->template->build('advertisement_list', $data);
+        $this->load->library('datatables');
+        $this->datatables
+            ->select('id, serial, status, user_id, purchased_time, strategy_id')
+            ->from('coupon');
+
+        $this->datatables->edit_column('id', '<a href="profiles/edit/$1">$2</a>', 'id, username');
+
+
+        $data['result'] = $this->datatables->generate();
+        //$data = null;
+
+        $this->load->view('ajax', $data);
+
+        //$this->_data['data'] = $ret;
+        //$this->template->build('advertisement_list', $this->_data);
     }
     
 
@@ -121,6 +137,8 @@ class Advertisement_Manage extends Authenticated_Controller {
 
     public function save()
     {
+        $this->menu_page = 'manage';
+
         // strategy_id is really required here
         $this->form_validation->set_rules('strategy[id]', 'Strategy', 'required|integer');
 
@@ -151,19 +169,24 @@ class Advertisement_Manage extends Authenticated_Controller {
             $this->load->model('advertisement/advertisement_model');
             $data = $this->advertisement_model->save_advertisement($data);
 
+            $data['menu']['context'] = $this->menu_context;
+            $data['menu']['page'] = $this->menu_page;
+
             $this->template->build('advertisement_edit', $data);
         }
 
     }
 
 
-    public function view($strategy_id = 0, $campaign_id = 0)
+    public function edit($strategy_id = 0, $campaign_id = 0)
     {
         if (!$strategy_id || !is_numeric($strategy_id))
             redirect($this->redirect_back());
 
         if (!$campaign_id || !is_numeric($campaign_id))
             redirect($this->redirect_back());
+
+        $this->_data['menu']['page'] = 'campaigns';
 
 // $this->load->model('plan/plan_model');
 // $ret = $this->plan_model->check_plan_is_free(1);
@@ -182,7 +205,44 @@ class Advertisement_Manage extends Authenticated_Controller {
         $this->load->model('plan/plan_model');
         $data['plans'] = $this->plan_model->get_dropdown();
         $data['campaign']['id'] = $campaign_id;
-        $this->template->build('advertisement_edit', $data);
+
+        $this->_data = array_merge($this->_data, $data);
+
+        $this->template->build('advertisement_edit', $this->_data);
+    }
+
+
+    public function view($strategy_id = 0, $campaign_id = 0)
+    {
+        if (!$strategy_id || !is_numeric($strategy_id))
+            redirect($this->redirect_back());
+
+        if (!$campaign_id || !is_numeric($campaign_id))
+            redirect($this->redirect_back());
+
+        $this->_data['menu']['page'] = 'campaigns';
+
+// $this->load->model('plan/plan_model');
+// $ret = $this->plan_model->check_plan_is_free(1);
+
+        // load strategy information
+        $this->load->model('advertisement/advertisement_model');
+        $data = $this->advertisement_model->advertisement_load($strategy_id);
+
+        if (!$data) {
+            // @TODO notify the user that there has been a problem loading this strategy
+            redirect($this->redirect_back());
+        }
+
+        //$data['strategy'] = $settings['strategy'];
+
+        $this->load->model('plan/plan_model');
+        $data['plans'] = $this->plan_model->get_dropdown();
+        $data['campaign']['id'] = $campaign_id;
+
+        $this->_data = array_merge($this->_data, $data);
+
+        $this->template->build('advertisement_view', $this->_data);
     }
 
 
