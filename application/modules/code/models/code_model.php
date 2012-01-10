@@ -47,9 +47,31 @@ class Code_Model extends Base_Model {
         return array('code_id' => $code_id);
 	    
 	}
-	
-	
 
+
+    public function get_code(&$data)
+    {
+        if (!isset($data['campaign']['id']) && !isset($data['brand']['id']) && !isset($data['code']['id']))
+            return FALSE;
+
+        // verify access to this record
+        if ($this->auth_code_update($data))
+        {
+            $where = array();
+            if (isset($data['code']['id']))
+                $where['id'] = $data['code']['id'];
+
+            if (isset($data['brand']['id']))
+                $where['brand_id'] = $data['brand']['id'];
+
+            if (isset($data['campaign']['id']))
+                $where['campaign_id'] = $data['campaign']['id'];
+
+            return (array) parent::get_by($where);
+        }
+
+        return FALSE;
+    }
 
 
     public function authorize_action_create(&$data)
@@ -105,6 +127,10 @@ class Code_Model extends Base_Model {
         {
             $this->db->where('camp.id', $data['campaign_id']);
             $this->db->where('b.id', $data['brand_id']);
+        }
+        else if (isset($data['campaign']['id']))
+        {
+            $this->db->where('camp.id', $data['campaign']['id']);
         }
         else
         {
