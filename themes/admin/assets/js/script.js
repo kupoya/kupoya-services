@@ -24,7 +24,7 @@ $(function () {
         	"bServerSide": true,
         	"bAutoWidth":true,
         	"sPaginationType": "full_numbers",
-        	"sAjaxSource": "http://localhost:8080/services/advertisement/index",
+        	"sAjaxSource": "http://localhost:8080/services/strategy/manage/get_all_strategies/1",
         	"fnServerData": function ( sSource, aoData, fnCallback ) {
 	            $.ajax( {
 	                "dataType": 'json', 
@@ -206,6 +206,19 @@ $(function () {
 			return false;
 		}
 	);
+
+	/* @LT */
+	$('.tab-switch-url a').click(
+		function() { 
+			var tab = $(this).attr('href'); // Set variable 'tab' to the value of href of clicked tab
+			if (tab) {
+				location.href = url;
+				return false;
+			}
+			return true;
+		}
+	);
+	/* */
 
 	$('.sidetab-switch a').click(
 		function() { 
