@@ -1519,3 +1519,29 @@ table .actions .delete { background:url('../img/icons/icon_table_delete.png') no
 	background-repeat:no-repeat;
 }
 /* */
+
+/* @LT */
+.tab-switch-url-ajax {
+	display:block;
+	position:relative;
+	top:7px;
+}
+.tab-switch-url-ajax li {
+	float:left;
+	list-style:none;
+	margin-right:15px;
+}
+.tab-switch-url-ajax li:last-child { margin-right:0; }
+.tab-switch-url-ajax li:last-child a { padding-right:0; }
+.tab-switch-url-ajax li a.current { background-image:url('../img/icons/icon_tab.png'); }
+.tab-switch-url-ajax li a {
+	display:block;
+	padding:0 3px 12px;
+	text-decoration:none;
+	height:16px;
+}
+.tab-switch-url-ajax li a.current {
+	background-position:bottom center;
+	background-repeat:no-repeat;
+}
+/* */

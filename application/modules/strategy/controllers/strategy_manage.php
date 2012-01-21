@@ -1,27 +1,111 @@
 <?php
 class Strategy_Manage extends Authenticated_Controller {
     
-    
+    protected $_data = array();
+
+    protected $_menu = array();
+
+    protected $_notifications = array();
+
     
     public function __construct()
     {
         parent::__construct();
+
+        $this->load->library('form_validation');
+
+        $this->load->language('strategy', 'english');
+
+        $this->load->helper('form');
+        $this->load->helper('url');
+
+        $this->_menu['context'] = 'campaigns';
+    }
+
+
+    /**
+     * Redirects to the specific strategy type extended view
+     * 
+     * @param int $strategy_id
+     * @param int $campaign_id
+     */
+    public function view($strategy_id = 0, $campaign_id = 0)
+    {
+        $this->load->model('strategy/strategy_model');
+
+        $payload['strategy']['id'] = $strategy_id;
+        $payload['campaign']['id'] = $campaign_id;
+
+        // data includes ['plan'] and ['strategy'] arrays
+        $data = $this->strategy_model->load($payload);
+
+        // we need to know which stratey type is this so we can fwd to the correct module
+        if (isset($data['strategy']['strategy_type_name']))
+        {
+            $strategy_type = $data['strategy']['strategy_type_name'];
+            // we're redirecting to url like: advertisement/view/2/1
+            redirect($strategy_type.'/view/'.$strategy_id.'/'.$campaign_id);
+        }
+
+    }
+
+
+    /**
+     * Redirects to the specific strategy type extended edit
+     * 
+     * @param int $strategy_id
+     * @param int $campaign_id
+     */
+    public function edit($strategy_id = 0, $campaign_id = 0)
+    {
+        $this->load->model('strategy/strategy_model');
+
+        $payload['strategy']['id'] = $strategy_id;
+        $payload['campaign']['id'] = $campaign_id;
+
+        // data includes ['plan'] and ['strategy'] arrays
+        $data = $this->strategy_model->load($payload);
+
+        // we need to know which stratey type is this so we can fwd to the correct module
+        if (isset($data['strategy']['strategy_type_name']))
+        {
+            $strategy_type = $data['strategy']['strategy_type_name'];
+            // we're redirecting to url like: advertisement/view/2/1
+            redirect($strategy_type.'/edit/'.$strategy_id.'/'.$campaign_id);
+        }
+
     }
     
-    
-    public function index()
+
+    public function get_all_strategies($brand_id = 0)
     {
+        if (!$brand_id)
+            $brand_id = 1;
         
-        //$this->load->model('strategy/strategy_model');
-        
-        $data['data'] = $ret;
+        $payload['brand']['id'] = $brand_id;
+
+        $this->load->model('strategy/strategy_model');
+
+        $data['result'] = $this->strategy_model->get_strategies($payload);
+
+        $this->load->view('ajax', $data);
+    }
+    
+
+    public function index($brand_id = 0)
+    {
+        $this->_menu['page'] = 'my_campaigns';
+        $this->template->set('menu', $this->_menu);
+
+        $data['data'] = 'sss';
         $this->template->build('strategy_list', $data);
     }
     
     
     public function create()
     {
-        
+        $this->_menu['page'] = 'new_campaign';
+        $this->template->set('menu', $this->_menu);
         
         $this->load->helper('form');
         $this->load->library('form_validation');

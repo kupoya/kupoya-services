@@ -47,6 +47,7 @@
 	<!--
 	<script src="js/libs/modernizr-1.7.min.js"></script>
 	-->
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<?=	theme_js('libs/modernizr-1.7.min.js'); ?>
 </head>
 
@@ -2519,7 +2520,6 @@
 		$txt = (isset($template['partials']['post_jquery'])) ? $template['partials']['post_jquery'] : '';
 		echo $txt;
 	?>
-
 	<!--
 	<script>
 		var _gaq=[['_setAccount','UA-XXXXXXX'],['_trackPageview']];

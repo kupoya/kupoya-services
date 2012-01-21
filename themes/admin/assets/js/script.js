@@ -17,6 +17,13 @@ $(function () {
 	// jQuery jWYSIWYG Editor
 	$('.wysiwyg').wysiwyg({ iFrameClass:'wysiwyg-iframe' });
 	
+	// $('.ajaxButton').click(function() {
+	// 	alert('test');
+	// 	var toLoad = $(this).attr('href')+' #content';
+	// 	$('#loaded_content').load(toLoad);
+	// 	return false;
+	// });
+
 	// jQuery dataTables
 	$('.datatable').dataTable(
 		{
@@ -220,7 +227,29 @@ $(function () {
 	);
 	/* */
 
-	$('.sidetab-switch a').click(
+	/* @LT */
+	$('.tab-switch-url-ajax a').click(
+		function() { 
+			var toLoad = $(this).attr('href');
+			// $.ajax({
+			// 	url: toLoad,
+			// 	success: function(data) {
+			// 		$("#loaded_content").html(data);
+			// 	}
+			// });
+			$('#loaded_content').load(toLoad);
+			// $('#loaded_content').load(toLoad, function(response, status, xhr) {
+			// 	if (status != 'error') {
+			// 		$('#loaded_content').html(response);
+			// 	}
+			// });
+			return false;
+		}
+	);
+	/* */
+
+	// $('.sidetab-switch a').click(
+	$('.sidetab-switch a').live("click",(
 		function() { 
 			var sidetab = $(this).attr('href'); // Set variable 'sidetab' to the value of href of clicked sidetab
 			$(this).parent().siblings().find('a').removeClass('current'); // Remove 'current' class from all sidetabs
@@ -232,7 +261,7 @@ $(function () {
 			
 			return false;
 		}
-	);
+	));
 	
 	// Content box accordions
 	$('.accordion li div').hide();

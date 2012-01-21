@@ -10,6 +10,7 @@ class Advertisement_Manage extends Authenticated_Controller {
 
         $this->load->library('form_validation');
 
+        $this->load->language('strategy/strategy', 'english');
         $this->load->language('advertisement', 'english');
 
         $this->load->helper('form');
@@ -37,6 +38,15 @@ class Advertisement_Manage extends Authenticated_Controller {
 
         //$this->_data['data'] = $ret;
         //$this->template->build('advertisement_list', $this->_data);
+    }
+
+
+    public function statistics($strategy_id = 0, $campaign_id = 0)
+    {
+        $data['strategy']['id'] = $strategy_id;
+        $data['campaign']['id'] = $campaign_id;
+
+        $this->template->build('advertisement_statistics', $data);
     }
     
 

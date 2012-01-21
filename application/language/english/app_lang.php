@@ -5,9 +5,36 @@ $lang['menu:support:examples'] = "Examples";
 $lang['menu:support:contact'] = "Contact";
 $lang['menu:support:faq'] = "FAQ";
 
+$lang['menu:dashboard'] = "Dashboard";
+
 $lang['menu:account'] = "Account";
 $lang['menu:account:my_brands'] = "My Brand";
 $lang['menu:account:profile'] = "Profile";
+
+$lang['menu:campaigns'] = "Campaigns";
+$lang['menu:campaigns:my_campaigns'] = "My Campaigns";
+$lang['menu:campaigns:new_campaign'] = "New Campaign";
+
+$lang['Statistics'] = 'Statistics';
+
+$lang['Strategy'] = 'Strategy';
+$lang['Plan'] = 'Plan';
+
+$lang['View'] = 'View';
+$lang['Edit'] = 'Edit';
+
+$lang['Name'] = 'Name';
+$lang['First_Name'] = 'First Name';
+$lang['Last_Name'] = 'Last Name';
+$lang['Address'] = 'Address';
+$lang['City'] = 'City';
+$lang['State'] = 'State';
+$lang['Country'] = 'Country';
+$lang['Phone'] = 'Phone';
+$lang['Email'] = 'Email';
+
+$lang['submit'] = 'submit';
+$lang['Submit'] = 'Submit';
 
 $lang['Settings'] = 'Settings';
 $lang['settings'] = 'Settings';

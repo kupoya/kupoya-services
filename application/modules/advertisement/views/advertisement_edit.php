@@ -31,6 +31,9 @@ $advertisement_edit_url = '#';
 if (isset($campaign['id']) && isset($strategy['id']))
 	$advertisement_edit_url = base_url().'advertisement/edit/'.$strategy['id'].'/'.$campaign['id'];
 	
+$advertisement_statistics_url = '#';
+if (isset($campaign['id']) && isset($strategy['id']))
+	$advertisement_statistics_url = base_url().'advertisement/statistics/'.$strategy['id'].'/'.$campaign['id'];
 
 ?>
 
@@ -42,6 +45,7 @@ if (isset($campaign['id']) && isset($strategy['id']))
 					<nav>
 						<ul class="tab-switch-url">
 							<li><a href="<?=$advertisement_view_url; ?>" rel="tooltip" title="Switch to next tab"><?=lang('View')?></a></li>
+							<li><a href="<?=$advertisement_statistics_url; ?>" rel="tooltip" title="Switch to next tab"><?=lang('Statistics')?></a></li>
 							<li><a href="<?=$advertisement_edit_url; ?>" class="default-tab current" rel="tooltip" title="Switch to next tab"><?=lang('Edit')?></a></li>
 						</ul>
 					</nav>

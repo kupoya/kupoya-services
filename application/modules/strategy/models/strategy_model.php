@@ -54,6 +54,10 @@ class Strategy_Model extends Base_Model {
 	    if (!$ret)
 	        return FALSE;
 
+	    /*
+	     * Original AR pattern code is commented and replaced with Datatables library as it makes
+	     * sense that we'll be returning lists of data in a more organized fashion like RESTful
+	     *
 		$this->db->select('code.id, code.brand_id, cs.campaign_id, s.id as strategy_id, s.name as strategy_name, st.name as strategy_type, p.bank as bank_size, p.plan_type as plan_type');
 		$this->db->from('code');
 
@@ -65,13 +69,34 @@ class Strategy_Model extends Base_Model {
 		$this->db->where('code.brand_id', $brand_id);
 		$this->db->where('cs.active', '1');
 
-		// we don't really need anymore than 1 row returned and actually that would be a bug if that's the case
-		//$this->db->limit(1);
-
 		return $this->db->get()->result_array();
-		// $row = $this->db->get()->row_array();
-		// $result['brand']['id'] = $row['brand_id'];
-		// $result['code']['id'] = $row['id'];
+		*/
+
+
+		$this->load->library('datatables');
+
+		$this->datatables->select('code.id as code_id, code.brand_id as brand_id, cs.campaign_id as campaign_id, s.id as strategy_id, s.name as strategy_name, st.name as strategy_type, p.bank as bank_size, p.plan_type as plan_type');
+		$this->datatables->from('code');
+
+		$this->datatables->join('campaign_strategies AS cs', 'cs.campaign_id = code.campaign_id');
+		$this->datatables->join('strategy AS s', 's.id = cs.strategy_id');
+		$this->datatables->join('plan AS p', 'p.id = s.plan_id');
+		$this->datatables->join('strategy_type AS st', 'st.id = p.strategy_type');
+
+		$this->datatables->where('code.brand_id', $brand_id);
+		$this->datatables->where('cs.active', '1');
+
+        $this->datatables->edit_column('strategy_name', '<a href="'.base_url().'strategy/manage/view/$2/$3">$4</a>', 'strategy_type, strategy_id, campaign_id, strategy_name');
+
+        $this->datatables->unset_column('code_id');
+        $this->datatables->unset_column('brand_id');
+        $this->datatables->unset_column('campaign_id');
+        $this->datatables->unset_column('strategy_id');
+        $this->datatables->unset_column('plan_type');
+        $this->datatables->unset_column('bank_size');
+
+
+        $result = $this->datatables->generate();
 
 		return $result;
 
@@ -170,6 +195,54 @@ class Strategy_Model extends Base_Model {
 
 
 
+
+	public function get_strategy_type($strategy_type_id = 0, $strategy_id = 0)
+	{
+		/*
+		SELECT st.id, st.name
+		FROM strategy AS s
+		JOIN plan AS p ON p.id = s.plan_id
+		JOIN strategy_type AS st ON st.id = p.strategy_type
+		WHERE s.id =2
+		AND st.name =  'advertisement'
+		*/
+
+		$this->db->select('st.id, st.name');
+		if (isset($strategy_type_id) && $strategy_type_id)
+		{
+			$this->db->from('strategy_type AS st');
+			if (is_numeric($strategy_type_id))
+				$this->db->where('st.id', $strategy_type_id);
+			else
+				$this->db->where('st.name', $strategy_type_id);
+		}
+		else
+		{
+			if ($strategy_type_id && $strategy_id)
+			{
+				$this->db->from('strategy AS s');
+				$this->db->join('plan AS p', 'p.id = s.plan_id');
+				$this->db->join('strategy_type AS st', 'st.id = p.strategy_type');
+				$this->db->where('s.id', $strategy_id);
+
+				if (is_numeric($strategy_type_id))
+					$this->db->where('st.id', $strategy_type_id);
+				else
+					$this->db->where('st.name', $strategy_type_id);
+			}
+			else
+			{
+				return FALSE;
+			}
+
+		}
+
+		// we don't really need anymore than 1 row returned and actually that would be a bug if that's the case
+		$this->db->limit(1);
+
+		return $this->db->get()->row_array();
+	}
+
 	/**
 	 * Validate the strategy being loaded is of a specific type
 	 * 
@@ -210,9 +283,75 @@ class Strategy_Model extends Base_Model {
 	}
 
 
-	public function get($strategy_id = NULL, $options)
+	/**
+	 * returns a multi dimentional array with strategy data and it's related metadata (plans, etc), array is composed of: 
+	 * - strategy array
+	 * - plan array
+	 * - order array
+	 * 
+	 * @TODO the above plan and order arrays
+	 */
+	public function load($data = NULL)
 	{
-		
+		// in case $strategy is an array payload
+		if (is_array($data) && isset($data['strategy']['id']))
+			$strategy_id = $data['strategy']['id'];
+
+		// otherwise it's just an int parameter
+		if (is_numeric($data))
+			$strategy_id = $data;
+
+		if (!isset($strategy_id))
+			return FALSE;
+
+		// verify access to this record
+		if ($this->authorize_action($data))
+		{
+			// load strategy info
+			$strategy = parent::get($strategy_id);
+
+			if (isset($strategy->plan_id))
+			{
+				// load plan info (which also has strategy_type there, wtf did I put it there)
+				$this->load->model('plan/plan_model');
+				$plan = $this->plan_model->get($strategy->plan_id);
+			}
+
+			$ret['strategy'] = (array) $strategy;
+
+			// assuming everything went well
+			if (!isset($ret['strategy']['strategy_type']) && isset($plan->strategy_type))
+			{
+				// make sure strategy_type id is set
+				$ret['strategy']['strategy_type'] = $plan->strategy_type;
+
+				// now get the strategy name
+				$strategy_type_name = $this->get_strategy_type($plan->strategy_type);
+				if (isset($strategy_type_name['name']))
+					$ret['strategy']['strategy_type_name'] = $strategy_type_name['name'];
+				else
+					$ret['strategy']['strategy_type_name'] = '';
+			}
+
+			$ret['plan'] = (array) $plan;
+
+			return $ret;
+		}
+
+		return FALSE;
+	}
+
+
+	public function get($strategy = NULL, $options)
+	{
+		// in case $strategy is an array payload
+		if (is_array($strategy) && isset($strategy['strategy']['id']))
+			$strategy_id = $strategy['strategy']['id'];
+
+		// otherwise it's just an int parameter
+		if (is_numeric($strategy))
+			$strategy_id = $strategy;
+
 		if (!isset($strategy_id))
 			return FALSE;
 
