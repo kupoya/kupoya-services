@@ -56,7 +56,7 @@ class Order_Model extends Base_Model {
 
 		$this->load->library('datatables');
 
-		$this->datatables->select('o.created_time, p.name as plan_name, p.bank, p.plan_type, o.status, o.order_total');
+		$this->datatables->select('o.created_time as order_created_time, p.name as plan_name, p.bank, p.plan_type, o.status, o.order_total');
 		$this->datatables->from('order as o');
 
 		$this->datatables->join('strategy AS s', 's.id = o.strategy_id');
@@ -108,7 +108,7 @@ class Order_Model extends Base_Model {
 	        return FALSE;
 	        
 	    $order = $data['order'];
-	    
+
 	    // if id was received then we update the record, otherwise we insert a new one 
 	    if (isset($order['id']) && $new === FALSE)
 	    {
@@ -155,11 +155,11 @@ class Order_Model extends Base_Model {
 	    {
 			// create the record
 
-			// if no associated record ids provided then we quit
+			// require basic settings for saving an order
 			if (!isset($order['operator_id']) && !isset($order['strategy_id']) && !isset($order['plan_id']))
 			{
-			 log_message('error', ' - Order => Save => Insert => missing operator_id or strategy_id or plan_id');
-			 return FALSE;
+				log_message('error', ' - Order => Save => Insert => missing operator_id or strategy_id or plan_id');
+				return FALSE;
 			}
 
 			$order_total = $this->calc_order_total($data);
