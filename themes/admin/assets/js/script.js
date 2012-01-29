@@ -25,30 +25,30 @@ $(function () {
 	// });
 
 	// jQuery dataTables
-	$('.datatable').dataTable(
-		{
-			"bProcessing": true,
-        	"bServerSide": true,
-        	"bAutoWidth":true,
-        	"sPaginationType": "full_numbers",
-        	"sAjaxSource": "http://localhost:8080/services/strategy/manage/get_all_strategies/1",
-        	"fnServerData": function ( sSource, aoData, fnCallback ) {
-	            $.ajax( {
-	                "dataType": 'json', 
-	                "type": "POST", 
-	                "url": sSource, 
-	                "data": aoData, 
-	                "success": fnCallback
-	            } );
-        	}
-		}
-	);
+	// $('.datatable').dataTable(
+	// 	{
+	// 		"bProcessing": true,
+    //    	"bServerSide": true,
+    //    	"bAutoWidth":true,
+    //    	"sPaginationType": "full_numbers",
+    //    	"sAjaxSource": "http://localhost:8080/services/strategy/manage/get_all_strategies/1",
+    //    	"fnServerData": function ( sSource, aoData, fnCallback ) {
+	//             $.ajax( {
+	//                 "dataType": 'json', 
+	//                 "type": "POST", 
+	//                 "url": sSource, 
+	//                 "data": aoData, 
+	//                 "success": fnCallback
+	//             } );
+    //    	}
+	// 	}
+	// );
 
 	// jQuery Custome File Input
 	$('.fileupload').customFileInput();
 
 	// jQuery DateInput
-	$('.datepicker').datepick({ pickerClass: 'jq-datepicker' });
+	$('.datepicker').datepick({ pickerClass: 'jq-datepicker', dateFormat: 'yyyy-mm-dd 00:00:00' });
 
 	// jQuery Data Visualize
 	$('table.data').each(function() {
@@ -286,7 +286,8 @@ $(function () {
 	// Progress bar animation
 	$('.progress-bar').each(function() {
 		var progress = $(this).children().width();
-		$(this).children().css({ 'width':0 }).animate({width:progress},3000);
+		$(this).parent().show();
+		$(this).children().css({ 'width':0 }).animate({width:progress+'%'},3000);
 	});
 	
 	//jQuery Full Calendar
