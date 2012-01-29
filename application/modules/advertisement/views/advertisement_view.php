@@ -23,6 +23,31 @@
 
 // //var_dump($error);
 
+
+if (isset($plan['plan_type']))
+{
+	// handle expiration 
+	if ($plan['plan_type'] === 'expiration' && isset($strategy['expiration_date']))
+	{
+		$plan_type = 'expiration';
+		// in expiration, plan_total means the unix timestamp of the expiration date
+		$plan_total = @strtotime($strategy['expiration_date']);
+
+		// and the plan_used will be the current timestamp
+		$plan_used = time();
+		$plan_used_percent = number_format(($plan_used / $plan_total), 2) * 100;
+
+		$plan_available = ($plan_total - $plan_used);
+		$plan_available_percent = number_format(($plan_available / $plan_total), 2) * 100;
+	}
+
+	// handle bank size
+	if ($plan['plan_type'] === 'expiration')
+	{
+		$plan_type = 'bank';
+	}
+}
+
 $data['strategy'] = $strategy;
 $data['campaign'] = $campaign;
 
@@ -57,6 +82,81 @@ if (isset($campaign['id']) && isset($strategy['id']))
 				<!-- Article Content -->
 				<section>
 
+		<!-- Half Content Block -->
+		<article class="half-block">
+
+			<!-- Article Container for safe floating -->
+			<div class="article-container">
+
+					<?php
+						echo Modules::run('strategy/strategy_overview/_get_strategy_overview', $data);
+					?>
+
+			</div>
+			<!-- /Article Container -->
+			
+		</article>
+		<!-- /Half Content Block -->
+
+		<!-- Half Content Block -->
+		<article class="half-block clearrm">
+
+			<!-- Article Container for safe floating -->
+			<div class="article-container">
+
+				<header>
+					<h2>Properties</h2>
+				</header>
+
+				<ul class="stats-summary">
+						<li>
+							<strong class="stats-count">17</strong>
+							<p>New registrations</p>
+							<a href="#" class="button stats-view" rel="tooltip" original-title="View new registrations">View</a>
+						</li>
+						<li>
+							<strong class="stats-count">89</strong>
+							<p>New visitors</p>
+							<a href="#" class="button stats-view" title="View new visitros" rel="tooltip">View</a>
+						</li>
+						<li>
+							<strong class="stats-count">346</strong>
+							<p>New sales</p>
+							<a href="#" class="button stats-view" rel="tooltip" original-title="View new sales">View</a>
+						</li>
+						<li>
+							<strong class="stats-count">266</strong>
+							<p>New orders</p>
+							<a href="#" class="button stats-view" title="View new orders" rel="tooltip">View</a>
+						</li>
+						<li>
+							<strong class="stats-count">1024</strong>
+							<p>New requests</p>
+							<a href="#" class="button stats-view" title="View new requests" rel="tooltip">View</a>
+						</li>
+					</ul>
+
+						<?php if (isset($plan_used_percent)): ?>
+						<div class="clearfix"></div>
+
+						<div style="display: none">
+							<label> Plan Usage </label>
+							<div class="progress-bar red small">
+								<div style="width: <?=$plan_used_percent?>%; ">
+									<span><?=$plan_used_percent?><sup>%</sup></span>
+								</div>
+							</div>
+						<div>
+						<?php endif; ?>
+
+			</div>
+			<!-- /Article Container -->
+			
+		</article>
+		<!-- /Half Content Block -->
+
+<div class="clearfix"></div>
+<hr/>
 
 					<!-- Strategy Widgets Information -->
 					<!-- Widget Container -->
@@ -73,12 +173,6 @@ if (isset($campaign['id']) && isset($strategy['id']))
 					<hr>
 					<?php
 						echo Modules::run('strategy/strategy_overview/_get_requests_graph', $data);
-					?>
-
-					<hr>
-
-					<?php
-						echo Modules::run('strategy/strategy_overview/_get_strategy_overview', $data);
 					?>
 
 				</section>

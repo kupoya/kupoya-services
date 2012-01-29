@@ -1,39 +1,34 @@
 <?php
 
-// echo "<br/><br/>";
 // if (isset($message)) echo $message;
-// echo "<br/><br/>";
 
 // echo validation_errors();
-// echo "<br/><br/>";
-// echo "<br/><br/>";
 
 // var_dump($strategy);
-// echo "<br/><br/>";
 // var_dump($plan);
 
-// echo "<br/><br/>";
-// echo "<br/><br/>";
-
 // var_dump($advertisement);
-// echo "<br/><br/>";
-// echo "<br/><br/>";
+
 // var_dump($advertisement_blocks);
 
 
 // //var_dump($error);
 
+$data['strategy'] = $strategy;
+$data['campaign'] = $campaign;
+$data['plan'] = $plan;
+
 $advertisement_view_url = '#';
 if (isset($campaign['id']) && isset($strategy['id']))
-	$advertisement_view_url = base_url().'advertisement/view/'.$strategy['id'].'/'.$campaign['id'];
+	$advertisement_view_url = base_url().'strategy/manage/view/'.$strategy['id'].'/'.$campaign['id'];
 
 $advertisement_edit_url = '#';
 if (isset($campaign['id']) && isset($strategy['id']))
-	$advertisement_edit_url = base_url().'advertisement/edit/'.$strategy['id'].'/'.$campaign['id'];
+	$advertisement_edit_url = base_url().'strategy/manage/edit/'.$strategy['id'].'/'.$campaign['id'];
 	
 $advertisement_statistics_url = '#';
 if (isset($campaign['id']) && isset($strategy['id']))
-	$advertisement_statistics_url = base_url().'advertisement/statistics/'.$strategy['id'].'/'.$campaign['id'];
+	$advertisement_statistics_url = base_url().'strategy/reports/overview/index/'.$strategy['id'].'/'.$campaign['id'];
 
 ?>
 
@@ -44,7 +39,7 @@ if (isset($campaign['id']) && isset($strategy['id']))
 					<!-- Article Header Tab Navigation -->
 					<nav>
 						<ul class="tab-switch-url">
-							<li><a href="<?=$advertisement_view_url; ?>" rel="tooltip" title="Switch to next tab"><?=lang('View')?></a></li>
+							<li><a href="<?=$advertisement_view_url; ?>" rel="tooltip" advertisement_statistics_urle="Switch to next tab"><?=lang('View')?></a></li>
 							<li><a href="<?=$advertisement_statistics_url; ?>" rel="tooltip" title="Switch to next tab"><?=lang('Statistics')?></a></li>
 							<li><a href="<?=$advertisement_edit_url; ?>" class="default-tab current" rel="tooltip" title="Switch to next tab"><?=lang('Edit')?></a></li>
 						</ul>
@@ -125,9 +120,15 @@ if (isset($campaign['id']) && isset($strategy['id']))
 
 										<!-- Next item -->
 
+										<dt>
+											<label> &nbsp; </label>
+										</dt>
+										<dd>
+											<button type="submit"><?=lang('Submit');?></button>
+										</dd>
+
 									</dl>
 								</fieldset>
-								<button type="submit"><?=lang('Submit');?></button>
 								</form>
 
 								<?php echo form_open_multipart('advertisement/edit_strategy_picture');?>
@@ -151,9 +152,16 @@ if (isset($campaign['id']) && isset($strategy['id']))
 
 										<!-- Next item -->
 
+
+										<dt>
+											<label> &nbsp; </label>
+										</dt>
+										<dd>
+											<button type="submit"><?=lang('Submit');?></button>
+										</dd>
+
 									</dl>
 								</fieldset>
-								<button type="submit"><?=lang('Submit');?></button>
 								</form>
 
 							</div>
@@ -189,9 +197,7 @@ if (isset($campaign['id']) && isset($strategy['id']))
 										</dt>
 										<dd>
 											<?php $err = form_error('advertisement_blocks[block_1]'); ?>
-											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
-												name="advertisement_blocks[block_1]" maxlength='100'
-												value='<?= set_value('advertisement_blocks[block_1]', isset($advertisement_blocks['block_1']) ? $advertisement_blocks['block_1'] : '')  ?>' />
+											<textarea rows="5" cols="40" class="wysiwyg large <?php if ($err) echo 'invalid'; ?>"><?= set_value('advertisement_blocks[block_1]', isset($advertisement_blocks['block_1']) ? $advertisement_blocks['block_1'] : '')  ?></textarea>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
 											<p><?=lang('advertisement:block_1:tooltip')?></p>
 										</dd>
@@ -206,50 +212,16 @@ if (isset($campaign['id']) && isset($strategy['id']))
 							</div>
 
 							<!-- Wizard Item -->
-							<div id="plan" class="wizard-content">
+							<div id="plan" class="wizard-content">							
 
-								<form name='plan' action='<?php echo base_url().'advertisement/save'?>' method='post'>
-								<!-- Inputs -->
-								<!-- Use class .small, .medium or .large for predefined size -->
-								<input type='hidden' name='strategy[id]'
-									value='<?= set_value('strategy[id]', isset($strategy['id']) ? $strategy['id'] : '')  ?>' />
-								<fieldset>
-									<legend><?=lang('settings')?></legend>
-									<dl>
+<?php
+	echo Modules::run('advertisement/advertisement_manage/_partial_plan_usage_info', $data);
+?>
 
-										<dt>
-											<label><?=lang('advertisement:plan')?></label>
-										</dt>
-										<dd>
-											<?php if (isset($plan['name'])) echo $plan['name']; ?>
-										<!--
-											<?php $err = form_error('advertisement[plan]'); ?>
-											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
-												name="advertisement[redirect_url]" maxlength='100'
-												value='<?= set_value('advertisement[redirect_url]', isset($advertisement['redirect_url']) ? $advertisement['redirect_url'] : '')  ?>' />
-											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
-											<p><?=lang('advertisement:plan:tooltip')?></p>
-										-->
-										</dd>
 
-										<!-- Next item -->
-
-										<dt>
-											<label><?=lang('advertisement:promotion')?></label>
-										</dt>
-										<dd>
-											<?php $err = form_error('order[promotion_id]'); ?>
-											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
-												name="order[promotion_id]" maxlength='100'
-												value='<?= set_value('order[promotion_id]', '')  ?>' />
-											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
-											<p><?=lang('advertisement:promotion:tooltip')?></p>
-										</dd>										
-
-									</dl>
-								</fieldset>
-								<button type="submit"><?=lang('Submit');?></button>
-								</form>										
+<?php
+	echo Modules::run('order/order_manage/_get_order_history', $data);
+	?>
 
 							</div>
 

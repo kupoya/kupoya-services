@@ -2,6 +2,12 @@
 class Advertisement_Manage extends Authenticated_Controller {
     
     protected $_data = array();
+
+    protected $_menu = array();
+
+    protected $strategy_type = 'advertisement';
+
+    protected $_notifications = array();
     
     
     public function __construct()
@@ -16,8 +22,8 @@ class Advertisement_Manage extends Authenticated_Controller {
         $this->load->helper('form');
         $this->load->helper('url');
 
-        $this->_data['menu']['context'] = 'campaigns';
-
+        //$this->_data['menu']['context'] = 'campaigns';
+        $this->_menu['context'] = 'campaigns';
     }
     
     
@@ -51,6 +57,44 @@ class Advertisement_Manage extends Authenticated_Controller {
     
 
 
+    /**
+     * Partial for returning the expiration information for a strategy
+     * - expiration date/total bank
+     * - remaining strategy days/bank
+     * - used up strategy days/bank
+     */
+    public function _partial_plan_usage_info($data = NULL)
+    {
+
+        $this->load->model('plan/plan_model');
+        // get only free plans
+        $plan_dropdown = $this->plan_model->get_dropdown($this->strategy_type, TRUE);
+
+        // what to do if $data has nothing in it?
+        if (!isset($data['strategy']['expiration_date']) || !isset($data['strategy']['bank']) || !isset($data['strategy']['exposure_count']))
+        {
+            if (is_numeric($data))
+            {
+                $this->load->model('advertisement/advertisement_model');
+                $payload = $this->advertisement_model->get_plan_usage_info($data);
+
+                $payload['plans'] = $plan_dropdown;
+                return $this->load->view('view_partials/strategy_expiration_info', $payload);
+            }
+            else
+            {
+                return FALSE;
+            }
+
+        }
+
+        $payload = $data;
+        $payload['plans'] = $plan_dropdown;
+
+        $this->load->view('view_partials/strategy_plan_usage_info', $payload);
+    }
+
+
     public function edit_strategy_picture()
     {
 
@@ -63,11 +107,11 @@ class Advertisement_Manage extends Authenticated_Controller {
 
         if ($this->form_validation->run() === FALSE)
         {
-            //error
-            log_message('debug', '==> 2');
+            // error validating form submission
 
+            $this->_notifications['error'][] = 'Error saving file';
+            $this->session->set_flashdata('notifications', $this->_notifications);
             
-            //$this->template->build('brand_edit', $data);
             redirect($this->redirect_back());
         }
         else
@@ -84,6 +128,10 @@ class Advertisement_Manage extends Authenticated_Controller {
             $info = (array) $this->strategy_model->get_parents($payload);
             if (!isset($info['brand']['id']) || empty($info['brand']['id'])) {
                 // @TODO notify the user that there has been a problem loading this strategy
+
+                $this->_notifications['error'][] = 'Error saving file, check strategy settings';
+                $this->session->set_flashdata('notifications', $this->_notifications);
+
                 redirect($this->redirect_back());
             }
 
@@ -105,25 +153,26 @@ class Advertisement_Manage extends Authenticated_Controller {
                 if (!mkdir($upload_config['upload_path']))
                 {
                     // error, could not create directory for some reason... 
-                    //redirect('advertisement/view');
+
+                    $this->_notifications['error'][] = 'Error saving file, check account file permissions';
+                    $this->session->set_flashdata('notifications', $this->_notifications);
+
                     redirect($this->redirect_back());
                 }
             }
 
             if (!$this->upload->do_upload('strategy_picture'))
             {
-                log_message('debug', '==> 5');
                 //$error = array('error' => $this->upload->display_errors());
 
-                //$this->load->view('upload_form', $error);
-                //redirect('brand/edit_brand');
+                $this->_notifications['error'][] = 'Error saving file, try a different file type';
+                $this->session->set_flashdata('notifications', $this->_notifications);
+
                 redirect($this->redirect_back());
             }
             else
             {
-                log_message('debug', '==> 6');
                 //$data = array('upload_data' => $this->upload->data());
-                //$this->load->view('upload_success', $data);
 
                 // update the brand record for the new picture uploaded
                 $upload_data = $this->upload->data();
@@ -133,9 +182,16 @@ class Advertisement_Manage extends Authenticated_Controller {
                 $ret = (array) $this->strategy_model->save_strategy($payload);
                 if (!$ret)
                 {
-                    // show error, saving image failed
+                    
+                    $this->_notifications['error'][] = 'Error saving file, image failed to save on server';
+                    $this->session->set_flashdata('notifications', $this->_notifications);
+
                     redirect($this->redirect_back());
                 }
+
+
+                $this->_notifications['success'][] = 'Successfully updated strategy picture';
+                $this->session->set_flashdata('notifications', $this->_notifications);
 
                 redirect($this->redirect_back());
             }
@@ -147,7 +203,9 @@ class Advertisement_Manage extends Authenticated_Controller {
 
     public function save()
     {
-        $this->menu_page = 'manage';
+        //$this->menu_page = 'manage';
+        $this->_menu['page'] = 'manage';
+        $this->template->set('menu', $this->_menu);
 
         // strategy_id is really required here
         $this->form_validation->set_rules('strategy[id]', 'Strategy', 'required|integer');
@@ -179,10 +237,11 @@ class Advertisement_Manage extends Authenticated_Controller {
             $this->load->model('advertisement/advertisement_model');
             $data = $this->advertisement_model->save_advertisement($data);
 
-            $data['menu']['context'] = $this->menu_context;
-            $data['menu']['page'] = $this->menu_page;
+            $this->_notifications['success'][] = 'Sucessfully saved!';
+            $this->session->set_flashdata('notifications', $this->_notifications);
 
-            $this->template->build('advertisement_edit', $data);
+            redirect($this->redirect_back());
+            //$this->template->build('advertisement_edit', $data);
         }
 
     }
@@ -204,6 +263,7 @@ class Advertisement_Manage extends Authenticated_Controller {
         // load strategy information
         $this->load->model('advertisement/advertisement_model');
         $data = $this->advertisement_model->advertisement_load($strategy_id);
+
 
         if (!$data) {
             // @TODO notify the user that there has been a problem loading this strategy

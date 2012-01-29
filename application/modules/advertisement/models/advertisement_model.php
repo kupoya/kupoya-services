@@ -47,6 +47,52 @@ class Advertisement_Model extends Base_Model
 	}
 
 
+	public function get_plan_usage_info($data = NULL)
+	{
+		// in case $strategy is an array payload
+		if (is_array($data) && isset($data['strategy']['id']))
+			$strategy_id = $data['strategy']['id'];
+
+		// otherwise it's just an int parameter
+		if (is_numeric($data))
+			$strategy_id = $data;
+
+		if (!isset($strategy_id))
+			return FALSE;
+
+		// verify access to this record
+		$payload['strategy']['id'] = $strategy_id;
+		if (!$this->authorize_action($payload))
+		{
+			return FALSE;
+		}
+
+		$ret = array();
+
+		$this->db->select('exposure_count, expiration_date, bank, plan_id');
+		$this->db->from('strategy');
+		$this->db->where('id', $strategy_id);
+		$strategy = $this->db->get()->row_array();
+
+		$ret['strategy'] = (array) $strategy;
+
+		if (isset($ret['strategy']['plan_id']))
+		{
+			$this->db->select('*');
+			$this->db->from('plan');
+			$this->db->where('id', $ret['strategy']['plan_id']);
+			$plan = $this->db->get()->row_array();
+
+			$ret['plan'] = (array) $plan;
+		}
+
+		if (!$ret)
+			return FALSE;
+
+		return $ret;
+	}
+
+
 	public function advertisement_load_blocks($strategy_id, $view)
 	{
 		$this->load->model('strategy/strategy_model');
@@ -124,7 +170,8 @@ class Advertisement_Model extends Base_Model
 	{
 		$strategy_id = FALSE;
 
-		if (isset($data['strategy'])) {
+		if (isset($data['strategy']))
+		{
 			//forward to strategy_model to save it
 			$this->load->model('strategy/strategy_model');
 			$strategy_id = $this->strategy_model->save_strategy($data);
