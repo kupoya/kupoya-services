@@ -47,6 +47,11 @@
 	<!--
 	<script src="js/libs/modernizr-1.7.min.js"></script>
 	-->
+
+	<!-- JS Libs at the end for faster loading -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script>!window.jQuery && document.write(unescape('%3Cscript src="js/jquery/jquery-1.5.1.min.js"%3E%3C/script%3E'))</script>
+
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<?=	theme_js('libs/modernizr-1.7.min.js'); ?>
 </head>
@@ -177,7 +182,6 @@
 		<!-- Full Content Block -->
 		<!-- Note that only 1st article need clearfix class for clearing -->
 		<article class="full-block clearfix">
-		
 			<!-- Notifications -->
 			<?php echo $template['partials']['notifications']; ?>
 			<!-- /Notifications -->
@@ -2480,9 +2484,6 @@
 	</div>
 	<!-- /Fixed Layout Wrapper -->
 
-	<!-- JS Libs at the end for faster loading -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-	<script>!window.jQuery && document.write(unescape('%3Cscript src="js/jquery/jquery-1.5.1.min.js"%3E%3C/script%3E'))</script>
 	<!--
 	<script src="js/libs/selectivizr.js"></script>
 	<script src="js/jquery/jquery.nyromodal.js"></script>
@@ -2519,6 +2520,9 @@
 	<?php
 		$txt = (isset($template['partials']['post_jquery'])) ? $template['partials']['post_jquery'] : '';
 		echo $txt;
+
+		$assets = Asset::get_assets('js', null, TRUE);
+		echo $assets;
 	?>
 	<!--
 	<script>
