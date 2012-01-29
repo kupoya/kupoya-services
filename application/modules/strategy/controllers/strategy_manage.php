@@ -80,7 +80,7 @@ class Strategy_Manage extends Authenticated_Controller {
     public function get_all_strategies($brand_id = 0)
     {
         if (!$brand_id)
-            $brand_id = 1;
+            $brand_id = 0;
         
         $payload['brand']['id'] = $brand_id;
 
@@ -97,7 +97,14 @@ class Strategy_Manage extends Authenticated_Controller {
         $this->_menu['page'] = 'my_campaigns';
         $this->template->set('menu', $this->_menu);
 
-        $data['data'] = 'sss';
+        // attempt to get brand_id from session if not provided
+        if (!$brand_id)
+        {
+            $operator = $this->session->userdata('operator');
+            $brand_id = $operator['brand_id'];
+        }
+
+        $data['brand']['id'] = $brand_id;
         $this->template->build('strategy_list', $data);
     }
     

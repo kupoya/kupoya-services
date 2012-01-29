@@ -10,7 +10,9 @@
 
 					<!-- Article Container for safe floating -->
 					<div class="article-container">
-						<h3>Overview</h3>
+					<header>
+						<h2>Overview</h2>
+					</header>
 
 						<!-- Image Minimenu Actions -->
 						<div class="image-frame left">

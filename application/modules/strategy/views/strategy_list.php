@@ -1,4 +1,5 @@
 <?php
+
 ?>
 
 				<!-- Article Header -->
@@ -33,3 +34,30 @@
 
 				<!-- /Article Content -->
 				</section>
+
+
+<script type="text/javascript">
+
+// jQuery dataTables
+$(document).ready(function () {
+		$('.datatable').dataTable(
+		{
+		"bProcessing": true,
+	   	"bServerSide": true,
+	   	"bAutoWidth":true,
+	   	"sPaginationType": "full_numbers",
+	   	"sAjaxSource": "<?= base_url() ?>strategy/manage/get_all_strategies/<?=$brand['id']?>",
+	   	"fnServerData": function ( sSource, aoData, fnCallback ) {
+	            $.ajax( {
+	                "dataType": 'json', 
+	                "type": "POST", 
+	                "url": sSource, 
+	                "data": aoData, 
+	                "success": fnCallback
+	            } );
+	   	}
+		}
+	);
+});
+
+</script>

@@ -342,7 +342,38 @@ class Strategy_Model extends Base_Model {
 	}
 
 
-	public function get($strategy = NULL, $options)
+
+	public function upgrade_bank($data, $bank_amount)
+	{
+		// in case $strategy is an array payload
+		if (is_array($data) && isset($data['strategy']['id']))
+			$strategy_id = $data['strategy']['id'];
+
+		// otherwise it's just an int parameter
+		if (is_numeric($data))
+			$strategy_id = $data;
+
+		if (!isset($strategy_id))
+			return FALSE;
+
+		// verify access to this record
+		$payload['strategy']['id'] = $strategy_id;
+		if ($this->authorize_action($payload))
+		{
+			//$sql = "UPDATE ? SET bank=(bank+?) WHERE id = ?";
+			//return $this->db->query($sql, array($this->_table, $bank_amount, $strategy_id));
+			$this->db->where('id', $strategy_id);
+			$this->db->set('bank', 'bank+'. (int) $bank_amount, FALSE);
+			return $this->db->update($this->_table);
+		}
+		else
+		{
+			return FALSE;
+		}
+		
+	}
+
+	public function get($strategy = NULL, $options = NULL)
 	{
 		// in case $strategy is an array payload
 		if (is_array($strategy) && isset($strategy['strategy']['id']))
@@ -358,9 +389,12 @@ class Strategy_Model extends Base_Model {
 		// verify the strategy type
 		// make sure the strategy_id that we're going to load matches the strategy type
 		// that we are actually loading...
-		$ret = $this->validate_strategy_type($strategy_id, $options['strategy_type']);
-		if (!$ret)
-			return FALSE;
+		if (isset($options))
+		{
+			$ret = $this->validate_strategy_type($strategy_id, $options['strategy_type']);
+			if (!$ret)
+				return FALSE;
+		}
 
 		// verify access to this record
 		$data['strategy']['id'] = $strategy_id;
@@ -371,6 +405,67 @@ class Strategy_Model extends Base_Model {
 
 		return FALSE;
 	}
+
+
+	/**
+	 * Get strategy expiration info:
+	 * - expiration date/total bank
+	 * - remaining strategy days/bank
+	 * - used up strategy days/bank
+	 * 
+	 */
+	// public function get_expiration_info($data = NULL)
+	// {
+	// 	// in case $strategy is an array payload
+	// 	if (is_array($data) && isset($data['strategy']['id']))
+	// 		$strategy_id = $data['strategy']['id'];
+
+	// 	// otherwise it's just an int parameter
+	// 	if (is_numeric($data))
+	// 		$strategy_id = $data;
+
+	// 	if (!isset($strategy_id))
+	// 		return FALSE;
+
+	// 	// verify access to this record
+	// 	$payload['strategy']['id'] = $strategy_id;
+	// 	if (!$this->authorize_action($payload))
+	// 		return FALSE;
+		
+	// 	$this->db->select('strategy.id');
+	// 	$this->db->from('strategy');
+	// 	$this->db->join('campaign_strategies AS cs', 'cs.strategy_id = strategy.id');
+	// 	$this->db->join('code AS code', 'code.campaign_id = cs.campaign_id');
+ //        $this->db->join('brand AS b', 'b.id = code.brand_id');
+ //        $this->db->join('operator AS op', 'op.brand_id = b.id');
+
+ //        if (isset($data['strategy']['id']))
+ //        {
+ //            $this->db->where('strategy.id', $data['strategy']['id']);
+ //        }
+ //        else
+ //        {
+ //            return FALSE;
+ //        }
+        
+ //        if (!isset($data['operator_id']))
+ //        {
+ //            $operator_id = $this->get_operator_id();
+ //        }
+ //        else
+ //        {
+ //            $operator_id = $data['operator_id'];
+ //        }
+        
+ //        if (!$operator_id)
+ //            return FALSE;
+            
+ //        $this->db->where('op.id', $operator_id);
+        
+        
+ //        $ret = $this->db->get()->row_array();
+
+	// }
 
 
 	public function promotion_validate($data)
@@ -525,6 +620,12 @@ class Strategy_Model extends Base_Model {
 
 	        if (isset($strategy['exposure_count']))
 	            $record['exposure_count'] = $strategy['exposure_count'];
+
+	        if (isset($strategy['bank']))
+	            $record['bank'] = $strategy['bank'];
+
+	        if (isset($strategy['type']))
+	            $record['type'] = $strategy['type'];
 	         
 	        if (isset($strategy['expiration_date']))
 	            $record['expiration_date'] = $strategy['expiration_date'];

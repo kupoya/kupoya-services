@@ -1,5 +1,16 @@
 <?php
+// $strategy['bank']
+// $strategy['expiration_date']
 ?>
+
+						<!-- Widget Box -->
+						<div class="widget increase" id="new-visitors">
+							<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
+							<span>increase</span>
+							<p><strong><?= $strategy['bank']?><sup>%</sup></strong> bank size</p>
+						</div>
+						<!-- /Widget Box -->
+
 						<!-- Widget Box -->
 						<div class="widget increase" id="new-visitors">
 							<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
@@ -18,9 +29,9 @@
 						
 						<?php if (isset($strategy['exposure_count'])): ?>
 							<!-- /Widget Box -->
-							<div class="widget increase" id="new-tasks">
+							<div class="widget increase autowidth" id="new-tasks">
 								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
-								<span><?php echo $strategy['exposure_count']; ?>4523575432</span>
+								<span><?php echo $strategy['exposure_count']; ?></span>
 								<p><strong><?=lang('strategy:Exposure');?></strong><?=lang('strategy:total_exposure_count');?></p>
 							</div>
 							<!-- Widget Box -->
