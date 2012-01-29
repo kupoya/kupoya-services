@@ -316,6 +316,16 @@ section[role=navigation] header h1 {
 	top:-8px;
 }
 
+/* Widget with auto width */
+.widget.autowidth {
+	width:auto;
+	min-width:160px;
+}
+.widget.autowidth span {
+	width:auto;
+	min-width:36px;
+}
+
 /*  Sample Widgets  */
 #new-visitors span, #new-orders span {
 	text-indent:-9999em;
@@ -438,6 +448,35 @@ article footer {
 	background-repeat:no-repeat;
 }
 .tab {
+	clear:both;
+	display:block;
+	overflow:hidden;
+}
+
+/*  Content Layout :: Main Content :: Tabs */
+.tab-switch-url {
+	display:block;
+	position:relative;
+	top:7px;
+}
+.tab-switch-url li {
+	float:left;
+	list-style:none;
+	margin-right:15px;
+}
+.tab-switch-url li:last-child { margin-right:0; }
+.tab-switch-url li:last-child a { padding-right:0; }
+.tab-switch-url li a {
+	display:block;
+	padding:0 3px 12px;
+	text-decoration:none;
+	height:16px;
+}
+.tab-switch-url li a.current {
+	background-position:bottom center;
+	background-repeat:no-repeat;
+}
+.tab-url {
 	clear:both;
 	display:block;
 	overflow:hidden;
@@ -1172,6 +1211,14 @@ input.datepicker {
 }
 .ie9 input.datepicker { background-position:6px 5px; }
 
+.nyroModalDom form, nyroModalLink form {
+	min-width:600px;
+	max-width:900px;
+}
+.nyroModalDom form fieldset, .nyroModalLink form fieldset {
+	min-width:700px;
+}
+
 /*  jQuery Datepicker  */
 .jq-datepicker {
 	border:1px solid;
@@ -1493,55 +1540,3 @@ table .actions .delete { background:url('../img/icons/icon_table_delete.png') no
 	text-align:center;
 	font-size:1000%;
 }
-
-/* @LT */
-.tab-switch-url {
-	display:block;
-	position:relative;
-	top:7px;
-}
-.tab-switch-url li {
-	float:left;
-	list-style:none;
-	margin-right:15px;
-}
-.tab-switch-url li:last-child { margin-right:0; }
-.tab-switch-url li:last-child a { padding-right:0; }
-.tab-switch-url li a.current { background-image:url('../img/icons/icon_tab.png'); }
-.tab-switch-url li a {
-	display:block;
-	padding:0 3px 12px;
-	text-decoration:none;
-	height:16px;
-}
-.tab-switch-url li a.current {
-	background-position:bottom center;
-	background-repeat:no-repeat;
-}
-/* */
-
-/* @LT */
-.tab-switch-url-ajax {
-	display:block;
-	position:relative;
-	top:7px;
-}
-.tab-switch-url-ajax li {
-	float:left;
-	list-style:none;
-	margin-right:15px;
-}
-.tab-switch-url-ajax li:last-child { margin-right:0; }
-.tab-switch-url-ajax li:last-child a { padding-right:0; }
-.tab-switch-url-ajax li a.current { background-image:url('../img/icons/icon_tab.png'); }
-.tab-switch-url-ajax li a {
-	display:block;
-	padding:0 3px 12px;
-	text-decoration:none;
-	height:16px;
-}
-.tab-switch-url-ajax li a.current {
-	background-position:bottom center;
-	background-repeat:no-repeat;
-}
-/* */
