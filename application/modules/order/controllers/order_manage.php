@@ -9,15 +9,53 @@ class Order_Manage extends Authenticated_Controller {
     }
     
     
-    public function index()
-    {
+    // public function index()
+    // {
         
-        //$this->load->model('order/order_model');
+    //     //$this->load->model('order/order_model');
         
-        $data['data'] = $ret;
-        $this->template->build('order_list', $data);
-    }
+    //     $data['data'] = $ret;
+    //     $this->template->build('order_list', $data);
+    // }
     
+
+
+    /**
+     * Returns partial for order history
+     * 
+     * 
+     * @param array $data the payload
+     */
+    public function _get_order_history($data)
+    {
+        //$this->template
+
+        //$asset_js = js('order_history.js', 'order');
+        //Asset::add_asset('js', $asset_js, 'order');
+        
+        $this->load->view('order_history', $data);
+    }
+
+
+    /**
+     * API: Get Order History
+     * 
+     * @param integer @strategy_id
+     */
+    public function get_order_history($strategy_id = 0)
+    {
+        if (!$strategy_id)
+            return FALSE;
+
+        $payload['strategy']['id'] = $strategy_id;
+
+        $this->load->model('order/order_model');
+
+        $data['result'] = $this->order_model->get_order_history($payload);
+
+        $this->load->view('ajax', $data);
+    }
+
     
     public function create()
     {

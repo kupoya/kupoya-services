@@ -19,6 +19,59 @@ class Order_Model extends Base_Model {
 	
 
 	
+
+
+	/**
+	 * Get order history
+	 * 
+	 * @param array $data
+	 * 	$data['strategy']['id'] = the strategy id
+	 * 
+	 * @return array $results mysql result array 
+	 */
+	public function get_order_history(&$data)
+	{
+		if (!isset($data['strategy']['id']) || empty($data['strategy']['id']) || !is_numeric($data['strategy']['id']))
+			return FALSE;
+
+		$strategy_id = $data['strategy']['id'];
+
+		/*
+		SELECT
+		 o.created_time, p.name as plan_name, p.bank, p.plan_type, o.status, o.order_total
+		FROM
+		 `order` as `o`
+		JOIN strategy s ON s.id = o.strategy_id
+		JOIN plan p ON p.id = o.plan_id
+		JOIN strategy_type st ON st.id = p.strategy_type
+		WHERE
+			s.id = 1
+		*/
+
+		// confirm user access to this record
+		$this->load->model('strategy/strategy_model');
+	    $ret = $this->strategy_model->authorize_action($data);
+	    if (!$ret)
+	        return FALSE;
+
+		$this->load->library('datatables');
+
+		$this->datatables->select('o.created_time, p.name as plan_name, p.bank, p.plan_type, o.status, o.order_total');
+		$this->datatables->from('order as o');
+
+		$this->datatables->join('strategy AS s', 's.id = o.strategy_id');
+		$this->datatables->join('plan AS p', 'p.id = o.plan_id');
+
+		$this->datatables->where('s.id', $strategy_id);
+
+        //$this->datatables->unset_column('code_id');
+
+        $result = $this->datatables->generate();
+
+		return $result;
+	}
+
+
 	/**
 	 * Set status
 	 * 
@@ -84,6 +137,9 @@ class Order_Model extends Base_Model {
 	        if (isset($order['strategy_id']))
 	            $record['strategy_id'] = $order['strategy_id'];
 
+	        if (isset($order['plan_id']))
+	            $record['plan_id'] = $order['plan_id'];
+
 	        if (isset($order['expiration_date']))
 	            $record['expiration_date'] = $order['expiration_date'];
 
@@ -100,9 +156,9 @@ class Order_Model extends Base_Model {
 			// create the record
 
 			// if no associated record ids provided then we quit
-			if (!isset($order['operator_id']) || !isset($order['strategy_id']))
+			if (!isset($order['operator_id']) && !isset($order['strategy_id']) && !isset($order['plan_id']))
 			{
-			 log_message('error', ' - Order => Save => Insert => missing operator_id or strategy_id');
+			 log_message('error', ' - Order => Save => Insert => missing operator_id or strategy_id or plan_id');
 			 return FALSE;
 			}
 
@@ -129,6 +185,7 @@ class Order_Model extends Base_Model {
     	            'promotion_id' => isset($order['promotion_id']) && $order['promotion_id'] ? $order['promotion_id'] : NULL,
     	            //'order_total' => isset($order['order_total']) ? $order['order_total'] : '0',
     	            'order_total' => $order_total,
+    	            'plan_id' => isset($order['plan_id']) ? $order['plan_id'] : 0,
     	            'strategy_id' => $order['strategy_id'],
     	            'expiration_date' => isset($order['expiration_date']) ? $order['expiration_date'] : '0000-00-00 00:00:00',
     	        )
