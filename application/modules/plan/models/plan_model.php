@@ -40,17 +40,18 @@ class Plan_Model extends Base_Model {
 	 * @param mixed $strategy_type provide an integer or name of the stratey_type
 	 * @return array $records all plans information
 	 */
-	public function get_dropdown($strategy_type = NULL)
+	public function get_dropdown($strategy_type = NULL, $only_free = FALSE)
 	{
 		$this->db->select('plan.*');
-        $this->db->select('st.name');
+		$this->db->select('st.id as strategy_type_id');
+        $this->db->select('st.name as strategy_type_name');
         $this->db->from('plan AS plan');
         $this->db->join('strategy_type AS st', 'plan.strategy_type = st.id');
         
-        // if requested to return a specific stratey_type plan information
+        // if requested to return a specific strategy_type plan information
         if (isset($strategy_type))
         {
-        	if (is_numeric($stratey_type))
+        	if (is_numeric($strategy_type))
         	{
             	$this->db->where('st.id', $strategy_type);
             }
@@ -58,6 +59,13 @@ class Plan_Model extends Base_Model {
             {
             	$this->db->where('st.name', $strategy_type);
             }
+        }
+
+        // further limit result for only free plans?
+        if ($only_free)
+        {
+        	// gives me: LIKE free%
+        	$this->db->like('plan.name', 'FREE_', 'after');
         }
         
         // only return plans which are set valid
@@ -69,14 +77,110 @@ class Plan_Model extends Base_Model {
         $options = array();
         foreach ($ret as $plan => $plan_info)
         {
-        	$options[$plan_info['id']] = $plan_info['description'];
+        	//$options[$plan_info['id']] = $plan_info['description'];
+        	$options[$plan_info['id']] = $plan_info;
         }
 
         return $options;
 
-
 	}
 
+
+
+	/**
+	 * Upgrade a Plan
+	 * 
+	 * 
+	 */
+	public function upgrade($data)
+	{
+		/**
+		 * - 
+		 * - make sure user has access to this strategy
+		 * - make sure strategy type matches the plan type requested
+		 * - make sure plan is valid: valid=1
+		 * - create an order record
+		 * - if plan_type = bank -> upgrade strategy bank counter and sets expiration time to current day
+		 * - if plan_type = expiration -> set expiration time to required time and set strategy bank counter to 0
+		 */
+		
+		if (!isset($data['plan']['id']) || !isset($data['strategy']['id']))
+	        return FALSE;
+
+	    if (!$data['plan']['id'] || !$data['strategy']['id'])
+	        return FALSE;
+
+	    
+	    // validate plan is ok for using it
+	    if (!$this->authorize_action($data))
+	    	return FALSE;
+	    
+
+	    $upgrade_plan = (array) $this->get($data['plan']['id']);
+	    if (!$upgrade_plan || !isset($upgrade_plan['id']))
+	    	return FALSE;
+
+	   	// we need some models loaded
+	    $this->load->model('strategy/strategy_model');
+	    $this->load->model('order/order_model');
+
+	    $strategy = $this->strategy_model->get($data['strategy']['id']);
+
+	    $ret = TRUE;
+
+	    if (isset($upgrade_plan['plan_type']) && $upgrade_plan['plan_type'] == 'bank')
+	    {
+	    	// get plan bank amount for bank type plans and update strategy with bank amount	
+	    	$bank_amount = $upgrade_plan['bank'];
+
+			// prepare payload for strategy save 
+	    	$payload['strategy']['id'] = $data['strategy']['id'];
+	    	
+	    	// add the bank amount to the current payload
+	    	$ret = $this->strategy_model->upgrade_bank($payload, $bank_amount);
+
+	    	// set expiration_date to current day, we're now on bank plan type, not expiration
+	    	$payload['strategy']['expiration_date'] = date('Y-m-d H:i:s', time());
+	    	$payload['strategy']['plan_id'] = $upgrade_plan['id'];
+	    	$ret = $this->strategy_model->save_strategy($payload);
+
+	    }
+	    elseif (isset($upgrade_plan['plan_type']) && $upgrade_plan['plan_type'] == 'expiration')
+	    {
+			// get plan expiration date for expiration type plans
+	    	$expiration_date = $data['plan']['expiration_date'];
+	    	
+	    	// prepare payload for strategy save 
+	    	$payload['strategy']['id'] = $data['strategy']['id'];
+	    	$payload['strategy']['expiration_date'] = $expiration_date;
+	    	// set bank to 0, we're now on expiration_date plan type, not banks
+	    	$payload['strategy']['bank'] = '0';
+	    	$payload['strategy']['plan_id'] = $upgrade_plan['id'];
+
+	    	$ret = $this->strategy_model->save_strategy($payload);
+
+	    }
+	    else
+	    {
+	    	// unknown plan_type can't be handled
+	    	return FALSE;
+	    }
+
+    	// if all went well, we'll add an order record for this action
+    	if ($ret)
+    	{
+	    	// create a new order record
+	    	$payload['order']['operator_id'] = $this->get_operator_id();
+	    	$payload['order']['strategy_id'] = $data['strategy']['id'];
+	    	$payload['order']['plan_id'] = $upgrade_plan['id'];
+
+	    	$ret = $ret && $this->order_model->save_order($payload);
+	    }
+	    
+	    return $ret;
+
+
+	}
 
 	
 	/**
@@ -307,7 +411,86 @@ class Plan_Model extends Base_Model {
 	 */	
 	public function auth_plan(&$data)
 	{
-	    /*
+
+		/*
+         * SQL Example:
+         * 
+		SELECT 
+		    `strategy`.`id`
+		FROM
+		    (`strategy`)
+		JOIN `plan` AS p ON p.strategy_type = strategy.type
+		JOIN `campaign_strategies` AS cs ON `cs`.`strategy_id` = `strategy`.`id`
+		JOIN `code` AS code ON `code`.`campaign_id` = `cs`.`campaign_id`
+		JOIN `brand` AS `b` ON `b`.`id` = `code`.`brand_id`
+		JOIN `operator` AS `op` ON `op`.`brand_id` = `b`.`id`
+		WHERE
+		    `strategy`.`id` =  '2'
+		AND
+		    p.id = 27
+		AND
+		    p.valid = 1
+		AND
+		    `op`.`id` =  '1'
+     	 *
+     	 *
+         */
+
+		$this->db->select('strategy.id');
+		$this->db->from('strategy');
+		$this->db->join('plan AS p', 'p.strategy_type = strategy.type');
+		$this->db->join('campaign_strategies AS cs', 'cs.strategy_id = strategy.id');
+		$this->db->join('code AS code', 'code.campaign_id = cs.campaign_id');
+        $this->db->join('brand AS b', 'b.id = code.brand_id');
+        $this->db->join('operator AS op', 'op.brand_id = b.id');
+
+        if (isset($data['plan']['id']))
+        {
+        	$this->db->where('p.id', $data['plan']['id']);
+        }
+        else
+        {
+        	return FALSE;
+        }
+        	
+        // make sure plan is valid for usage
+        $this->db->where('p.valid', '1');
+
+        if (isset($data['strategy']['id']))
+        {
+            $this->db->where('strategy.id', $data['strategy']['id']);
+        }
+        else
+        {
+            return FALSE;
+        }
+        
+        if (!isset($data['operator_id']))
+        {
+            $operator_id = $this->get_operator_id();
+        }
+        else
+        {
+            $operator_id = $data['operator_id'];
+        }
+        
+        if (!$operator_id)
+            return FALSE;
+            
+        $this->db->where('op.id', $operator_id);
+        
+        
+        $ret = $this->db->get()->row_array();
+        
+        if (!$ret)
+            return FALSE;
+        
+        return $ret;
+
+
+		/* OLD:
+
+	    
          * SQL Example:
          * 
 			SELECT op.id, op.brand_id
@@ -323,7 +506,7 @@ class Plan_Model extends Base_Model {
      			cs.strategy_id = 2
      	 *
      	 *
-         */
+         
         $this->db->select('op.id');
         $this->db->select('op.brand_id');
         $this->db->from('operator AS op');
@@ -361,6 +544,8 @@ class Plan_Model extends Base_Model {
             return FALSE;
         
         return $ret;
+
+        */
 	}
 	
 	
