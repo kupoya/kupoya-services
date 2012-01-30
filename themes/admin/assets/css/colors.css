@@ -248,6 +248,25 @@ article.nested .sidetab-switch li a.current { border-right:1px solid #e6e6e6; }
 .no-cssgradients .button.green, .no-cssgradients button.green { background:#78ac15 url('../img/btns/btn_green.png') repeat-x left top; }
 .no-cssgradients .button.green:hover, .no-cssgradients button.green:hover { background:#679212 url('../img/btns/btn_green_hover.png') repeat-x left top; }
 
+
+/*  Buttons :: Button :: Pink  */
+.button.pink, button.pink { 
+	border-color:#ff00cc #ff00c9 #ff0099;
+	background:-moz-linear-gradient(top, #ff00cc, #ff00c9 5%, #ff0099 100%);
+	background:-webkit-gradient(linear, left top, left bottom, from(#ff00c9), to(#ff00c9), color-stop(0.05, #ff0099));
+	background:-o-linear-gradient(top, #ff00cc, #ff00c9 5%, #ff0099 100%);
+	color:#f7ffe5;
+}
+.button.pink:hover, button.pink:hover {
+	background:-moz-linear-gradient(top, #ff00cc, #ff00c9 5%, #ff0099 100%);
+	background:-webkit-gradient(linear, left top, left bottom, from(#d7fa96), to(#ff00c9), color-stop(0.05, #ff0099));
+	background:-o-linear-gradient(top, #ff00cc, #ff00c9 5%, #ff0099 100%);
+	color:#fff;
+}
+.no-cssgradients .button.pink, .no-cssgradients button.pink { background:#ff0099 url('../img/btns/btn_green.png') repeat-x left top; }
+.no-cssgradients .button.pink:hover, .no-cssgradients button.pink:hover { background:#ff0099 url('../img/btns/btn_green_hover.png') repeat-x left top; }
+
+
 /*  Buttons :: Button :: Gray  */
 .button.gray, button.gray { 
 	border-color:#b1b3b3 #a4a6a6 #929494;

@@ -731,6 +731,14 @@ article section p a.button {
 .progress-bar.blue div { background-color:#058dc7; }
 .progress-bar.green div { background-color:#77ab13; }
 
+
+.image.center img {
+	display: block;
+	border-style: none;
+	text-align: center;
+	margin: auto;
+}
+
 /*  Content Images  */
 article img {
 	padding:4px;
@@ -738,6 +746,7 @@ article img {
 	border:1px solid;
 }
 div.tab > img, div.tab > .image-frame img { margin-top:0; }
+
 
 /*  Content Image Mini Menu  */
 .image-frame { position:relative; }
@@ -1539,4 +1548,10 @@ table .actions .delete { background:url('../img/icons/icon_table_delete.png') no
 	display:block;
 	text-align:center;
 	font-size:1000%;
+}
+
+div.center {
+	display: block;
+	text-align: center;
+	margin: auto;
 }

@@ -109,7 +109,28 @@ class Strategy_Manage extends Authenticated_Controller {
     }
     
     
+
+    /**
+     * Redirects to the specific strategy create page
+     * 
+     * @param int $strategy_id
+     * @param int $campaign_id
+     */
     public function create()
+    {
+        $this->_menu['page'] = 'new_campaign';
+        $this->template->set('menu', $this->_menu);
+
+        $data = array();
+        $this->template->build('strategy_create', $data);
+    }
+
+
+
+    /**
+     * Legacy method, unused
+     */
+    private function _create()
     {
         $this->_menu['page'] = 'new_campaign';
         $this->template->set('menu', $this->_menu);

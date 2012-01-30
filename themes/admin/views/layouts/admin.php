@@ -96,7 +96,7 @@
 					<a href="" title="" class="events"><?=lang('menu:campaigns');?></a>
 					<ul>
 						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'my_campaigns') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/index'?>" title=""><?=lang('menu:campaigns:my_campaigns');?></a></li>
-						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'new_campaign') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/new'?>" title=""><?=lang('menu:campaigns:new_campaign');?></a></li>
+						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'new_campaign') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/create'?>" title=""><?=lang('menu:campaigns:new_campaign');?></a></li>
 					</ul>
 				</li>
 				<li>
