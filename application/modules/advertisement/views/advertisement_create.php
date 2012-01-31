@@ -1,54 +1,73 @@
 <?php
 
-echo "<br/><br/>";
-if (isset($message)) echo $message;
-echo "<br/><br/>";
-
-echo validation_errors();
-echo "<br/><br/>";
-echo "<br/><br/>";
-
-var_dump($data);
-
-var_dump($error);
-
-
-echo "<br/><br/>";
+//var_dump($plans);
+if (!isset($plans))
+	$plans = array();
 ?>
 
 
-<form name='test' action='<?php echo base_url().'advertisement/create'?>' method='post'>
+	<?php
+		$form_errors = validation_errors();
+		if ($form_errors != ''):
+	?>
+		<div class="notification error">
+			<a href="#" class="close-notification" title="Hide Notification" rel="tooltip">x</a>
+			<p><strong>Errors in the form</strong>
+				<?php echo $form_errors ?>
+			</p>
+		</div>
+	<?php endif; ?>
 
-	strategy name
-	<input type='text' name='strategy[name]' value='<?= set_value('strategy[name]', '') ?>' />
-	<br/>
+	<header>
+		<h2>
+			Create a new campaign
+		</h2>
+	</header>
 
-	strategy description
-	<input type='text' name='strategy[description]' value='<?= set_value('strategy[description]', '') ?>' />
-	<br/>
+		<form name='advertisement' action='<?php echo base_url().'advertisement/create'?>' method='post'>
+			<!-- Inputs -->
+			<!-- Use class .small, .medium or .large for predefined size -->
+			<input type='hidden' name='strategy[id]'
+				value='<?= set_value('strategy[id]', isset($strategy['id']) ? $strategy['id'] : '')  ?>' />
+			<fieldset>
+				<legend>Basic Campaign Info</legend>
+				<dl>
 
-	strategy picture
-	<input type='text' name='strategy[picture]' value='<?= set_value('strategy[picture]', '') ?>' />
-	<br/>
+					<dt>
+						<label>Campaign Name</label>
+					</dt>
+					<dd>
+						<?php $err = form_error('strategy[name]'); ?>
+						<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+							name="strategy[name]" maxlength='100'
+							value='<?= set_value('strategy[name]', isset($strategy['name']) ? $strategy['name'] : '')  ?>' />
+						<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+						<p>This name identifies your campaign strategy name</p>
+					</dd>
 
-	strategy website
-	<input type='text' name='strategy[website]' value='<?= set_value('strategy[website]', '') ?>' />
-	<br/>
+					<!-- Next item -->
 
-	redirect url
-	<input type='text' name='advertisement[redirect_url]' value='<?= set_value('advertisement[redirect_url]', '') ?>' />
-	<br/>
+				</dl>
+			</fieldset>
 
-	choose plan
-	<?= form_dropdown('plan[id]', $plans); ?>
-	<br/>
+			<fieldset>
+				<legend>Choose a plan to start with...</legend>
 
-	promotion
-	<input type='text' name='order[promotion_id]' value='<?= set_value('order[promotion_id]', '') ?>' />
-	<br/>
+					<?php foreach($plans as $key => $value): ?>
 
+						<input type="radio" name="plan[id]" value="<?=$value['id']?>">
+						<label><?= $value['name']?></label>
+						<br/>
+						<ul>
+							<p><?= $value['description']?> </p>
+							<?php if (isset($value['plan_type']) && $value['plan_type'] == 'expiration'): ?>
+							Set Expiration Date <input type="text" name="plan[expiration_date]" class="datepicker small" value="" />
+							<?php endif; ?>
+						</ul>
 
+					<?php endforeach; ?>
 
-	<input type='submit' name='submit' value='submit' />
+			</fieldset>
 
-</form>
+			<button type="submit"><?=lang('Submit');?></button>
+			</form>

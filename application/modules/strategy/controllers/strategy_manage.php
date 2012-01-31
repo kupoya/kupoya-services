@@ -118,10 +118,11 @@ class Strategy_Manage extends Authenticated_Controller {
      */
     public function create()
     {
+        $data = array();
+
         $this->_menu['page'] = 'new_campaign';
         $this->template->set('menu', $this->_menu);
 
-        $data = array();
         $this->template->build('strategy_create', $data);
     }
 

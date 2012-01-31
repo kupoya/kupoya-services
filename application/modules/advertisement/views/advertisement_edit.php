@@ -207,7 +207,7 @@ if (isset($campaign['id']) && isset($strategy['id']))
 									</dl>
 								</fieldset>
 								<button type="submit"><?=lang('Submit');?></button>
-								</form>										
+								</form>
 
 							</div>
 

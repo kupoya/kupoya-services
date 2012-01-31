@@ -26,6 +26,8 @@
 $data['strategy'] = $strategy;
 $data['campaign'] = $campaign;
 
+
+
 $advertisement_view_url = '#';
 if (isset($campaign['id']) && isset($strategy['id']))
 	$advertisement_view_url = base_url().'strategy/manage/view/'.$strategy['id'].'/'.$campaign['id'];

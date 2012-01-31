@@ -173,8 +173,11 @@ class Advertisement_Model extends Base_Model
 		if (isset($data['strategy']))
 		{
 			//forward to strategy_model to save it
-			$this->load->model('strategy/strategy_model');
-			$strategy_id = $this->strategy_model->save_strategy($data);
+			// @TODO this doesn't work well with register_strategy() in strategy_model which already
+			// takes care of registering the strategy
+
+			// $this->load->model('strategy/strategy_model');
+			// $strategy_id = $this->strategy_model->save_strategy($data);
 		}
 
 	    if (!isset($data['advertisement']))
@@ -226,6 +229,9 @@ class Advertisement_Model extends Base_Model
     	            'text' => isset($advertisement['text']) ? $advertisement['text'] : NULL,
     	        )
     	    ); 
+
+			if ($strategy_id !== FALSE)
+    	    	$strategy_id = TRUE;
 	    }
 	    
 	    if (!$strategy_id)

@@ -530,7 +530,7 @@ class Strategy_Model extends Base_Model {
 		// creates the campaign name if wasn't provided - which is a derived copy of the strategy name
 	    if (!isset($data['campaign']['name']) && isset($data['strategy']['name']))
 	    {
-	    	$data['campaign']['name'] = mb_substr($data['strategy']['name'], 0, 44);
+	    	$data['campaign']['name'] = mb_substr($data['strategy']['name'], 0);
 	    }  
 
 	    // set brand information
@@ -569,6 +569,7 @@ class Strategy_Model extends Base_Model {
 		// first set order settings
 		$data['order']['operator_id'] = $operator['id'];
 		$data['order']['strategy_id'] = $result['strategy_id'];
+		$data['order']['plan_id'] = $data['plan']['id'];
 		$ret = $this->order_model->save_order($data, TRUE);
 		if ($ret === FALSE)
 			return FALSE;
@@ -666,6 +667,7 @@ class Strategy_Model extends Base_Model {
     	            'picture' => isset($strategy['picture']) ? $strategy['picture'] : '',
     	            'website' => isset($strategy['website']) ? $strategy['website'] : '',
     	            'plan_id' => $strategy['plan_id'],
+    	            'bank' => 0,
     	            'expiration_date' => isset($strategy['expiration_date']) ? $strategy['expiration_date'] : '0000-00-00 00:00:00',
     	            'language' => isset($strategy['language']) ? $strategy['language'] : 'en-us',
     	        )

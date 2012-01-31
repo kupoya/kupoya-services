@@ -35,6 +35,39 @@ class Plan_Model extends Base_Model {
 
 
 	/**
+	 * Validate plan is ok for using
+	 * 
+	 */
+	public function validate_plan($data = NULL)
+	{
+		$plan_id = FALSE;
+
+		if (isset($data['plan']['id']))
+			$plan_id = $data['plan']['id'];
+
+		if (is_numeric($data))
+			$plan_id = $data;
+
+		if (!$plan_id)
+			return FALSE;
+
+		$plan = (array) $this->get($plan_id);
+		if ($plan['plan_type'] == 'expiration')
+		{
+			// was the expiration field provided
+			if (!isset($data['plan']['expiration_date']) || empty($data['plan']['expiration_date']))
+				return FALSE;
+
+			// make sure plan is not surpassing it's allowed expiration date
+			// @TODO
+			$expiration_date = strtotime($data['plan']['expiration_date']);
+		}
+
+		return TRUE;
+	}
+
+
+	/**
 	 * Get plan information
 	 * 
 	 * @param mixed $strategy_type provide an integer or name of the stratey_type
@@ -47,7 +80,7 @@ class Plan_Model extends Base_Model {
         $this->db->select('st.name as strategy_type_name');
         $this->db->from('plan AS plan');
         $this->db->join('strategy_type AS st', 'plan.strategy_type = st.id');
-        
+        log_message('error', $strategy_type);
         // if requested to return a specific strategy_type plan information
         if (isset($strategy_type))
         {

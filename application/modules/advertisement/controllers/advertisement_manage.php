@@ -317,42 +317,74 @@ class Advertisement_Manage extends Authenticated_Controller {
 
 
     public function create()
-    {        
-        $this->form_validation->set_rules('strategy[name]', 'Strategy Name', 'required|xss_clean|max_length[100]');
-        $this->form_validation->set_rules('strategy[description]', 'Strategy Description', 'required|xss_clean|max_length[512]');
-        $this->form_validation->set_rules('strategy[picture]', 'Strategy Picture', 'required|xss_clean|max_length[160]');
-        $this->form_validation->set_rules('strategy[website]', 'Strategy Website', 'required|xss_clean|max_length[100]');
+    {
+        $this->_menu['page'] = 'new_campaign';
+        $this->template->set('menu', $this->_menu);
 
+        $this->form_validation->set_rules('strategy[name]', 'Strategy Name', 'required|xss_clean|max_length[100]');
         $this->form_validation->set_rules('plan[id]', 'Plan', 'required|integer');
 
-        //$this->form_validation->set_rules('order[promotion_id]', 'Promotion', 'integer');
 
-        $this->form_validation->set_rules('advertisement[redirect_url]', 'Advertisement Redirect URL', 'xss_clean|max_length[128]');
+        /* a more feature-rich form requires more data but we're not there yet... 
+         *
+            $this->form_validation->set_rules('strategy[description]', 'Strategy Description', 'required|xss_clean|max_length[512]');
+            $this->form_validation->set_rules('strategy[picture]', 'Strategy Picture', 'required|xss_clean|max_length[160]');
+            $this->form_validation->set_rules('strategy[website]', 'Strategy Website', 'required|xss_clean|max_length[100]');
+            $this->form_validation->set_rules('order[promotion_id]', 'Promotion', 'integer');
 
-        //$this->form_validation->set_rules('strategy[expirate_date]', 'Strategy Expiration Date', 'required|max_length[45]');
-        //$this->form_validation->set_rules('strategy[language]', 'Strategy Language', 'required|max_length[45]');
+            $this->form_validation->set_rules('advertisement[redirect_url]', 'Advertisement Redirect URL', 'xss_clean|max_length[128]');
 
+            $this->form_validation->set_rules('strategy[expirate_date]', 'Strategy Expiration Date', 'required|max_length[45]');
+            $this->form_validation->set_rules('strategy[language]', 'Strategy Language', 'required|max_length[45]');
+        */
+        
+
+        // get available free plans for advertisement strategy
         $this->load->model('plan/plan_model');
-        $data['plans'] = $this->plan_model->get_dropdown();
+        $data['plans'] = $this->plan_model->get_dropdown('advertisement', TRUE);
         
-        log_message('debug', '==> 1');
-        
-        if ($this->form_validation->run() === FALSE)
+        // get form settings
+        $plan = $this->input->post('plan', TRUE);
+        $strategy = $this->input->post('strategy', TRUE);
+
+
+        $plan_validated = TRUE;
+        // validate plan is indeed in possible options
+        if (!isset($plan['id']) || (!in_array($plan['id'], array_keys($data['plans']))))
         {
-            //error
-            log_message('debug', '==> 2');
+            // $this->_notifications['error'][] = 'Incorrect plan';
+            // $this->session->set_flashdata('notifications', $this->_notifications);
 
-            $data['data'] = $this->input->post('strategy[name]');
+            $plan_validated = FALSE;
+        }
 
+        // validate plan
+        $payload['plan'] = $plan;
+        $ret = $this->plan_model->validate_plan($payload);
+        if (!$ret)
+        {
+            // $this->_notifications['error'][] = 'Provide plan expiration date';
+            // $this->session->set_flashdata('notifications', $this->_notifications);
+
+            // redirect($this->redirect_back());
+            $plan_validated = FALSE;
+        }
+
+        if ($plan_validated === FALSE)
+        {
+            $this->form_validation->set_rules('plan[expiration_date]', 'Plan Expiration', 'required');
+        }
+
+
+        if ($this->form_validation->run() === FALSE || $plan_validated === FALSE)
+        {
+            // $data['data'] = $this->input->post('strategy[name]');
             $this->template->build('advertisement_create', $data);
         }
         else 
         {
             //success
             log_message('debug', '==> 3');
-            
-            // set plan settings
-            $data['plan'] = $this->input->post('plan', TRUE);
 
             // set order promotion
             $order = $this->input->post('order', TRUE);
@@ -363,55 +395,47 @@ class Advertisement_Manage extends Authenticated_Controller {
             // set advertisement settings
             $data['advertisement'] = $this->input->post('advertisement', TRUE);
 
-            // set strategy settings
-            $data['strategy'] = $this->input->post('strategy', TRUE);
-            $data['strategy']['plan_id'] = $data['plan']['id'];
-            // be sure to unset the strategy id so that it doesn't get updated by any smart-ass user
-            unset($data['strategy']['id']);
+            // set plan
+            $data['plan']['id'] = $plan['id'];
 
-            $data['campaign']['name'] = mb_substr($data['strategy']['name'], 0, 44);
+            // set strategy settings
+            // $data['strategy'] = $this->input->post('strategy', TRUE);
+            // unset($data['strategy']['id']);
+            $data['strategy']['name'] = $strategy['name'];
+            $data['strategy']['plan_id'] = $plan['id'];
+            // be sure to unset the strategy id so that it doesn't get updated by any smart-ass user
+
+            // $data['campaign']['name'] = mb_substr($data['strategy']['name'], 0, 99);
+            $data['campaign']['name'] = mb_substr($data['strategy']['name'], 0);
 
             $this->load->model('advertisement/advertisement_model');
             $ret = $this->advertisement_model->register_advertisement($data);
 
-            $data['data'] = $ret;
-            $data['error'] = $this->session->flashdata('error');
+
+            if ($ret)
+            {
+                // if successful move the user to his new strategy
+                $this->_notifications['success'][] = 'Successfully created new campaign, you may now update the campaign details as you wish';
+                $this->session->set_flashdata('notifications', $this->_notifications);
+
+                // if we know the strategy/campaign id we'll redirect the user to the edit screen
+                if (isset($ret['strategy_id']) && isset($ret['campaign_id']))
+                    redirect('strategy/manage/edit/'.$ret['strategy_id'].'/'.$ret['campaign_id']);
+                else
+                    redirect('strategy/manage/index');
+            }
+            else
+            {
+                // otherwise send the user back with the error
+                $this->_notifications['error'][] = 'Error registering new campaign/strategy';
+                $this->session->set_flashdata('notifications', $this->_notifications);
+
+                redirect($this->redirect_back());
+            }
             
-            $this->template->build('advertisement_create', $data);
-        }
-        
-        log_message('debug', '==> 4');
-        
-        /*
-        log_message('debug', '==> in create()');
-        
-        $data['name'] = 'bugaga';
-        $data['campaign_mode'] = '1';
-        $data['brand_id'] = '2';
-        
-        $this->load->model('campaign/campaign_model');
-        $ret = $this->campaign_model->create_campaign($data, true);
-        */
-        
-        //$this->load->model('campaign/campaign_strategies_model');
-        //$ret = $this->campaign_strategies_model->get_by(array('campaign_id' => '12', 'strategy_id' => '12'));
 
-        /*
-        if ($this->input->post('campaign_name'))
-        {
-            log_message('debug', '==> got campaign_name');
-            $data['data'] = array('name' => $this->input->post('campaign_name'));
         }
-        else
-        {
-            redirect('campaign/campaign_manage/index');
-        }
-          */
 
-        //$data['data'] = $ret;
-        
-        //$this->template->build('campaign_create', $data);
-        
     }
      
     
