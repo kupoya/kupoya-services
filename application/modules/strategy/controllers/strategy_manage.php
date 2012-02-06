@@ -1,4 +1,5 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 class Strategy_Manage extends Authenticated_Controller {
     
     protected $_data = array();
@@ -31,6 +32,7 @@ class Strategy_Manage extends Authenticated_Controller {
      */
     public function view($strategy_id = 0, $campaign_id = 0)
     {
+        
         $this->load->model('strategy/strategy_model');
 
         $payload['strategy']['id'] = $strategy_id;
@@ -44,7 +46,7 @@ class Strategy_Manage extends Authenticated_Controller {
         {
             $strategy_type = $data['strategy']['strategy_type_name'];
             // we're redirecting to url like: advertisement/view/2/1
-            redirect($strategy_type.'/view/'.$strategy_id.'/'.$campaign_id);
+            redirect($strategy_type.'/manage/view/'.$strategy_id.'/'.$campaign_id);
         }
 
     }
@@ -71,7 +73,7 @@ class Strategy_Manage extends Authenticated_Controller {
         {
             $strategy_type = $data['strategy']['strategy_type_name'];
             // we're redirecting to url like: advertisement/view/2/1
-            redirect($strategy_type.'/edit/'.$strategy_id.'/'.$campaign_id);
+            redirect($strategy_type.'/manage/edit/'.$strategy_id.'/'.$campaign_id);
         }
 
     }

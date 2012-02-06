@@ -43,12 +43,14 @@ class Strategy_Overview extends Authenticated_Controller {
         $this->load->model('strategy/strategy_model');
 
         $payload['strategy']['id'] = $strategy_id;
-        $payload['campaign']['id'] = $campaign_id;
+        // $payload['campaign']['id'] = $campaign_id;
 
-        // data includes ['plan'] and ['strategy'] arrays
-        //$data = $this->strategy_model->load($payload);
+         // data includes ['plan'] and ['strategy'] arrays
+        $data = $this->strategy_model->load($payload);
 
-        $this->template->build('reports/strategy_reports_overview', $payload);
+        $data['campaign']['id'] = $campaign_id;
+
+        $this->template->build('reports/strategy_reports_overview', $data);
 
     }
     

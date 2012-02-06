@@ -14,29 +14,14 @@ class Strategy_Reports_Demographics extends Authenticated_Controller {
 
         $this->load->library('form_validation');
 
-        $this->load->language('strategy', 'english');
+        $this->load->language('strategy/strategy', 'english');
 
         $this->load->helper('form');
         $this->load->helper('url');
 
         $this->_menu['context'] = 'campaigns';
     }
-    
 
-    public function get_all_strategies($brand_id = 0)
-    {
-        if (!$brand_id)
-            $brand_id = 1;
-        
-        $payload['brand']['id'] = $brand_id;
-
-        $this->load->model('strategy/strategy_model');
-
-        $data['result'] = $this->strategy_model->get_strategies($payload);
-
-        $this->load->view('ajax', $data);
-    }
-    
 
     public function index($brand_id = 0)
     {
@@ -48,29 +33,31 @@ class Strategy_Reports_Demographics extends Authenticated_Controller {
     }
 
 
-    public function platform($strategy_id = 0)
+    public function get_by_gender($strategy_id = 0)
     {
-        $this->_menu['page'] = 'my_campaigns';
-        $this->template->set('menu', $this->_menu);
+        if (!$strategy_id)
+            return FALSE;
+        
+        $payload['strategy']['id'] = $strategy_id;
 
-        $data['data'] = 'sss';
+        $this->load->model('strategy/strategy_reports_demographics_model');
 
-        $this->template->set_partial('post_jquery', 'js/strategy_reports_demographics_platform');
-        $this->template->build('reports/strategy_reports_platform', $data);
+        $data['result'] = $this->strategy_reports_demographics_model->get_by_gender($payload);
+
+        $this->load->view('ajax', $data);
     }
 
 
-    public function platform_get_all($strategy_id = 0)
+    public function get_by_age($strategy_id = 0)
     {
-        // if (!$brand_id)
-        //     $brand_id = 1;
+        if (!$strategy_id)
+            return FALSE;
         
-        $payload['strategy']['id'] = '13';
+        $payload['strategy']['id'] = $strategy_id;
 
-        //$this->load->model('strategy/strategy_model');
         $this->load->model('strategy/strategy_reports_demographics_model');
 
-        $data['result'] = $this->strategy_reports_demographics_model->get_platform_list($payload);
+        $data['result'] = $this->strategy_reports_demographics_model->get_by_age($payload);
 
         $this->load->view('ajax', $data);
     }

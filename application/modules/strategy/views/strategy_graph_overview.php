@@ -25,7 +25,7 @@
 				      
 				    // Set a callback to run when the Google Visualization API is loaded.
 				    google.setOnLoadCallback(drawChart);
-				      
+
 				    function drawChart() {
 
 				      var v1 = $('input[name=date_start]');
@@ -59,6 +59,11 @@
 				    <!--/Load the AJAX API-->
 					<div id="chart_div">
 					</div>
+
+					<div id="toolbar_div">
+					</div>
+
+					
 				    <form name="strategy_report_form" action="#">
 					    <dl>
 						    <dt>
@@ -71,13 +76,6 @@
 								<input type="text" class="datepicker tiny" name="date_end">
 								<a class="button" href="javascript:drawChart()">Apply</a>
 							</dd>
-							<dt>
-								<label>Type: </label>
-							</dt>
-							<dd>
-								<input type="radio" name="type" value="date" checked /> Date
-							</dd>
-
 						</dl>
 					</form>
 

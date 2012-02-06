@@ -137,26 +137,32 @@ class Strategy_Reports_Model extends Strategy_Model {
 
 		// impose date range, by default use the past month
 		$now = new DateTime('now');
+
 		if (isset($date_start) && $date_start)
 		{	
-			$date_params = explode('/', $date_start);
-			$month = isset($date_params[0]) ? $date_params[0] : date('m');
-			$day = isset($date_params[1]) ? $date_params[1] : date('d');
-			$year = isset($date_params[2]) ? $date_params[2] : date('Y');
-			$date_start = $now->setDate($year, $month, $day)->format('Y-m-d 00:00:01');
+			// $date_params = explode('-', $date_start);
+			// $month = isset($date_params[0]) ? $date_params[0] : date('m');
+			// $day = isset($date_params[1]) ? $date_params[1] : date('d');
+			// $year = isset($date_params[2]) ? $date_params[2] : date('Y');
+			// $date_start = $now->setDate($year, $month, $day)->format('Y-m-d 00:00:01');
+			// $date_start = new DateTime($date_start)->format('Y-m-d 00:00:01');;
 		}
 		else
 		{
-			$date_start = $now->modify('first day of this month')->format('Y-m-d 00:00:01');
+			// @TODO - change this so by default it will be:
+			//$date_start = $now->modify('first day of this month')->format('Y-m-d 00:00:01');
+
+			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
 		}
 		
 		if (isset($date_end) && $date_end)
 		{
-			$date_params = explode('/', $date_end);
-			$month = isset($date_params[0]) ? $date_params[0] : date('m');
-			$day = isset($date_params[1]) ? $date_params[1] : date('d');
-			$year = isset($date_params[2]) ? $date_params[2] : date('Y');
-			$date_end = $now->setDate($year, $month, $day)->format('Y-m-d 00:00:01');
+		// 	$date_params = explode('/', $date_end);
+		// 	$month = isset($date_params[0]) ? $date_params[0] : date('m');
+		// 	$day = isset($date_params[1]) ? $date_params[1] : date('d');
+		// 	$year = isset($date_params[2]) ? $date_params[2] : date('Y');
+		// 	$date_end = $now->setDate($year, $month, $day)->format('Y-m-d 00:00:01');
+			// $date_end = new DateTime($date_end);
 		}
 		else
 		{
