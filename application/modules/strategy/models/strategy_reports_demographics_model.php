@@ -176,6 +176,13 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 
 		$strategy_id = $data['strategy']['id'];
 
+		// verify access to this record
+		$data['coupon']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
 		$date_start = $this->input->post('date_start', TRUE);
 		$date_end = $this->input->post('date_end', TRUE);
 		
@@ -294,6 +301,13 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 
 		$strategy_id = $data['strategy']['id'];
 
+		// verify access to this record
+		$data['coupon']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
 		$date_start = $this->input->post('date_start', TRUE);
 		$date_end = $this->input->post('date_end', TRUE);
 		
@@ -376,11 +390,11 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 			 coupon.id as coupon_id,
 			 user_info.id as user_info_id,
 			 @user_age := FLOOR(DATEDIFF( NOW() , user_info.dob )/365) as age,
-			 SUM(IF(@user_age >= 0 AND @user_age < 10, 1, 0)) AS age10,
-			 SUM(IF(@user_age >= 10 AND @user_age < 20, 1, 0)) AS age20,
-			 SUM(IF(@user_age >= 20 AND @user_age < 30, 1, 0)) AS age30,
-			 SUM(IF(@user_age >= 30 AND @user_age < 40, 1, 0)) AS age40,
-			 SUM(IF(@user_age >= 40, 1, 0)) AS age40_over
+			 SUM( IF( FLOOR(DATEDIFF(NOW() , user_info.dob)/365) >=0 AND FLOOR(DATEDIFF(NOW() , user_info.dob)/365) <10, 1, 0 ) ) AS age10,
+			 SUM( IF( FLOOR(DATEDIFF(NOW() , user_info.dob)/365) >=10 AND FLOOR(DATEDIFF(NOW() , user_info.dob)/365) <20, 1, 0 ) ) AS age20,
+			 SUM( IF( FLOOR(DATEDIFF(NOW() , user_info.dob)/365) >=20 AND FLOOR(DATEDIFF(NOW() , user_info.dob)/365) <30, 1, 0 ) ) AS age30,
+			 SUM( IF( FLOOR(DATEDIFF(NOW() , user_info.dob)/365) >=30 AND FLOOR(DATEDIFF(NOW() , user_info.dob)/365) <40, 1, 0 ) ) AS age40,
+			 SUM( IF( FLOOR(DATEDIFF(NOW() , user_info.dob)/365) >=40, 1, 0 ) ) AS age40_over
 			FROM coupon
 			JOIN user as user ON user.id = coupon.user_id
 			JOIN user_info as user_info ON user.user_info_id = user_info.id
@@ -399,7 +413,7 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Range',
+			'label' => 'Age Ranges',
 			'pattern' => '',
 			'type' => 'number',
 		);

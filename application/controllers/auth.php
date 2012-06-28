@@ -171,6 +171,9 @@ class Auth extends Base_Controller {
 	//change password
 	function change_password()
 	{
+		// @TODO this is not implemented via the ionauth controller
+		exit;
+
 		$this->form_validation->set_rules('old', 'Old password', 'required');
 		$this->form_validation->set_rules('new', 'New Password', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[new_confirm]');
 		$this->form_validation->set_rules('new_confirm', 'Confirm New Password', 'required');
@@ -234,6 +237,10 @@ class Auth extends Base_Controller {
 	//forgot password
 	function forgot_password()
 	{
+
+		// @TODO not implemented and we need to work on it still
+		exit;
+
 		$this->form_validation->set_rules('email', 'Email Address', 'required');
 		if ($this->form_validation->run() == false)
 		{
@@ -266,6 +273,9 @@ class Auth extends Base_Controller {
 	//reset password - final step for forgotten password
 	public function reset_password($code)
 	{
+		// @TODO not implemented and we need to work on it still
+		exit;
+
 		$reset = $this->ion_auth->forgotten_password_complete($code);
 
 		if ($reset)
@@ -283,6 +293,9 @@ class Auth extends Base_Controller {
 	//activate the user
 	function activate($id, $code=false)
 	{
+		// @TODO not implemented and we need to work on it still
+		exit;
+
 		if ($code !== false)
 			$activation = $this->ion_auth->activate($id, $code);
 		else if ($this->ion_auth->is_admin())
@@ -305,6 +318,9 @@ class Auth extends Base_Controller {
 	//deactivate the user
 	function deactivate($id = NULL)
 	{
+		// @TODO not implemented and we need to work on it still
+		exit;
+
 		// no funny business, force to integer
 		$id = (int) $id;
 
@@ -346,6 +362,9 @@ class Auth extends Base_Controller {
 	//create a new user
 	function create_user()
 	{
+		// @TODO not implemented and we need to work on it still
+		exit;
+		
 		$this->data['title'] = "Create User";
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())

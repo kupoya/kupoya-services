@@ -19,6 +19,9 @@
  * codeigniter-paypal-ipn. If not, see <http://www.gnu.org/licenses/>.
  */
 
+//@TODO we did not reach this point yet of implementing PayPal support
+exit;
+
 class Example extends Controller {
 
     // To handle the IPN post made by PayPal (uses the Paypal_Lib library).

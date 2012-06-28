@@ -88,7 +88,15 @@ class Microdeal_Reports_Overview extends Authenticated_Controller {
     {
         $this->load->view('widgets/microdeal_request_graph', $data);
     }
-    public function get_microdeal_redem_expose($strategy_id = 0)
+
+
+    public function _widget_redemptions_graph($data = NULL)
+    {
+        $this->load->view('widgets/microdeal_redemptions_graph', $data);
+    }
+
+
+    public function get_microdeal_redem_requests($strategy_id = 0)
     {
         // @TODO probably needs to return *SOME* kind of view error..
         if (!$strategy_id)
@@ -98,6 +106,24 @@ class Microdeal_Reports_Overview extends Authenticated_Controller {
         
         $this->load->model('microdeal/microdeal_reports_model');
         $res = $this->microdeal_reports_model->get_strategy_requests($payload);
+
+        $data['result'] = json_encode($res);
+
+        $this->load->view('ajax', $data);
+        
+    }
+
+
+    public function get_microdeal_redem_expose($strategy_id = 0)
+    {
+        // @TODO probably needs to return *SOME* kind of view error..
+        if (!$strategy_id)
+            return FALSE;
+
+        $payload['strategy']['id'] = $strategy_id;
+        
+        $this->load->model('microdeal/microdeal_reports_model');
+        $res = $this->microdeal_reports_model->get_strategy_exposure($payload);
 
         $data['result'] = json_encode($res);
 
@@ -121,6 +147,135 @@ class Microdeal_Reports_Overview extends Authenticated_Controller {
     //     $this->load->view('ajax', $data);
         
     // }
+
+
+
+    public function get_customer_friends_count_profile($strategy_id = 0)
+    {
+        // @TODO probably needs to return *SOME* kind of view error..
+        if (!$strategy_id)
+            return FALSE;
+
+        $payload['strategy']['id'] = $strategy_id;
+        
+        $this->load->model('microdeal/microdeal_reports_model');
+        $res = $this->microdeal_reports_model->get_customer_friends_count_profile($payload);
+
+        $data['result'] = json_encode($res);
+
+        $this->load->view('ajax', $data);
+
+    }
+
+
+    public function get_redemptions_foot_traffic($strategy_id = 0)
+    {
+        // @TODO probably needs to return *SOME* kind of view error..
+        if (!$strategy_id)
+            return FALSE;
+
+        $payload['strategy']['id'] = $strategy_id;
+        
+        $this->load->model('microdeal/microdeal_reports_model');
+        $res = $this->microdeal_reports_model->get_redemptions_foot_traffic($payload);
+
+        $data['result'] = json_encode($res);
+
+        $this->load->view('ajax', $data);
+
+    }
+
+    public function get_customer_redemption_profile($strategy_id = 0)
+    {
+
+        // @TODO probably needs to return *SOME* kind of view error..
+        if (!$strategy_id)
+            return FALSE;
+
+        $payload['strategy']['id'] = $strategy_id;
+        
+        $this->load->model('microdeal/microdeal_reports_model');
+        $res = $this->microdeal_reports_model->get_customer_redemption_profile($payload);
+
+        $data['result'] = json_encode($res);
+
+        $this->load->view('ajax', $data);
+
+    }
+
+
+    public function get_redemptions_per_returning_customer($strategy_id = 0)
+    {
+
+        // @TODO probably needs to return *SOME* kind of view error..
+        if (!$strategy_id)
+            return FALSE;
+
+        $payload['strategy']['id'] = $strategy_id;
+        
+        $this->load->model('microdeal/microdeal_reports_model');
+        $res = $this->microdeal_reports_model->get_redemptions_per_returning_customer($payload);
+
+        $data['result'] = json_encode($res);
+
+        $this->load->view('ajax', $data);
+        
+/*
+-- GET count of non-frequency>1 for coupon retrievals of 
+-- this is the sum of all the users that redeemed only one coupon (unique redemption)
+SELECT
+    COUNT(*) as total_coupons,
+    (
+        SELECT COUNT(*)
+        FROM
+        (
+            SELECT
+            count(id) as user_freq
+            FROM `coupon`
+            WHERE 
+            strategy_id = 1
+            GROUP BY user_id
+            HAVING user_freq > 1
+            -- ORDER BY user_freq DESC
+        ) t
+    ) as multiple_redemptions
+FROM coupon
+WHERE
+strategy_id = 1
+
+
+
+-- GET TOP RETURNING CUSTOMERS by frequency of retreivals
+-- 
+    SELECT
+    user_id, count(id) as user_freq
+    FROM `coupon`
+    WHERE 
+    strategy_id = 1
+    GROUP BY user_id
+    ORDER BY user_freq DESC
+
+
+-- GET count of non frequent retreivals
+-- 
+    SELECT COUNT(t.user_freq) cnt
+    FROM (
+        SELECT
+        user_id, count(id) as user_freq
+        FROM `coupon`
+        WHERE 
+        strategy_id = 1
+        GROUP BY user_id
+        ORDER BY user_freq DESC
+    ) t
+    WHERE t.user_freq = 1
+    
+    
+
+
+
+*/
+    }
 
 
 }

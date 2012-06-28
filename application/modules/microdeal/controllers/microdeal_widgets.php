@@ -43,8 +43,26 @@ class Microdeal_Widgets extends Authenticated_Controller {
 
         $data['widgets']['total_redemptions'] = $this->microdeal_model->get_total_redemptions($data);
         $data['widgets']['estimated_exposure'] = $this->microdeal_model->get_estimated_exposure($data);
+        $data['widgets']['total_exposure'] = $this->microdeal_model->get_total_exposure($data);
+        $data['widgets']['total_customers'] = $this->microdeal_model->get_total_customers($data);
+        $data['widgets']['returning_customers'] = $this->microdeal_model->get_returning_customers($data);
+        $data['widgets']['conversion_rate'] = $this->microdeal_model->get_conversion_rate($data);
+        
 
         $this->load->view('widgets/strategy_widgets', $data);
+    }
+
+
+    public function _get_total_redemptions($data)
+    {
+        // if (!$data)
+        //     return FALSE;
+        
+        // $this->load->model('microdeal/microdeal_model');
+        // $data['widgets']['total_redemptions'] = $this->microdeal_model->get_total_redemptions($data);
+
+        $this->load->view('widgets/microdeal_total_redemptions', $data);
+
     }
 
 

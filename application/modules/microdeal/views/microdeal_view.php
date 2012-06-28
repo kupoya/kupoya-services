@@ -94,12 +94,11 @@ if (isset($campaign['id']) && isset($strategy['id']))
 					<h2>Properties</h2>
 				</header>
 
+				
+						
+				<?php echo Modules::run('microdeal/microdeal_widgets/_get_total_redemptions', $data); ?>
+				
 				<ul class="stats-summary">
-						<li>
-							<strong class="stats-count">17</strong>
-							<p>New registrations</p>
-							<a href="#" class="button stats-view" rel="tooltip" original-title="View new registrations">View</a>
-						</li>
 						<li>
 							<strong class="stats-count">89</strong>
 							<p>New visitors</p>

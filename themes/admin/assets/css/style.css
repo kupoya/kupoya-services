@@ -162,6 +162,7 @@ section[role=navigation] header h1 {
 #user-info ul li {
 	float:left;
 	margin-right:5px;
+	margin-bottom:2px;
 }
 #user-info ul li:last-child { margin-right:0; }
 #user-info .button-link { font-size:80%; }

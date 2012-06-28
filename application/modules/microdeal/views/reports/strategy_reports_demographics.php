@@ -124,13 +124,14 @@ if (isset($campaign['id']) && isset($strategy['id']))
 
 				      // Chart options
 					  var options = {
-				          width: 600, height: 400,
+				          width: 500, height: 300,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
 				          title: 'Requests Grouped by Age'
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
-				      var chart = new google.visualization.PieChart(document.getElementById('pie_chart2'));
+				      //var chart = new google.visualization.PieChart(document.getElementById('pie_chart2'));
+				      var chart = new google.visualization.ColumnChart(document.getElementById('pie_chart2'));
 				      // var chart = new google.visualization.BarChart(document.getElementById('pie_chart2'));
 				      chart.draw(data, options);
 				    }

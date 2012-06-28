@@ -5,7 +5,7 @@
 
 	if (isset($strategy['id']))
 	{
-		$strategy_graph .= 'microdeal/reports/overview/get_microdeal_redem_requests/'.$strategy['id'];
+		$strategy_graph .= 'microdeal/reports/overview/get_microdeal_redem_expose/'.$strategy['id'];
 	}
 
 ?>
@@ -42,7 +42,32 @@
 				      // Chart options
 					  var options = {
 				          width: "100%", height: 240,
-				          title: '<?php echo lang("strategy:requests_graph_title")?>'
+				          //title: '<?php //echo lang("strategy:requests_graph_title")?>'
+				          title: 'Redemptions/Exposure Graph',
+				          series: {
+				            0: {
+				                targetAxisIndex: 0,
+				                textStyle:{color: 'blue'},
+				            },
+				            1: {
+				                targetAxisIndex: 1,
+				                textStyle:{color: 'red'},
+				            }
+				          },
+				          vAxes: {
+				            0: {
+				                minValue: 0,
+				                //maxValue: 10,
+				                label: 'Redemptions',
+				                textStyle:{color: 'blue'},
+				            },
+				            1: {
+				                minValue: 0,
+				                //maxValue: 60000,
+				                label: 'Exposure',
+				                textStyle:{color: 'red'},
+				            }
+				          }
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.

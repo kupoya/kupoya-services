@@ -1,6 +1,6 @@
 <?php
 /**
- * Strategy Overview
+ * Strategy Dashboard
  * 
  * Methods in this class provide access to functions providing partials like widgets, blocks, etc.
  * As such, they are accessed only view Modules:run() HMVC and *NOT* via a front-controller user accessed
@@ -8,7 +8,7 @@
  * 
  * This is done mainly for security reasons for now.
  */
-class Strategy_Overview extends Authenticated_Controller {
+class Strategy_Dashboard extends Authenticated_Controller {
     
     protected $_data = array();
 
@@ -50,7 +50,7 @@ class Strategy_Overview extends Authenticated_Controller {
 
         $data['campaign']['id'] = $campaign_id;
 
-        $this->template->build('reports/strategy_reports_overview', $data);
+        $this->template->build('strategy_dashboard', $data);
 
     }
 

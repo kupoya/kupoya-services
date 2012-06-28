@@ -21,6 +21,476 @@ class Microdeal_Reports_Model extends Strategy_Model {
 		parent::__construct();
 	}
 
+
+
+
+
+	/**
+	 * 
+	 * @param array $data
+	 * 	$data['strategy']['id'] = the strategy id
+	 * 
+	 * @return array $results mysql result array
+	 */
+	public function get_customer_friends_count_profile(&$data = NULL) {
+
+		if (!isset($data['strategy']['id']))
+			return FALSE;
+
+		$strategy_id = $data['strategy']['id'];
+
+		// verify access to this record
+		$data['coupon']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
+		$date_start = $this->input->post('date_start', TRUE);
+		$date_end = $this->input->post('date_end', TRUE);
+
+		$query = '
+			SELECT
+			 SUM(IF (t1.friends_count >= 0 AND t1.friends_count <= 500, 1, 0)) as range0,
+			 SUM(IF (t1.friends_count >= 501 AND t1.friends_count <= 1000, 1, 0)) as range500,
+			 SUM(IF (t1.friends_count >= 1001 AND t1.friends_count <= 2000, 1, 0)) as range1000,
+			 SUM(IF (t1.friends_count >= 2001, 1, 0)) as range2000
+			FROM (
+			    SELECT
+			     DISTINCT(user_info.id) as user_info_id, user_info.friends_count as friends_count
+			    FROM coupon
+			    JOIN user as user ON user.id = coupon.user_id
+			    JOIN user_info as user_info ON user.user_info_id = user_info.id
+			    WHERE
+			     coupon.strategy_id = ?
+			) as t1
+		';
+
+		$result = $this->db->query($query, $strategy_id)->row_array();
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Range',
+			'pattern' => '',
+			'type' => 'string',
+		);
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Users',
+			'pattern' => '',
+			'type' => 'number',
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '0-500', 'f' => null),
+			1 => array('v' => (int) $result['range0'], 'f' => null),
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '501-1000', 'f' => null),
+			1 => array('v' => (int) $result['range500'], 'f' => null),
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '1001-2000', 'f' => null),
+			1 => array('v' => (int) $result['range1000'], 'f' => null),
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '2001+', 'f' => null),
+			1 => array('v' => (int) $result['range2000'], 'f' => null),
+		);
+
+		return $payload;
+
+	}
+
+
+
+	/**
+	 * 
+	 * @param array $data
+	 * 	$data['strategy']['id'] = the strategy id
+	 * 
+	 * @return array $results mysql result array
+	 */
+	public function get_customer_redemption_profile(&$data = NULL) {
+
+		if (!isset($data['strategy']['id']))
+			return FALSE;
+
+		$strategy_id = $data['strategy']['id'];
+
+		// verify access to this record
+		$data['coupon']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
+		$date_start = $this->input->post('date_start', TRUE);
+		$date_end = $this->input->post('date_end', TRUE);
+
+
+		$this->load->model('microdeal/microdeal_model');
+		$returning_customers = $this->microdeal_model->get_returning_customers($data);
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Customer Redemptions Profile',
+			'pattern' => '',
+			'type' => 'string',
+		);
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Count',
+			'pattern' => '',
+			'type' => 'number',
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => 'Multiple', 'f' => null),
+			1 => array('v' => (int) $returning_customers, 'f' => null),
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => 'One-time', 'f' => null),
+			1 => array('v' => (int) (100-$returning_customers), 'f' => null),
+		);
+
+		return $payload;
+
+
+
+	}
+
+
+	/**
+	 * 
+	 * @param array $data
+	 * 	$data['strategy']['id'] = the strategy id
+	 * 
+	 * @return array $results mysql result array
+	 */
+	public function get_redemptions_per_returning_customer(&$data = NULL) {
+
+		if (!isset($data['strategy']['id']))
+			return FALSE;
+
+		$strategy_id = $data['strategy']['id'];
+
+		// verify access to this record
+		$data['coupon']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
+		$date_start = $this->input->post('date_start', TRUE);
+		$date_end = $this->input->post('date_end', TRUE);
+
+
+		// impose date range, by default use the past month
+		$now = new DateTime('now');
+
+		if (!$date_start)
+		{	
+			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
+		}
+		
+		if (!$date_end)
+		{
+			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
+		}
+
+		$query = '
+
+		SELECT
+		(
+		    SELECT COUNT(*) 
+		    FROM (
+		    SELECT COUNT(id) AS user_freq
+		    FROM  coupon
+		    WHERE strategy_id = ?
+		    GROUP BY user_id
+		    HAVING user_freq = 2
+		    ) as t1
+		) as redemps2,
+		(
+		    SELECT COUNT(*) 
+		    FROM (
+		    SELECT COUNT(id) AS user_freq
+		    FROM  coupon
+		    WHERE strategy_id = ?
+		    GROUP BY user_id
+		    HAVING user_freq = 3
+		    ) as t2
+		) as redemps3,
+		(
+		    SELECT COUNT(*) 
+		    FROM (
+		    SELECT COUNT(id) AS user_freq
+		    FROM  coupon
+		    WHERE strategy_id = ?
+		    GROUP BY user_id
+		    HAVING user_freq = 4
+		    ) as t3
+		) as redemps4,
+		(
+		    SELECT COUNT(*) 
+		    FROM (
+		    SELECT COUNT(id) AS user_freq
+		    FROM  coupon
+		    WHERE strategy_id = ?
+		    GROUP BY user_id
+		    HAVING user_freq >= 5
+		    ) as t4
+		) as redemps5
+
+		';
+
+		$result = $this->db->query($query, array($strategy_id, $strategy_id, $strategy_id, $strategy_id))->row_array();
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Returning Customers',
+			'pattern' => '',
+			'type' => 'string',
+		);
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Redemptions Count',
+			'pattern' => '',
+			'type' => 'number',
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '2', 'f' => null),
+			1 => array('v' => (int) $result['redemps2'], 'f' => null),
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '3', 'f' => null),
+			1 => array('v' => (int) $result['redemps3'], 'f' => null),
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '4', 'f' => null),
+			1 => array('v' => (int) $result['redemps4'], 'f' => null),
+		);
+
+		$payload['rows'][]['c'] = array(
+			0 => array('v' => '5+', 'f' => null),
+			1 => array('v' => (int) $result['redemps5'], 'f' => null),
+		);
+
+		return $payload;
+
+
+
+	}
+
+
+	/**
+	 * 
+	 * @param array $data
+	 * 	$data['strategy']['id'] = the strategy id
+	 * 
+	 * @return array $results mysql result array 
+	 */
+	public function get_redemptions_foot_traffic(&$data = NULL)
+	{
+
+		if (!isset($data['strategy']['id']))
+			return FALSE;
+
+		$strategy_id = $data['strategy']['id'];
+
+		// verify access to this record
+		$data['coupon']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
+		$date_start = $this->input->post('date_start', TRUE);
+		$date_end = $this->input->post('date_end', TRUE);
+
+	    /*
+		SELECT
+		    COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT( coup.purchased_time, '%w' ) as t, DATE_FORMAT( coup.purchased_time, '%W' ) AS day_of_week
+		FROM coupon coup
+		WHERE coup.strategy_id =1
+		GROUP BY t
+		ORDER BY t ASC
+	    */
+
+		// impose date range, by default use the past month
+		$now = new DateTime('now');
+
+		if (!$date_start)
+		{
+			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
+		}
+		
+		if (!$date_end)
+		{
+			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
+		}
+
+	    $this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT(coup.purchased_time, "%w") as t, DATE_FORMAT(coup.purchased_time, "%W") AS day_of_week', FALSE);
+	    $this->db->from('coupon AS coup');
+	    $this->db->where('coup.strategy_id', $strategy_id);
+
+	    if ($date_start) {
+	    	//$this->db->where('coup.purchased_time >=', $date_start);
+	    }
+
+	    if ($date_end) {
+	    	//$this->db->where('coup.purchased_time <=', $date_end);
+	    }
+
+	    $this->db->group_by('t');
+	    $this->db->order_by('t', 'ASC');
+
+	    $result = $this->db->get();
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Day of Week',
+			'pattern' => '',
+			'type' => 'string',
+		);
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Redemptions',
+			'pattern' => '',
+			'type' => 'number',
+		);
+
+		foreach($result->result_array() as $row) {
+			$payload['rows'][]['c'] = array(
+				0 => array('v' => $row['day_of_week'], 'f' => null),
+				1 => array('v' => (int) $row['redemptions'], 'f' => null),
+			);
+		}
+
+		return $payload;
+	}
+
+
+
+	/**
+	 * 
+	 * @param array $data
+	 * 	$data['strategy']['id'] = the strategy id
+	 * @param string $agg_type
+	 * 	the aggregation type (hour, day, month or date)
+	 * 
+	 * @return array $results mysql result array 
+	 */
+	public function get_strategy_exposure(&$data = NULL, $agg_type = 'date')
+	{
+		if (!isset($data['strategy']['id']))
+			return FALSE;
+
+		$strategy_id = $data['strategy']['id'];
+
+		// verify access to this record
+		$data['coupon']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
+
+		$date_start = $this->input->post('date_start', TRUE);
+		$date_end = $this->input->post('date_end', TRUE);
+
+	    /*
+		SELECT
+		    COUNT(coup.strategy_id) AS redemptions, DATE( coup.purchased_time ) AS t, SUM(ui.friends_count)
+		FROM coupon coup
+		JOIN user u ON u.id = coup.user_id
+		JOIN user_info ui ON ui.id = u.user_info_id
+		WHERE coup.strategy_id = 1
+		GROUP BY t
+		ORDER BY t ASC
+	    */
+
+		// impose date range, by default use the past month
+		$now = new DateTime('now');
+
+		if (!$date_start)
+		{
+			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
+		}
+		
+		if (!$date_end)
+		{
+			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
+		}
+
+	    $this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE(coup.purchased_time) AS t, SUM(ui.friends_count) AS exposure');
+	    $this->db->from('coupon AS coup');
+	    $this->db->join('user AS u', 'u.id = coup.user_id');
+	    $this->db->join('user_info AS ui', 'ui.id = u.user_info_id');
+	    $this->db->where('coup.strategy_id', $strategy_id);
+
+	    if ($date_start) {
+	    	$this->db->where('coup.purchased_time >=', $date_start);
+	    }
+
+	    if ($date_end) {
+	    	$this->db->where('coup.purchased_time <=', $date_end);
+	    }
+
+	    $this->db->group_by('t');
+	    $this->db->order_by('t', 'ASC');
+
+	    $result = $this->db->get();
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Time',
+			'pattern' => '',
+			'type' => 'string',
+		);
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Exposure',
+			'pattern' => '',
+			'type' => 'number',
+		);
+
+		$payload['cols'][] = array(
+			'id' => '',
+			'label' => 'Redemptions',
+			'pattern' => '',
+			'type' => 'number',
+		);
+
+		foreach($result->result_array() as $row) {
+			$payload['rows'][]['c'] = array(
+				0 => array('v' => $row['t'], 'f' => null),
+				1 => array('v' => (int) $row['exposure'], 'f' => null),
+				2 => array('v' => (int) $row['redemptions'], 'f' => null),
+			);
+		}
+
+		return $payload;
+	}
+
+
+
+
+
+
 	/**
 	 * 
 	 * @param array $data

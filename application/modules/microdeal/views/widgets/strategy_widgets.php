@@ -39,13 +39,44 @@
 							<!-- Widget Box -->
 						<?php endif; ?>
 
-						<?php if (isset($widgets['estimated_exposure'])): ?>
+						<?php if (isset($widgets['total_exposure'])): ?>
 							<!-- /Widget Box -->
 							<div class="widget increase autowidth" id="new-tasks">
 								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
-								<span><?php echo $widgets['estimated_exposure']; ?></span>
-								<p><strong>Estimated Exposure</strong>to friends on facebook</p>
+								<span><?php echo $widgets['total_exposure']; ?></span>
+								<p><strong>Total Exposure</strong>of vouchers by your customers</p>
 							</div>
 							<!-- Widget Box -->
 						<?php endif; ?>
+
+						<?php if (isset($widgets['total_customers'])): ?>
+							<!-- /Widget Box -->
+							<div class="widget increase autowidth" id="new-tasks">
+								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
+								<span><?php echo $widgets['total_customers']; ?></span>
+								<p><strong>Total Customers</strong>of vouchers by your customers</p>
+							</div>
+							<!-- Widget Box -->
+						<?php endif; ?>
+
+						<?php if (isset($widgets['returning_customers'])): ?>
+							<!-- /Widget Box -->
+							<div class="widget increase autowidth" id="new-tasks">
+								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
+								<span><?php echo $widgets['returning_customers']; ?>%</span>
+								<p><strong>Returning Customers</strong>of vouchers by your customers</p>
+							</div>
+							<!-- Widget Box -->
+						<?php endif; ?>
+
+						<?php if (isset($widgets['conversion_rate'])): ?>
+							<!-- /Widget Box -->
+							<div class="widget increase autowidth" id="new-tasks">
+								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
+								<span><?php echo $widgets['conversion_rate']; ?>%</span>
+								<p><strong>Conversion Rate</strong>of vouchers by your customers</p>
+							</div>
+							<!-- Widget Box -->
+						<?php endif; ?>
+
 

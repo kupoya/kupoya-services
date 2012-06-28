@@ -86,8 +86,17 @@ class Strategy_Model extends Base_Model {
 		$this->datatables->where('code.brand_id', $brand_id);
 		$this->datatables->where('cs.active', '1');
 
-        $this->datatables->edit_column('strategy_name', '<a href="'.base_url().'strategy/manage/view/$2/$3">$4</a>', 'strategy_type, strategy_id, campaign_id, strategy_name');
+		// get only microdeal type strategies
+		// replaced microdeals with coupons as this is what we use on scans system initially
+		// @TODO probably makes better sense (?) to change this to microdeal in the future and update the db
+		//$this->datatables->where('st.name', 'microdeal');
+		$this->datatables->where('st.name', 'coupon');
 
+        //$this->datatables->edit_column('strategy_name', '<a href="'.base_url().'strategy/manage/view/$2/$3">$4</a>', 'strategy_type, strategy_id, campaign_id, strategy_name');
+
+        $this->datatables->edit_column('strategy_name', '<a href="'.base_url().'strategy/reports/dashboard/index/$2/$3">$4</a>', 'strategy_type, strategy_id, campaign_id, strategy_name');
+
+        $this->datatables->unset_column('strategy_type');
         $this->datatables->unset_column('code_id');
         $this->datatables->unset_column('brand_id');
         $this->datatables->unset_column('campaign_id');

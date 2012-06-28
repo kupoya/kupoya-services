@@ -80,8 +80,9 @@
 				</a>
 				<em><?php //$brand_name = kupoya_operator('brand_name'); if (!is_array($brand_name)) echo $brand_name; ?></em>
 				<ul>
-					<li><a class="button-link" href="#" title="This is my title!" rel="tooltip">view website</a></li>
-					<li><a class="button-link" href="#" title="And this is Sparta!" rel="tooltip">logout</a></li>
+					<li><a class="button-link" href="<?= site_url('operator/change_password'); ?>" title="This is my title!" rel="tooltip">change password</a></li>
+					<br/>
+					<li><a class="button-link" href="<?= site_url('auth/logout'); ?>" title="And this is Sparta!" rel="tooltip">logout</a></li>
 				</ul>
 			</div>
 		</section>
@@ -90,15 +91,23 @@
 		<!-- Main Navigation -->
 		<nav id="main-nav">
 			<ul>
+			<?php
+			/*
 				<li><a href="<?= base_url() ?>" title="" class="dashboard no-submenu"><?=lang('menu:dashboard');?></a></li> <!-- Use class .no-submenu to open link instead of a sub menu-->
 				<!-- Use class .current to open submenu on page load -->
+			*/
+			?>
 				<li class="<?= (isset($menu['context']) && $menu['context'] == 'campaigns') ? 'current' : '' ?>">
 					<a href="" title="" class="events"><?=lang('menu:campaigns');?></a>
 					<ul>
 						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'my_campaigns') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/index'?>" title=""><?=lang('menu:campaigns:my_campaigns');?></a></li>
+						<!--
 						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'new_campaign') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/create'?>" title=""><?=lang('menu:campaigns:new_campaign');?></a></li>
+						-->
 					</ul>
 				</li>
+			<?php
+			/*
 				<li>
 					<a href="" title="" class="projects">Projects</a><span title="You have 3 new tasks">3</span>
 					<ul>
@@ -120,6 +129,9 @@
 							<a href="<?= base_url().'operator/view_contact'?>" title=""><?= lang('menu:account:profile')?></a></li>
 					</ul>
 				</li>
+				<li><a href="" title="" class="gallery">Image Gallery</a><span title="You have 47 new tasks">47</span></li>
+			*/
+			?>
 				<li class="<?= (isset($menu['context']) && $menu['context'] == 'support') ? 'current' : '' ?>">
 					<a href="" title="" class="articles"><?= lang('menu:support')?></a>
 					<ul>
@@ -128,7 +140,7 @@
 						<li><a href="http://www.kupoya.com/faq/" title=""><?= lang('menu:support:faq')?></a></li>
 					</ul>
 				</li>
-				<li><a href="" title="" class="gallery">Image Gallery</a><span title="You have 47 new tasks">47</span></li>
+				
 			</ul>
 		</nav>
 		<!-- /Main Navigation -->
@@ -142,6 +154,8 @@
 		<!-- /Sidebar -->
 		
 		<!-- Sidebar -->
+		<?php
+		/*
 		<section class="sidebar">
 			<h2>Paragraph with Separator</h2>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et dignissim metus.</p>
@@ -173,6 +187,9 @@
 			</ul>
 		</section>
 		<!-- /Sidebar -->
+		*/
+		?>
+
 	</section>
 	<!-- /Aside Block -->
 	

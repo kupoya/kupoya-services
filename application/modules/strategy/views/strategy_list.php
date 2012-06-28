@@ -1,7 +1,6 @@
 <?php
 
-?>
-
+/*
 				<!-- Article Header -->
 				<header>
 					<h2><?=lang('Campaigns')?></h2>
@@ -15,7 +14,8 @@
 					<!-- /Article Header Tab Navigation -->
 				</header>
 				<!-- /Article Header -->
-				
+*/
+?>				
 				<!-- Article Content -->
 				<section>
 
@@ -27,7 +27,7 @@
 								<thead>
 									<tr>
 										<th><?=lang('Campaign_Name');?></th>
-										<th><?=lang('Campaign_Type');?></th>
+										<!-- <th><?=lang('Campaign_Type');?></th> -->
 									</tr>
 								</thead>
 							</table>
