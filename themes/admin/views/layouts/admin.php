@@ -98,9 +98,9 @@
 			*/
 			?>
 				<li class="<?= (isset($menu['context']) && $menu['context'] == 'campaigns') ? 'current' : '' ?>">
-					<a href="" title="" class="events"><?=lang('menu:campaigns');?></a>
+					<a href="" title="" class="events"><?=lang('menu:dashboard');?></a>
 					<ul>
-						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'my_campaigns') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/index'?>" title=""><?=lang('menu:campaigns:my_campaigns');?></a></li>
+						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'my_campaigns') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/index'?>" title=""><?=lang('menu:campaigns:campaign_selection');?></a></li>
 						<!--
 						<li class="<?= (isset($menu['page']) &&  $menu['page'] == 'new_campaign') ? 'current' : '' ?>"><a href="<?= base_url() . 'strategy/manage/create'?>" title=""><?=lang('menu:campaigns:new_campaign');?></a></li>
 						-->
@@ -132,6 +132,9 @@
 				<li><a href="" title="" class="gallery">Image Gallery</a><span title="You have 47 new tasks">47</span></li>
 			*/
 			?>
+
+				<li><a href="#" title="" class="gallery"><?=lang('menu:Create_new_campaign')?></a></li>
+
 				<li class="<?= (isset($menu['context']) && $menu['context'] == 'support') ? 'current' : '' ?>">
 					<a href="" title="" class="articles"><?= lang('menu:support')?></a>
 					<ul>
@@ -146,12 +149,17 @@
 		<!-- /Main Navigation -->
 		
 		<!-- Sidebar -->
+		<?php
+		/*
 		<section class="sidebar nested"> <!-- Use class .nested for diferent style -->
 			<h2>Nested Section</h2>
 			<p>Lorem ipsum dolor sit amet, conse ctetur adipiscing elit. Maec enas id augue ac metu aliquam.</p>
 			<p>Sed pharetra placerat est suscipit sagittis. Phasellus <a href="#">aliquam</a> males uada blandit. Donec adipiscing sem erat.</p>
 		</section>
 		<!-- /Sidebar -->
+		*/
+		?>
+
 		
 		<!-- Sidebar -->
 		<?php
