@@ -113,9 +113,10 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 600, height: 400,
+				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Redemptions Grouped by Gender'
+				          title: 'Redemptions Grouped by Gender',
+				          titleTextStyle: {fontSize: 14},
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -152,9 +153,13 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 500, height: 300,
+				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Requests Grouped by Age'
+				          legend: {position: 'none'},
+				          title: 'Requests Grouped by Age',
+				          titleTextStyle: {fontSize: 14},
+				          hAxis: {title: 'age ranges', titleTextStyle: {color: 'black'}},
+				          vAxis: {title: 'redemptions', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -190,9 +195,13 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 500, height: 300,
+				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Redemptions per Returning Customer'
+				          title: 'Redemptions per Returning Customer',
+				          legend: {position: 'none'},
+				          titleTextStyle: {fontSize: 14},
+				          hAxis: {title: 'number of returning customers', titleTextStyle: {color: 'black'}},
+				          vAxis: {title: 'redemptions count', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -227,9 +236,10 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 500, height: 300,
+				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Customer Redemption Profile'
+				          title: 'Customer Redemption Profile',
+				          titleTextStyle: {fontSize: 14},
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -265,9 +275,13 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 500, height: 300,
+				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Redemptions Foot Traffic'
+				          title: 'Redemptions Foot Traffic',
+				          legend: {position: 'none'},
+				          titleTextStyle: {fontSize: 14},
+				          hAxis: {title: 'day of week', titleTextStyle: {color: 'black'}},
+				          vAxis: {title: 'redemptions count', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -304,12 +318,13 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 500, height: 300,
+				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
 				          title: 'Customer Friends Count Profile',
-				          hAxis: {
-				          	title: 'friends count',
-				          }
+				          legend: {position: 'none'},
+				          titleTextStyle: {fontSize: 14},
+				          hAxis: {title: 'user\'s friends count', titleTextStyle: {color: 'black'}},
+				          vAxis: {title: 'users count', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
