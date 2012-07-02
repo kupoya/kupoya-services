@@ -13,7 +13,11 @@ $lang['menu:account:profile'] = "Profile";
 
 $lang['menu:campaigns'] = "Campaigns";
 $lang['menu:campaigns:my_campaigns'] = "My Campaigns";
+$lang['menu:campaigns:campaign_selection'] = "Campaign selection";
 $lang['menu:campaigns:new_campaign'] = "New Campaign";
+
+$lang['menu:Create_new_campaign'] = 'Create new campaign';
+
 
 $lang['Statistics'] = 'Statistics';
 
@@ -41,6 +45,7 @@ $lang['settings'] = 'Settings';
 $lang['Logo'] = "Logo";
 $lang['yes'] = 'yes';
 $lang['no'] = 'no';
+$lang['Save'] = 'Save';
 
 $lang['Validation failed'] = 'Validation failed';
 $lang['Cant load brand information'] = 'Cant load brand information';
@@ -56,6 +61,7 @@ $lang['username'] = 'Username';
 $lang['password'] = 'Password';
 $lang['sign_in'] = 'Sign in';
 $lang['remember_me'] = 'Remember me';
+
 
 
 

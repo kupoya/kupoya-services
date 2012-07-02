@@ -25,11 +25,11 @@
 
 				<!-- Article Header -->
 				<header>
-					<h2><?=lang('operator:my_profile')?></h2>
+					<h2><?=lang('operator:account')?></h2>
 					<!-- Article Header Tab Navigation -->
 					<nav>
 						<ul class="tab-switch-url">
-							<li><a href="<?=base_url().'operator/view_contact'?>" class="default-tab current" rel="tooltip" title="Switch to next tab"><?=lang('operator:view_contact')?></a></li>
+							<li><a href="<?=base_url().'operator/view_contact'?>" class="default-tab current" rel="tooltip" title="Switch to next tab"><?=lang('operator:profile')?></a></li>
 							<li><a href="<?=base_url().'operator/change_password'?>" rel="tooltip" title="Switch to next tab"><?=lang('operator:change_password')?></a></li>
 						</ul>
 					</nav>
@@ -49,7 +49,7 @@
 								<input type='hidden' name='operator_id'
 									value='<?= set_value('operator_id', isset($operator['id']) ? $operator['id'] : '')  ?>' />
 								<fieldset>
-									<legend><?=lang('settings')?></legend>
+									<legend><?=lang('operator:profile')?></legend>
 									<dl>
 										<dt>
 											<label><?=lang('Name')?></label>
@@ -156,7 +156,7 @@
 										</dd>
 									</dl>
 								</fieldset>
-								<button type="submit"><?=lang('Submit')?></button>
+								<button type="submit"><?=lang('Save')?></button>
 							</form>
 
 					</div>

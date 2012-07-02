@@ -21,7 +21,7 @@
 
 						<!-- Side Tab Content #sidetab1 -->
 						<div class="sidetab default-sidetab" id="sidetab1">
-							<h3><?=lang('My_Campaigns')?></h3>
+							<h3><?=lang('menu:campaigns:campaign_selection')?></h3>
 
 							<table class="datatable">
 								<thead>
