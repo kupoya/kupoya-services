@@ -16,7 +16,9 @@ class Auth extends Base_Controller {
 		$this->load->library('session');
 		$this->load->library('form_validation');
 		$this->load->database();
+		$this->load->language('app', 'english');
 		$this->load->helper('url');
+		$this->load->helper('language');
 
 		// decide on theme to show up
 		$theme = 'public';

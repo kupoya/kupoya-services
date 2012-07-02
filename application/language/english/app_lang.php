@@ -48,3 +48,24 @@ $lang['Settings saved'] = 'Settings saved';
 $lang['Can not save brand information'] = 'Can not save brand information';
 $lang['We apologize but we are unable to process brand logos at the moment'] = 'We apologize but we are unable to process brand logos at the moment';
 $lang['Could not process uploaded image'] = 'Could not process uploaded image';
+
+
+$lang['username_or_password_incorrect'] = 'The username or password you entered is incorrect.';
+$lang['password_error'] = 'Password Error';
+$lang['username'] = 'Username';
+$lang['password'] = 'Password';
+$lang['sign_in'] = 'Sign in';
+$lang['remember_me'] = 'Remember me';
+
+
+
+
+
+
+
+
+
+
+
+
+
