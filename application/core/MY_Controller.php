@@ -232,6 +232,7 @@ class Authenticated_Controller extends Base_Controller {
 
 		// load language file
 		$this->lang->load('app', 'english');
+		$this->load->helper('language');
 
 
 		Events::trigger('system:authenticated:before');
