@@ -44,6 +44,8 @@
 				          width: "100%", height: 240,
 				          //title: '<?php //echo lang("strategy:requests_graph_title")?>'
 				          title: 'Redemptions/Exposure Graph',
+				          pointSize: 5,
+				          hAxis: {format: 'MMM d, y'},
 				          series: {
 				            0: {
 				                targetAxisIndex: 0,
@@ -72,6 +74,10 @@
 				      
 				      // Instantiate and draw our chart, passing in some options.
 				      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+				      var monthYearFormatter = new google.visualization.DateFormat({ pattern: "MM DD" });
+					  monthYearFormatter.format(data, 0);
+
 				      chart.draw(data, options);
 				    }
 

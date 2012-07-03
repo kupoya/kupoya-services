@@ -374,7 +374,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		foreach($result->result_array() as $row) {
 			$payload['rows'][]['c'] = array(
-				0 => array('v' => $row['day_of_week'], 'f' => null),
+				0 => array('v' => substr($row['day_of_week'], 0, 3), 'f' => null),
 				1 => array('v' => (int) $row['redemptions'], 'f' => null),
 			);
 		}
@@ -435,6 +435,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
 		}
 
+	    //$this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT(coup.purchased_time,"%c/%e") AS t, SUM(ui.friends_count) AS exposure', FALSE);
 	    $this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE(coup.purchased_time) AS t, SUM(ui.friends_count) AS exposure');
 	    $this->db->from('coupon AS coup');
 	    $this->db->join('user AS u', 'u.id = coup.user_id');
