@@ -283,6 +283,93 @@ class Microdeal_Model extends Base_Model
 
 
 
+	/**
+	 * Get Bank Utilization
+	 * Provides the bank utilization information for a specific strategy, i.e: whats the bank size,
+	 * whats the total redemeed coupons and percentage of bank utilized (redemeed coupons out of bank size)
+	 * 
+	 * @param mixed $data array with elements 'strategy' or the strategy_id as integer
+	 * @return int $result
+	 */
+	public function get_strategy_bank_utilization($data)
+	{
+		if (is_numeric($data))
+			$strategy_id = $data;
+
+		if (isset($data['strategy']['id']))
+			$strategy_id = $data['strategy']['id'];
+
+		if (!$strategy_id)
+			return FALSE;
+
+
+		// verify access to this record
+		$data['strategy']['id'] = $strategy_id;
+		if (!$this->authorize_action($data))
+		{
+			return FALSE;
+		}
+
+		$bank_utilization = array(
+			'bank' => 0,
+			'coupons' => 0,
+			'utilization' => 0,
+		);
+
+		// select COUNT(DISTINCT(coupon.user_id)) from coupon AS coupon where coupon.strategy_id = 1
+		$this->db->select('bank, COUNT(DISTINCT(coupon.id)) as coupons');
+		$this->db->from('strategy AS strategy');
+		$this->db->join('coupon as coupon', 'coupon.strategy_id = strategy.id');
+		$this->db->where('strategy.id', $strategy_id);
+		$statuses = array('used', 'validated');
+		$this->db->where_in('coupon.status', $statuses);
+		$ret = $this->db->get()->row_array();
+
+		if (!$ret)
+			return $bank_utilization;
+
+		$bank = isset($ret['bank']) ? (int) $ret['bank'] : 0;
+		$coupons = isset($ret['coupons']) ? (int) $ret['coupons'] : 0;
+		$utilization = 0;
+		if (is_numeric($bank) && $bank != 0)
+			$utilization = floor(($coupons / $bank) * 100);
+
+		$bank_utilization[$strategy_id] = array(
+			'bank' => $bank,
+			'coupons' => $coupons,
+			'utilization' => $utilization,
+		);
+
+		return $bank_utilization[$strategy_id];
+	}
+
+
+
+	/**
+	 * Get Strategy Uptime in days
+	 * 
+	 * @param array $data array with elements 'strategy' or the strategy_id as integer
+	 * @return int $result
+	 */
+	public function get_strategy_uptime($data)
+	{
+
+		if (!isset($data['strategy']['id']))
+			return '0';
+
+		$strategy = $data['strategy'];
+
+		if (empty($strategy['created_time']))
+			return '0';
+
+		$start = new DateTime($strategy['created_time']);
+		$end = new DateTime(date('Y-m-d H:i:s'));
+
+		$interval =  $start->diff($end);
+		return $interval->format('%a');
+
+	}
+
 
 	/**
 	 * Get Returning Customers

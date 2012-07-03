@@ -41,6 +41,8 @@ class Microdeal_Widgets extends Authenticated_Controller {
 
         $this->load->model('microdeal/microdeal_model');
 
+        $data['widgets']['strategy_uptime'] = $this->microdeal_model->get_strategy_uptime($data);
+        $data['widgets']['strategy_bank_utilization'] = $this->microdeal_model->get_strategy_bank_utilization($data);
         $data['widgets']['total_redemptions'] = $this->microdeal_model->get_total_redemptions($data);
         $data['widgets']['estimated_exposure'] = $this->microdeal_model->get_estimated_exposure($data);
         $data['widgets']['total_exposure'] = $this->microdeal_model->get_total_exposure($data);

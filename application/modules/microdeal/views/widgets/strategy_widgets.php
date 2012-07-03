@@ -29,6 +29,32 @@
 */
 ?>
 
+						<?php if (isset($widgets['strategy_uptime'])): ?>
+							<!-- /Widget Box -->
+							<div class="widget increase autowidth" id="new-tasks">
+								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
+								<span><?php echo $widgets['strategy_uptime']; ?></span>
+								<p><strong>Campaign Uptime</strong>number of days campaign is running</p>
+							</div>
+							<!-- Widget Box -->
+						<?php endif; ?>
+
+						<?php if (isset($widgets['strategy_bank_utilization'])): ?>
+							<!-- /Widget Box -->
+							<div class="widget increase autowidth" id="new-tasks">
+								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
+								<span><?php echo $widgets['strategy_bank_utilization']['utilization']; ?>%</span>
+								<p><strong>Campaign Utilization</strong>
+									used <?= $widgets['strategy_bank_utilization']['coupons']?> microdeals out of <?= $widgets['strategy_bank_utilization']['bank']?>
+								</p>
+							</div>
+							<!-- Widget Box -->
+						<?php endif; ?>
+
+
+
+
+
 						<?php if (isset($widgets['total_redemptions'])): ?>
 							<!-- /Widget Box -->
 							<div class="widget increase autowidth" id="new-tasks">
