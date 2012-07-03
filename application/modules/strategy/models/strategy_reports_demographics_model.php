@@ -413,7 +413,7 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Age Ranges',
+			'label' => 'Redemptions',
 			'pattern' => '',
 			'type' => 'number',
 		);
