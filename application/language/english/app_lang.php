@@ -13,7 +13,7 @@ $lang['menu:account:profile'] = "Profile";
 
 $lang['menu:campaigns'] = "Campaigns";
 $lang['menu:campaigns:my_campaigns'] = "My Campaigns";
-$lang['menu:campaigns:campaign_selection'] = "Campaign selection";
+$lang['menu:campaigns:campaign_selection'] = "Campaign list";
 $lang['menu:campaigns:new_campaign'] = "New Campaign";
 
 $lang['menu:Create_new_campaign'] = 'Create new campaign';

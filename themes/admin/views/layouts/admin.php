@@ -75,14 +75,14 @@
 			<img src="<?php $brand_picture = kupoya_operator('brand_picture'); if (!is_array($brand_picture)) echo base_url($brand_picture); ?>"
 					alt="Sample User Avatar">
 			<div>
-				<a href="#" title="Account Settings and Profile Page">
+				<a href="<?= site_url('operator/profile'); ?>" title="Account Settings and Profile Page">
 					<?php $name = kupoya_operator('name'); if (!is_array($name)) echo $name; ?>
 				</a>
 				<em><?php //$brand_name = kupoya_operator('brand_name'); if (!is_array($brand_name)) echo $brand_name; ?></em>
 				<ul>
-					<li><a class="button-link" href="<?= site_url('operator/change_password'); ?>" title="This is my title!" rel="tooltip">change password</a></li>
+					<li><a class="button-link" href="<?= site_url('operator/change_password'); ?>" title="Change your account password" rel="tooltip">change password</a></li>
 					<br/>
-					<li><a class="button-link" href="<?= site_url('auth/logout'); ?>" title="And this is Sparta!" rel="tooltip">logout</a></li>
+					<li><a class="button-link" href="<?= site_url('auth/logout'); ?>" title="Logout" rel="tooltip">logout</a></li>
 				</ul>
 			</div>
 		</section>
@@ -133,8 +133,11 @@
 			*/
 			?>
 
-				<li><a href="#" title="" class="gallery"><?=lang('menu:Create_new_campaign')?></a></li>
+				<li><a href="<?=site_url('create_new_campaign')?>" title="" class="gallery"><?=lang('menu:Create_new_campaign')?></a></li>
 
+				<li><a href="<?=site_url('contact_page')?>" title="" class="gallery"><?=lang('menu:support:contact')?></a></li>
+			<?php
+			/*
 				<li class="<?= (isset($menu['context']) && $menu['context'] == 'support') ? 'current' : '' ?>">
 					<a href="" title="" class="articles"><?= lang('menu:support')?></a>
 					<ul>
@@ -143,6 +146,8 @@
 						<li><a href="http://www.kupoya.com/faq/" title=""><?= lang('menu:support:faq')?></a></li>
 					</ul>
 				</li>
+			*/
+			?>
 				
 			</ul>
 		</nav>
