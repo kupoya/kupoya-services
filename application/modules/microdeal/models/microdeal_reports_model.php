@@ -471,7 +471,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Redemptions',
+			'label' => 'Deal Claims',
 			'pattern' => '',
 			'type' => 'number',
 		);

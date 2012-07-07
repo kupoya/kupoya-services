@@ -115,7 +115,7 @@ $data['campaign'] = $campaign;
 					  var options = {
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Redemptions Grouped by Gender',
+				          title: 'Deal Claims Grouped by Gender',
 				          titleTextStyle: {fontSize: 14},
 				        };
 				      
@@ -156,10 +156,10 @@ $data['campaign'] = $campaign;
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
 				          legend: {position: 'none'},
-				          title: 'Requests Grouped by Age',
+				          title: 'Deal Claims Grouped by Age',
 				          titleTextStyle: {fontSize: 14},
-				          hAxis: {title: 'age ranges', titleTextStyle: {color: 'black'}},
-				          vAxis: {title: 'redemptions', titleTextStyle: {color: 'black'}}
+				          hAxis: {title: 'Age groups', titleTextStyle: {color: 'black'}},
+				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -173,8 +173,9 @@ $data['campaign'] = $campaign;
 			<!-- Begin Pie Chart By Hour -->
 
 					<!--Load the AJAX API-->
+					
 				    <script type="text/javascript">
-
+				    /*
 				    // Load the Visualization API and the piechart package.
 				    google.load('visualization', '1', {'packages':['corechart']});
 				      
@@ -208,6 +209,7 @@ $data['campaign'] = $campaign;
 				      var chart = new google.visualization.ColumnChart(document.getElementById('chart3'));
 				      chart.draw(data, options);
 				    }
+				    */
 				    </script>
 				    <!--/Load the AJAX API-->
 
@@ -215,7 +217,7 @@ $data['campaign'] = $campaign;
 
 					<!--Load the AJAX API-->
 				    <script type="text/javascript">
-
+				    /*
 				    // Load the Visualization API and the piechart package.
 				    google.load('visualization', '1', {'packages':['corechart']});
 				      
@@ -246,6 +248,7 @@ $data['campaign'] = $campaign;
 				      var chart = new google.visualization.PieChart(document.getElementById('chart4'));
 				      chart.draw(data, options);
 				    }
+				    */
 				    </script>
 				    <!--/Load the AJAX API-->
 
@@ -277,11 +280,11 @@ $data['campaign'] = $campaign;
 					  var options = {
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Redemptions Foot Traffic',
+				          title: 'Deal Claims Grouped by Day of Week',
 				          legend: {position: 'none'},
 				          titleTextStyle: {fontSize: 14},
-				          hAxis: {title: 'day of week', titleTextStyle: {color: 'black'}},
-				          vAxis: {title: 'redemptions count', titleTextStyle: {color: 'black'}}
+				          hAxis: {title: 'Day of week', titleTextStyle: {color: 'black'}},
+				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -320,11 +323,11 @@ $data['campaign'] = $campaign;
 					  var options = {
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Customer Friends Count Profile',
+				          title: 'Deal Claims Grouped by Friend Count',
 				          legend: {position: 'none'},
 				          titleTextStyle: {fontSize: 14},
-				          hAxis: {title: 'user\'s friends count', titleTextStyle: {color: 'black'}},
-				          vAxis: {title: 'users count', titleTextStyle: {color: 'black'}}
+				          hAxis: {title: 'Friends', titleTextStyle: {color: 'black'}},
+				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -336,6 +339,47 @@ $data['campaign'] = $campaign;
 
 
 		<div class="clearfix"></div> <!-- We're really sorry for this, but because of IE7 we still need separated div with clearfix -->
+
+		<!-- Quarter Content Block -->
+		<article class="half-block clearfix">
+
+			<!-- Article Container for safe floating -->
+			<div class="article-container">
+
+				<!-- Article Content -->
+				<section>
+
+					<div id="chart5">
+					</div>
+
+				</section>
+			
+			</div>
+
+		</article>
+
+
+
+		<!-- Quarter Content Block -->
+		<article class="half-block clearrm">
+
+			<!-- Article Container for safe floating -->
+			<div class="article-container">
+
+				<!-- Article Content -->
+				<section>
+
+					<div id="chart6">
+					</div>
+
+				</section>
+			
+			</div>
+
+		</article>
+
+		<div class="clearfix"></div> <!-- We're really sorry for this, but because of IE7 we still need separated div with clearfix -->
+
 
 		<!-- Quarter Content Block -->
 		<article class="half-block clearfix">
@@ -423,45 +467,6 @@ $data['campaign'] = $campaign;
 
 
 		<div class="clearfix"></div> <!-- We're really sorry for this, but because of IE7 we still need separated div with clearfix -->
-
-		<!-- Quarter Content Block -->
-		<article class="half-block clearfix">
-
-			<!-- Article Container for safe floating -->
-			<div class="article-container">
-
-				<!-- Article Content -->
-				<section>
-
-					<div id="chart5">
-					</div>
-
-				</section>
-			
-			</div>
-
-		</article>
-
-
-
-		<!-- Quarter Content Block -->
-		<article class="half-block clearrm">
-
-			<!-- Article Container for safe floating -->
-			<div class="article-container">
-
-				<!-- Article Content -->
-				<section>
-
-					<div id="chart6">
-					</div>
-
-				</section>
-			
-			</div>
-
-		</article>
-
 
 	</section>
 	<!-- /Article Content -->

@@ -60,7 +60,7 @@
 							<div class="widget increase autowidth" id="new-tasks">
 								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
 								<span><?php echo $widgets['total_redemptions']; ?></span>
-								<p><strong>Total Redemptions</strong>of vouchers by your customers</p>
+								<p><strong>Deals Claimed</strong>of vouchers by your customers</p>
 							</div>
 							<!-- Widget Box -->
 						<?php endif; ?>
@@ -70,11 +70,12 @@
 							<div class="widget increase autowidth" id="new-tasks">
 								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
 								<span><?php echo $widgets['total_exposure']; ?></span>
-								<p><strong>Total Exposure</strong>of vouchers by your customers</p>
+								<p><strong>Estimated Exposure</strong>of vouchers by your customers</p>
 							</div>
 							<!-- Widget Box -->
 						<?php endif; ?>
-
+<?php
+/*
 						<?php if (isset($widgets['total_customers'])): ?>
 							<!-- /Widget Box -->
 							<div class="widget increase autowidth" id="new-tasks">
@@ -94,7 +95,8 @@
 							</div>
 							<!-- Widget Box -->
 						<?php endif; ?>
-
+*/
+?>
 						<?php if (isset($widgets['conversion_rate'])): ?>
 							<!-- /Widget Box -->
 							<div class="widget increase autowidth" id="new-tasks">

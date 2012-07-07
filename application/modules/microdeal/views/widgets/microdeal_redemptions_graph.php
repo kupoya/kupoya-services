@@ -43,7 +43,8 @@
 					  var options = {
 				          width: "100%", height: 240,
 				          //title: '<?php //echo lang("strategy:requests_graph_title")?>'
-				          title: 'Redemptions/Exposure Graph',
+				          //title: 'Redemptions/Exposure Graph',
+				          title: '',
 				          pointSize: 5,
 				          hAxis: {format: 'MMM d, y'},
 				          series: {
@@ -60,7 +61,7 @@
 				            0: {
 				                minValue: 0,
 				                //maxValue: 10,
-				                label: 'Redemptions',
+				                label: 'Deal Claims',
 				                textStyle:{color: 'blue'},
 				            },
 				            1: {

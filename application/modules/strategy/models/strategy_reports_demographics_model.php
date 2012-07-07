@@ -273,7 +273,7 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 
 		foreach($result as $row => $row_data) {
 			$payload['rows'][]['c'] = array(
-				0 => array('v' => $row_data['gender'], 'f' => null),
+				0 => array('v' => ucfirst($row_data['gender']), 'f' => null),
 				1 => array('v' => (int) $row_data['freq'], 'f' => null),
 			);
 		}

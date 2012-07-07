@@ -72,7 +72,7 @@ class Operator_Model extends Base_Model {
 
 		// verify access to this record
 		$data['operator_id'] = $record_id;
-		if ($this->authorize_action($data['operator_id']))
+		if ($this->authorize_action($data))
 		{
 			return parent::get($record_id);
 		}
