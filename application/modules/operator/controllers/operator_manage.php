@@ -69,7 +69,6 @@ class Operator_Manage extends Authenticated_Controller {
         if ($this->form_validation->run() === FALSE)
         {
             //error
-
             $this->template->build('operator_edit', $data);
         }
         else
