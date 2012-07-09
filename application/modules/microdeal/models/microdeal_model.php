@@ -16,7 +16,7 @@ class Microdeal_Model extends Base_Model
 	 */
 	protected $primary_key = 'id';
 
-	protected $strategy_type = 'microdeal';
+	protected $strategy_type = 'coupon';
 
 
 	/**
@@ -99,7 +99,7 @@ class Microdeal_Model extends Base_Model
 	 * @param mixed $data array with elements 'strategy' or the strategy_id as integer
 	 * @return int $result
 	 */
-	public function get_total_redemptions($data)
+	public function get_total_redemptions($data, $status = array('validated', 'used'))
 	{
 		if (is_numeric($data))
 			$strategy_id = $data;
@@ -111,10 +111,11 @@ class Microdeal_Model extends Base_Model
 			return FALSE;
 		
 		// static redemptions per strategy id
-		static $total_redemptions;
+		//static $total_redemptions;
+		$total_redemptions = array();
 
-		if (isset($total_redemptions[$strategy_id]))
-			return $total_redemptions[$strategy_id];
+		//if (isset($total_redemptions[$strategy_id]))
+		//	return $total_redemptions[$strategy_id];
 
 		// verify access to this record
 		$data['coupon']['id'] = $strategy_id;
@@ -126,6 +127,7 @@ class Microdeal_Model extends Base_Model
 		$this->db->select('COUNT(coupon.id) AS redemptions');
 		$this->db->from('coupon AS coupon');
 		$this->db->where('coupon.strategy_id', $strategy_id);
+		$this->db->where_in('coupon.status', $status);
 		$ret = $this->db->get()->row_array();
 
 		if (!$ret)
@@ -139,7 +141,7 @@ class Microdeal_Model extends Base_Model
 
 
 	/**
-	 * Get Total Customers
+	 * Get Conversion Rate
 	 * Provides the conversion rate between scanned/strategy visit hits to actual coupon redemptions. Returns data in percentage (rounded down)
 	 * 
 	 * @param mixed $data array with elements 'strategy' or the strategy_id as integer
@@ -156,8 +158,7 @@ class Microdeal_Model extends Base_Model
 		if (!$strategy_id)
 			return FALSE;
 		
-		// static exposure per strategy id
-		static $total_customers;
+		static $conversion_rate;
 
 		if (isset($conversion_rate[$strategy_id]))
 			return $conversion_rate[$strategy_id];
@@ -169,16 +170,30 @@ class Microdeal_Model extends Base_Model
 			return FALSE;
 		}
 
-		// select COUNT(DISTINCT(coupon.user_id)) from coupon AS coupon where coupon.strategy_id = 1
-		$this->db->select('COUNT(DISTINCT(coupon.user_id)) as total_customers');
-		$this->db->from('coupon AS coupon');
-		$this->db->where('coupon.strategy_id', $strategy_id);
-		$ret = $this->db->get()->row_array();
 
-		if (!$ret)
-			return FALSE;
+		if (!isset($data['strategy']['exposure_count']))
+		{
+			$options['strategy_type'] = $this->strategy_type;
 
-		$conversion_rate[$strategy_id] = isset($ret['total_customers']) ? (int) $ret['total_customers'] : FALSE;
+			$this->load->model('strategy/strategy_model');
+			$strategy = $this->strategy_model->get($strategy_id, $options);
+			if (!$strategy || !isset($strategy['id']))
+				return FALSE;
+		}
+		else
+		{
+			$strategy = $data['strategy'];
+		}
+
+		if (!$strategy['exposure_count'] || $strategy['exposure_count'] == 0)
+		{
+			$conversion_rate[$strategy_id] = 0;
+		}
+		else
+		{
+			$total_redemptions = $this->get_total_redemptions($data, array('validated', 'used'));
+			$conversion_rate[$strategy_id] = number_format(($total_redemptions/$strategy['exposure_count']) * 100, 1);
+		}
 
 		return $conversion_rate[$strategy_id];
 	}
@@ -331,8 +346,9 @@ class Microdeal_Model extends Base_Model
 		$bank = isset($ret['bank']) ? (int) $ret['bank'] : 0;
 		$coupons = isset($ret['coupons']) ? (int) $ret['coupons'] : 0;
 		$utilization = 0;
-		if (is_numeric($bank) && $bank != 0)
-			$utilization = floor(($coupons / $bank) * 100);
+		if (is_numeric($bank) && $bank != 0) {
+			$utilization = number_format(($coupons / $bank) * 100, 1);
+		}
 
 		$bank_utilization[$strategy_id] = array(
 			'bank' => $bank,
