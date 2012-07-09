@@ -117,6 +117,7 @@ $data['campaign'] = $campaign;
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
 				          title: 'Deal Claims Grouped by Gender',
 				          titleTextStyle: {fontSize: 14},
+				          colors: ['#395A99','#37C644'],
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -158,6 +159,7 @@ $data['campaign'] = $campaign;
 				          legend: {position: 'none'},
 				          title: 'Deal Claims Grouped by Age',
 				          titleTextStyle: {fontSize: 14},
+				          colors: ['#395A99','#37C644'],
 				          hAxis: {title: 'Age groups', titleTextStyle: {color: 'black'}},
 				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
 				        };
@@ -283,6 +285,7 @@ $data['campaign'] = $campaign;
 				          title: 'Deal Claims Grouped by Day of Week',
 				          legend: {position: 'none'},
 				          titleTextStyle: {fontSize: 14},
+				          colors: ['#395A99','#37C644'],
 				          hAxis: {title: 'Day of week', titleTextStyle: {color: 'black'}},
 				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
 				        };
@@ -326,6 +329,7 @@ $data['campaign'] = $campaign;
 				          title: 'Deal Claims Grouped by Friend Count',
 				          legend: {position: 'none'},
 				          titleTextStyle: {fontSize: 14},
+				          colors: ['#395A99','#37C644'],
 				          hAxis: {title: 'Friends', titleTextStyle: {color: 'black'}},
 				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
 				        };

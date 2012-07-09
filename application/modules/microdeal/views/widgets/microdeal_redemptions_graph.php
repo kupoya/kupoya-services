@@ -47,14 +47,15 @@
 				          title: '',
 				          pointSize: 5,
 				          hAxis: {format: 'MMM d, y'},
+				          colors: ['#395A99','#37C644'],
 				          series: {
 				            0: {
 				                targetAxisIndex: 0,
-				                textStyle:{color: 'blue'},
+				                textStyle:{color: '#395A99'},
 				            },
 				            1: {
 				                targetAxisIndex: 1,
-				                textStyle:{color: 'red'},
+				                textStyle:{color: '#37C644'},
 				            }
 				          },
 				          vAxes: {
@@ -62,13 +63,13 @@
 				                minValue: 0,
 				                //maxValue: 10,
 				                label: 'Deal Claims',
-				                textStyle:{color: 'blue'},
+				                textStyle:{color: '#395A99'},
 				            },
 				            1: {
 				                minValue: 0,
 				                //maxValue: 60000,
 				                label: 'Exposure',
-				                textStyle:{color: 'red'},
+				                textStyle:{color: '#37C644'},
 				            }
 				          }
 				        };
