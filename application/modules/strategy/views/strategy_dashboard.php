@@ -115,7 +115,7 @@ $data['campaign'] = $campaign;
 					  var options = {
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Deal Claims Grouped by Gender',
+				          title: 'Deal claims grouped by gender',
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#37C644'],
 				        };
@@ -157,7 +157,7 @@ $data['campaign'] = $campaign;
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
 				          legend: {position: 'none'},
-				          title: 'Deal Claims Grouped by Age',
+				          title: 'Deal claims grouped by age',
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#37C644'],
 				          hAxis: {title: 'Age groups', titleTextStyle: {color: 'black'}},
@@ -282,7 +282,7 @@ $data['campaign'] = $campaign;
 					  var options = {
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Deal Claims Grouped by Day of Week',
+				          title: 'Deal claims grouped by day of week',
 				          legend: {position: 'none'},
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#37C644'],
@@ -326,7 +326,7 @@ $data['campaign'] = $campaign;
 					  var options = {
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Deal Claims Grouped by Friend Count',
+				          title: 'Deal claims grouped by friend count',
 				          legend: {position: 'none'},
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#37C644'],
