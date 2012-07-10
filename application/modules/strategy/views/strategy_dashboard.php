@@ -44,6 +44,20 @@ $data['campaign'] = $campaign;
 
 ?>
 
+		<!-- Article Content -->
+		<section>
+
+			<!-- Side Tab Content #sidetab1 -->
+			<div class="sidetab default-sidetab" id="sidetab1">
+				<h3><?php echo $strategy['name'] ?></h3>
+			</div>
+
+		<!-- /Article Content -->
+		</section>
+
+
+		<hr/>
+
 		<!-- Strategy Widgets Information -->
 		<!-- Widget Container -->
 		<section id="widgets-container">
