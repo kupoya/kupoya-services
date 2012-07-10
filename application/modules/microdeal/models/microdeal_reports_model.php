@@ -464,7 +464,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Exposure',
+			'label' => 'Est. exposure',
 			'pattern' => '',
 			'type' => 'number',
 		);
