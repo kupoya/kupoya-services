@@ -138,7 +138,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Customer Redemptions Profile',
+			'label' => 'Customer Deal Claims Profile',
 			'pattern' => '',
 			'type' => 'string',
 		);
@@ -262,7 +262,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Redemptions Count',
+			'label' => 'Deal Claims Count',
 			'pattern' => '',
 			'type' => 'number',
 		);
@@ -367,7 +367,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Redemptions',
+			'label' => 'Deal Claims',
 			'pattern' => '',
 			'type' => 'number',
 		);
@@ -640,7 +640,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Redemptions',
+			'label' => 'Deal Claims',
 			'pattern' => '',
 			'type' => 'number',
 		);
