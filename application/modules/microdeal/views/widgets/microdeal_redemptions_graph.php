@@ -68,8 +68,9 @@
 				            1: {
 				                minValue: 0,
 				                //maxValue: 60000,
-				                label: 'Est. exposure',
-				                textStyle:{color: '#37C644'},
+				               	label: 'Est. exposure',
+				               	textStyle:{color: '#37C644'},
+				               
 				            }
 				          }
 				        };

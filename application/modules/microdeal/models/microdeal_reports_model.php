@@ -464,23 +464,24 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Est. exposure',
+			'label' => 'Deal Claims',
 			'pattern' => '',
 			'type' => 'number',
 		);
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Deal Claims',
+			'label' => 'Est. exposure',
 			'pattern' => '',
 			'type' => 'number',
+			
 		);
 
 		foreach($result->result_array() as $row) {
 			$payload['rows'][]['c'] = array(
 				0 => array('v' => $row['t'], 'f' => null),
-				1 => array('v' => (int) $row['exposure'], 'f' => null),
-				2 => array('v' => (int) $row['redemptions'], 'f' => null),
+				1 => array('v' => (int) $row['redemptions'], 'f' => null),
+				2 => array('v' => (int) $row['exposure'], 'f' => null),
 			);
 		}
 
