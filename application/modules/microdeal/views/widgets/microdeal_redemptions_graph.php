@@ -90,9 +90,11 @@
 				    <form name="strategy_report_form" action="#">
 					    <dl>
 						    <dt>
-								<label>Range: </label>
+								<label></label>
 							</dt>
 							<dd>
+								<label>Range: </label>
+								&nbsp;
 								<label>From </label>
 								<input type="text" class="datepicker tiny" name="date_start">
 								<label>To </label>
