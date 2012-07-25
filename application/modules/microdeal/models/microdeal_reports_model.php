@@ -46,9 +46,6 @@ class Microdeal_Reports_Model extends Strategy_Model {
 			return FALSE;
 		}
 
-		$date_start = $this->input->post('date_start', TRUE);
-		$date_end = $this->input->post('date_end', TRUE);
-
 		$query = '
 			SELECT
 			 SUM(IF (t1.friends_count >= 0 AND t1.friends_count <= 500, 1, 0)) as range0,
@@ -129,10 +126,6 @@ class Microdeal_Reports_Model extends Strategy_Model {
 			return FALSE;
 		}
 
-		$date_start = $this->input->post('date_start', TRUE);
-		$date_end = $this->input->post('date_end', TRUE);
-
-
 		$this->load->model('microdeal/microdeal_model');
 		$returning_customers = $this->microdeal_model->get_returning_customers($data);
 
@@ -186,23 +179,6 @@ class Microdeal_Reports_Model extends Strategy_Model {
 		if (!$this->authorize_action($data))
 		{
 			return FALSE;
-		}
-
-		$date_start = $this->input->post('date_start', TRUE);
-		$date_end = $this->input->post('date_end', TRUE);
-
-
-		// impose date range, by default use the past month
-		$now = new DateTime('now');
-
-		if (!$date_start)
-		{	
-			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
-		}
-		
-		if (!$date_end)
-		{
-			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
 		}
 
 		$query = '
@@ -316,9 +292,6 @@ class Microdeal_Reports_Model extends Strategy_Model {
 			return FALSE;
 		}
 
-		$date_start = $this->input->post('date_start', TRUE);
-		$date_end = $this->input->post('date_end', TRUE);
-
 	    /*
 		SELECT
 		    COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT( coup.purchased_time, '%w' ) as t, DATE_FORMAT( coup.purchased_time, '%W' ) AS day_of_week
@@ -328,30 +301,9 @@ class Microdeal_Reports_Model extends Strategy_Model {
 		ORDER BY t ASC
 	    */
 
-		// impose date range, by default use the past month
-		$now = new DateTime('now');
-
-		if (!$date_start)
-		{
-			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
-		}
-		
-		if (!$date_end)
-		{
-			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
-		}
-
 	    $this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT(coup.purchased_time, "%w") as t, DATE_FORMAT(coup.purchased_time, "%W") AS day_of_week', FALSE);
 	    $this->db->from('coupon AS coup');
 	    $this->db->where('coup.strategy_id', $strategy_id);
-
-	    if ($date_start) {
-	    	//$this->db->where('coup.purchased_time >=', $date_start);
-	    }
-
-	    if ($date_end) {
-	    	//$this->db->where('coup.purchased_time <=', $date_end);
-	    }
 
 	    $this->db->group_by('t');
 	    $this->db->order_by('t', 'ASC');
@@ -367,7 +319,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Deal Claims',
+			'label' => 'Deal claims',
 			'pattern' => '',
 			'type' => 'number',
 		);
@@ -423,16 +375,16 @@ class Microdeal_Reports_Model extends Strategy_Model {
 	    */
 
 		// impose date range, by default use the past month
-		$now = new DateTime('now');
-
 		if (!$date_start)
 		{
+			$now = new DateTime('now');
 			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
 		}
-		
+	
 		if (!$date_end)
 		{
-			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
+			$now = new DateTime('now');
+			$date_end = $now->format('Y-m-t 23:59:59');
 		}
 
 	    //$this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT(coup.purchased_time,"%c/%e") AS t, SUM(ui.friends_count) AS exposure', FALSE);
@@ -464,7 +416,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Deal Claims',
+			'label' => 'Deal claims',
 			'pattern' => '',
 			'type' => 'number',
 		);
@@ -641,7 +593,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Deal Claims',
+			'label' => 'Deal claims',
 			'pattern' => '',
 			'type' => 'number',
 		);

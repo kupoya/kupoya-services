@@ -52,7 +52,15 @@
 						<?php endif; ?>
 
 
-
+						<?php if (isset($widgets['total_exposure'])): ?>
+							<!-- /Widget Box -->
+							<div class="widget increase autowidth" id="new-tasks">
+								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
+								<span><?php echo $widgets['total_exposure']; ?></span>
+								<p><strong>Estimated Exposure</strong>of vouchers by your customers</p>
+							</div>
+							<!-- Widget Box -->
+						<?php endif; ?>
 
 
 						<?php if (isset($widgets['deals_claimed'])): ?>
@@ -75,15 +83,6 @@
 							<!-- Widget Box -->
 						<?php endif; ?>
 
-						<?php if (isset($widgets['total_exposure'])): ?>
-							<!-- /Widget Box -->
-							<div class="widget increase autowidth" id="new-tasks">
-								<a href="#" class="close-widget" title="Hide Widget" rel="tooltip">x</a>
-								<span><?php echo $widgets['total_exposure']; ?></span>
-								<p><strong>Estimated Exposure</strong>of vouchers by your customers</p>
-							</div>
-							<!-- Widget Box -->
-						<?php endif; ?>
 <?php
 /*
 						<?php if (isset($widgets['total_customers'])): ?>

@@ -62,7 +62,7 @@
 				            0: {
 				                minValue: 0,
 				                //maxValue: 10,
-				                label: 'Deal Claims',
+				                label: 'Deal claims',
 				                textStyle:{color: '#395A99'},
 				            },
 				            1: {

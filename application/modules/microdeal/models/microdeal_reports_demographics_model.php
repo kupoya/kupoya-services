@@ -53,7 +53,7 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 	    //     return FALSE;
 
 		// impose date range, by default use the past month
-		$now = new DateTime('now');
+		
 
 		if (isset($date_start) && $date_start)
 		{	
@@ -68,7 +68,7 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 		{
 			// @TODO - change this so by default it will be:
 			//$date_start = $now->modify('first day of this month')->format('Y-m-d 00:00:01');
-
+			$now = new DateTime('now');
 			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
 		}
 		
@@ -83,6 +83,7 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 		}
 		else
 		{
+			$now = new DateTime('now');
 			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
 		}
 
@@ -142,7 +143,7 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 
 		$payload['cols'][] = array(
 			'id' => '',
-			'label' => 'Deal Claims',
+			'label' => 'Deal claims',
 			'pattern' => '',
 			'type' => 'number',
 		);
@@ -175,9 +176,6 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 			return FALSE;
 
 		$strategy_id = $data['strategy']['id'];
-
-		$date_start = $this->input->post('date_start', TRUE);
-		$date_end = $this->input->post('date_end', TRUE);
 		
 		/*
 			SELECT
@@ -191,42 +189,6 @@ class Strategy_Reports_Demographics_Model extends Strategy_Model {
 			GROUP BY gender
 		*/
 
-		// impose date range, by default use the past month
-		$now = new DateTime('now');
-
-		if (isset($date_start) && $date_start)
-		{	
-			// $date_params = explode('-', $date_start);
-			// $month = isset($date_params[0]) ? $date_params[0] : date('m');
-			// $day = isset($date_params[1]) ? $date_params[1] : date('d');
-			// $year = isset($date_params[2]) ? $date_params[2] : date('Y');
-			// $date_start = $now->setDate($year, $month, $day)->format('Y-m-d 00:00:01');
-			// $date_start = new DateTime($date_start)->format('Y-m-d 00:00:01');;
-		}
-		else
-		{
-			// @TODO - change this so by default it will be:
-			//$date_start = $now->modify('first day of this month')->format('Y-m-d 00:00:01');
-
-			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
-		}
-		
-		if (isset($date_end) && $date_end)
-		{
-		// 	$date_params = explode('/', $date_end);
-		// 	$month = isset($date_params[0]) ? $date_params[0] : date('m');
-		// 	$day = isset($date_params[1]) ? $date_params[1] : date('d');
-		// 	$year = isset($date_params[2]) ? $date_params[2] : date('Y');
-		// 	$date_end = $now->setDate($year, $month, $day)->format('Y-m-d 00:00:01');
-			// $date_end = new DateTime($date_end);
-		}
-		else
-		{
-			$date_end = $now->modify('last day of this month')->format('Y-m-d 23:59:59');
-		}
-
-		// $this->db->where('s.time >=', $date_start);
-		// $this->db->where('s.time <=', $date_end);
 		// $this->db->where('cs.campaign_id', $info['campaign']['id']);
 
 		/*
