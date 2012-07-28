@@ -5,8 +5,10 @@
 	if (isset($notifications_session) && count ($notifications_session))
 	{
 		//$notifications += array_merge($notifications, $this->session->flashdata('notifications'));
-		if (isset($notifications))
+		if (isset($notifications) && is_array($notifications_session))
 			$notifications += $notifications_session;
+		else if (isset($notifications))
+			$notifications;
 		else
 			$notifications = $notifications_session;
 	}
