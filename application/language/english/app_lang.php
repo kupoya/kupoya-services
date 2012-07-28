@@ -32,10 +32,16 @@ $lang['First_Name'] = 'First Name';
 $lang['Last_Name'] = 'Last Name';
 $lang['Address'] = 'Address';
 $lang['City'] = 'City';
-$lang['State'] = 'State';
+$lang['State'] = 'State / Province';
 $lang['Country'] = 'Country';
 $lang['Phone'] = 'Phone';
+$lang['Phone:helper'] = '+(Country code) (Area code) (Phone number)';
+$lang['Fax'] = 'Fax';
+$lang['Fax:helper'] = '+(Country code) (Area code) (Phone number)';
 $lang['Email'] = 'Email';
+
+$lang['Postal_Code'] = 'Postal Code / Zip';
+$lang['Timezone'] = 'Timezone';
 
 $lang['submit'] = 'submit';
 $lang['Submit'] = 'Submit';
@@ -46,6 +52,9 @@ $lang['Logo'] = "Logo";
 $lang['yes'] = 'yes';
 $lang['no'] = 'no';
 $lang['Save'] = 'Save';
+$lang['Update'] = 'Update';
+$lang['Cancel'] = 'Cancel';
+$lang['cancel'] = 'cancel';
 
 $lang['Validation failed'] = 'Validation failed';
 $lang['Cant load brand information'] = 'Cant load brand information';

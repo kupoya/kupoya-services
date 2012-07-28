@@ -118,16 +118,16 @@ class Operator_Manage extends Authenticated_Controller {
 
         $this->form_validation->set_rules('operator_id', 'Operator ID', 'required');
         //$this->form_validation->set_rules('contact[id]', 'Contact ID', 'required');
-        $this->form_validation->set_rules('contact[name]', 'Contact ID', 'required|max_length[45]|xss_clean');
-        $this->form_validation->set_rules('contact[first_name]', 'Contact First Name', 'max_length[100]|xss_clean');
-        $this->form_validation->set_rules('contact[last_name]', 'Contact Last Name', 'max_length[100]|xss_clean');
-        $this->form_validation->set_rules('contact[address]', 'Contact Address', 'max_length[45]|xss_clean');
-        $this->form_validation->set_rules('contact[city]', 'Contact City', 'required|max_length[45]|xss_clean');
-        $this->form_validation->set_rules('contact[state]', 'Contact State', 'max_length[45]|xss_clean');
-        $this->form_validation->set_rules('contact[country]', 'Contact Contry', 'max_length[45]|xss_clean');
-        $this->form_validation->set_rules('contact[phone]', 'Contact Phone', 'max_length[45]|xss_clean');
-        $this->form_validation->set_rules('contact[gender]', 'Contact Gender', 'numeric');
-        $this->form_validation->set_rules('contact[email]', 'Contact Email', 'max_length[80]|valid_email');
+        //$this->form_validation->set_rules('contact[name]', 'Contact ID', 'required|max_length[45]|xss_clean');
+        $this->form_validation->set_rules('contact[first_name]', 'Contact First Name', 'required|max_length[100]|xss_clean');
+        $this->form_validation->set_rules('contact[last_name]', 'Contact Last Name', 'required|max_length[100]|xss_clean');
+        //$this->form_validation->set_rules('contact[address]', 'Contact Address', 'max_length[45]|xss_clean');
+        //$this->form_validation->set_rules('contact[city]', 'Contact City', 'required|max_length[45]|xss_clean');
+        //$this->form_validation->set_rules('contact[state]', 'Contact State', 'max_length[45]|xss_clean');
+        //$this->form_validation->set_rules('contact[country]', 'Contact Contry', 'max_length[45]|xss_clean');
+        //$this->form_validation->set_rules('contact[phone]', 'Contact Phone', 'max_length[45]|xss_clean');
+        //$this->form_validation->set_rules('contact[gender]', 'Contact Gender', 'numeric');
+        $this->form_validation->set_rules('contact[email]', 'Contact Email', 'required|max_length[80]|valid_email');
 
         $contact = $this->input->post('contact');
 
@@ -156,8 +156,22 @@ class Operator_Manage extends Authenticated_Controller {
 
         if ($this->form_validation->run() === FALSE)
         {
-            $this->template->build('operator_view_contact', $data);
-            // redirect($this->redirect_back());
+
+            //if ($_SERVER['REQUEST_METHOD'] === 'POST')
+            if ($this->input->server('REQUEST_METHOD') === 'POST')
+            {
+                // collect all errors
+                $this->_notifications['error'][] = validation_errors();
+
+                // save in the session for printing on page load
+                $this->session->set_flashdata('notifications', $this->_notifications);
+
+                redirect('brand/edit_brand_profile');
+            }
+            else
+            {
+                $this->load->view('operator/operator_view_contact', $data);
+            }
         }
         else
         {
@@ -176,11 +190,13 @@ class Operator_Manage extends Authenticated_Controller {
                 $this->_notifications['error'][] = $this->lang->line('operator:error:saving_profile_contact');
             }
 
-            //$this->session->set_flashdata('notifications', $this->_notifications);
+            $this->session->set_flashdata('notifications', $this->_notifications);
             //redirect('operator/view_contact');
             
-            $this->template->set('notifications', $this->_notifications);
-            $this->template->build('operator_view_contact', $data);
+            //$this->template->set('notifications', $this->_notifications);
+            //$this->template->build('operator_view_contact', $data);
+            //$this->load->view('operator/operator_view_contact', $data);
+            redirect('brand/edit_brand_profile');
         }
     }
      

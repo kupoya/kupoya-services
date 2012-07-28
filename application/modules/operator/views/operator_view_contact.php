@@ -21,22 +21,6 @@
 // echo "<br/><br/>";
 ?>
 
-
-
-				<!-- Article Header -->
-				<header>
-					<h2><?=lang('operator:account')?></h2>
-					<!-- Article Header Tab Navigation -->
-					<nav>
-						<ul class="tab-switch-url">
-							<li><a href="<?=base_url().'operator/view_contact'?>" class="default-tab current" rel="tooltip" title="Switch to next tab"><?=lang('operator:profile')?></a></li>
-							<li><a href="<?=base_url().'operator/change_password'?>" rel="tooltip" title="Switch to next tab"><?=lang('operator:change_password')?></a></li>
-						</ul>
-					</nav>
-					<!-- /Article Header Tab Navigation -->
-				</header>
-				<!-- /Article Header -->
-
 				<!-- Article Content -->
 				<section>
 
@@ -49,8 +33,9 @@
 								<input type='hidden' name='operator_id'
 									value='<?= set_value('operator_id', isset($operator['id']) ? $operator['id'] : '')  ?>' />
 								<fieldset>
-									<legend><?=lang('operator:profile')?></legend>
+									<legend><?=lang('operator:user_info')?></legend>
 									<dl>
+									<!--
 										<dt>
 											<label><?=lang('Name')?></label>
 										</dt>
@@ -62,17 +47,21 @@
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
 										</dd>
+									-->
 
 										<dt>
 											<label><?=lang('First_Name')?></label>
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[first_name]'); ?>
-											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
 												name="contact[first_name]" maxlength='100'
 												value='<?= set_value('contact[first_name]', isset($contact['first_name']) ? $contact['first_name'] : '')  ?>'
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+											<span class="invalid-side-note">
+												required
+											</span>
 										</dd>
 
 										<dt>
@@ -80,13 +69,17 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[last_name]'); ?>
-											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
 												name="contact[last_name]" maxlength='100'
 												value='<?= set_value('contact[last_name]', isset($contact['last_name']) ? $contact['last_name'] : '')  ?>'
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+											<span class="invalid-side-note">
+												required
+											</span>
 										</dd>
 
+									<!--
 										<dt>
 											<label><?=lang('Address')?></label>
 										</dt>
@@ -135,28 +128,34 @@
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
 										</dd>
-
+									-->
 										<dt>
-											<label><?=lang('Email')?></label>
+											<label><?=lang('operator:personal_email')?></label>
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[email]'); ?>
-											<input type="text" class="large <?php if ($err) echo 'invalid'; ?>"
-												name="contact[email]" maxlength='45'
+											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+												name="contact[email]" maxlength='80'
 												value='<?= set_value('contact[email]', isset($contact['email']) ? $contact['email'] : '')  ?>'
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
+											<span class="invalid-side-note">
+												required
+											</span>
 										</dd>
-
+									<!--
 										<dt>
 											<label><?=lang('operator:contact:purpose')?></label>
 										</dt>
 										<dd class="text">
 											<p><?=lang('operator:contact:purpose:text')?></p>
 										</dd>
+									-->
+
 									</dl>
 								</fieldset>
-								<button type="submit"><?=lang('Save')?></button>
+								<button type="submit"><?=lang('Update')?></button>
+								&nbsp; 	<a href="<?= site_url('strategy/manage/index')?>">Cancel</a>
 							</form>
 
 					</div>

@@ -84,11 +84,17 @@ class Contact_Model extends Base_Model {
 	        if (isset($contact['phone']))
 	            $record['phone'] = $contact['phone'];
 
+	        if (isset($contact['fax']))
+	            $record['fax'] = $contact['fax'];
+
 	        if (isset($contact['gender']))
 	            $record['gender'] = $contact['gender'];
 	        
 	        if (isset($contact['email']))
 	            $record['email'] = $contact['email'];
+
+	        if (isset($contact['website']))
+	            $record['website'] = $contact['website'];
 
 	        $ret = $this->update($contact_id, $record);
 	        if (!$ret)

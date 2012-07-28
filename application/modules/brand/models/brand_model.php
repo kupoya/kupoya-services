@@ -85,6 +85,8 @@ class Brand_Model extends Base_Model {
             $ret = $this->authorize_action($data);
             if (!$ret)
                 return FALSE;
+
+            $record = array();
 	        
 	        $brand_id = $brand['id'];
 	        if (isset($brand['name']))
