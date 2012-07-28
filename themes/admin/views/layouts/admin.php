@@ -75,14 +75,14 @@
 			<img src="<?php $brand_picture = kupoya_operator('brand_picture'); if (!is_array($brand_picture)) echo base_url($brand_picture); ?>"
 					alt="Sample User Avatar">
 			<div>
-				<a href="<?= site_url('operator/view_contact'); ?>" title="Account Settings and Profile Page">
+				<a href="<?= site_url('brand/edit_brand_profile'); ?>" title="Account Settings and Profile Page">
 					<?php $name = kupoya_operator('name'); if (!is_array($name)) echo $name; ?>
 				</a>
 				<em><?php //$brand_name = kupoya_operator('brand_name'); if (!is_array($brand_name)) echo $brand_name; ?></em>
 				<ul>
-					<li><a class="button-link" href="<?= site_url('operator/change_password'); ?>" title="Change your account password" rel="tooltip">change password</a></li>
+					<li><a class="button-link" href="<?= site_url('operator/change_password'); ?>" rel="">change password</a></li>
 					<br/>
-					<li><a class="button-link" href="<?= site_url('auth/logout'); ?>" title="Signout" rel="tooltip">sign-out</a></li>
+					<li><a class="button-link" href="<?= site_url('auth/logout'); ?>" rel="">sign-out</a></li>
 				</ul>
 			</div>
 		</section>
