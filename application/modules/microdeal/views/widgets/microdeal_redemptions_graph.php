@@ -47,7 +47,7 @@
 				          title: '',
 				          pointSize: 5,
 				          hAxis: {format: 'MMM d, y'},
-				          colors: ['#395A99','#37C644'],
+				          colors: ['#395A99','#67AA28'],
 				          series: {
 				            0: {
 				                targetAxisIndex: 0,
@@ -55,7 +55,7 @@
 				            },
 				            1: {
 				                targetAxisIndex: 1,
-				                textStyle:{color: '#37C644'},
+				                textStyle:{color: '#67AA28'},
 				            }
 				          },
 				          vAxes: {
@@ -69,7 +69,7 @@
 				                minValue: 0,
 				                //maxValue: 60000,
 				               	label: 'Est. exposure',
-				               	textStyle:{color: '#37C644'},
+				               	textStyle:{color: '#67AA28'},
 				               
 				            }
 				          }

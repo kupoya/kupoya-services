@@ -94,6 +94,7 @@
 									</dl>
 								</fieldset>
 								<button type="submit"><?=lang('Save');?></button>
+								&nbsp; 	<a href="<?= site_url('strategy/manage/index')?>">Cancel</a>
 							</form>
 
 					</div>

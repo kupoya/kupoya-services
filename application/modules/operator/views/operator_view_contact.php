@@ -54,14 +54,12 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[first_name]'); ?>
-											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="contact[first_name]" maxlength='100'
 												value='<?= set_value('contact[first_name]', isset($contact['first_name']) ? $contact['first_name'] : '')  ?>'
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
-											<span class="invalid-side-note">
-												required
-											</span>
+											<font color="red"> * required </font>
 										</dd>
 
 										<dt>
@@ -69,14 +67,12 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[last_name]'); ?>
-											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="contact[last_name]" maxlength='100'
 												value='<?= set_value('contact[last_name]', isset($contact['last_name']) ? $contact['last_name'] : '')  ?>'
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
-											<span class="invalid-side-note">
-												required
-											</span>
+											<font color="red"> * required </font>
 										</dd>
 
 									<!--
@@ -134,14 +130,12 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[email]'); ?>
-											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="contact[email]" maxlength='80'
 												value='<?= set_value('contact[email]', isset($contact['email']) ? $contact['email'] : '')  ?>'
 												>
 											<?php if ($err) echo '<span class="invalid-side-note">' . $err .'</span>'; ?>
-											<span class="invalid-side-note">
-												required
-											</span>
+											<font color="red"> * required </font>
 										</dd>
 									<!--
 										<dt>
