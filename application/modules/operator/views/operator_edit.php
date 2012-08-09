@@ -58,7 +58,7 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('old_password'); ?>
-											<input type="password" class="large <?php if ($err) echo 'invalid'; ?>"
+											<input type="password" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="old_password" maxlength='100'
 												value='<?= set_value('old_password', '') ?>'
 												>
@@ -71,7 +71,7 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('new_password'); ?>
-											<input type="password" class="large <?php if ($err) echo 'invalid'; ?>"
+											<input type="password" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="new_password" maxlength='100'
 												value='<?= set_value('new_password', '') ?>'
 												>
@@ -84,7 +84,7 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('new_password_confirm'); ?>
-											<input type="password" class="large <?php if ($err) echo 'invalid'; ?>"
+											<input type="password" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="new_password_confirm" maxlength='100'
 												value='<?= set_value('new_password_confirm', '') ?>'
 												>

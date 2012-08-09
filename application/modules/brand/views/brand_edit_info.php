@@ -44,7 +44,7 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('brand[name]'); ?>
-											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="brand[name]" maxlength='100'
 												value='<?= set_value('brand[name]', isset($brand['name']) ? $brand['name'] : '')  ?>'
 												>
@@ -57,7 +57,7 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[address]'); ?>
-											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="contact[address]" maxlength='45'
 												value='<?= set_value('contact[address]', isset($contact['address']) ? $contact['address'] : '')  ?>'
 												>
@@ -410,7 +410,7 @@
 										</dt>
 										<dd>
 											<?php $err = form_error('contact[website]'); ?>
-											<input type="text" class="medium <?php if ($err) echo 'invalid'; ?>"
+											<input type="text" class="small <?php if ($err) echo 'invalid'; ?>"
 												name="contact[website]" maxlength='100'
 												value='<?= set_value('contact[website]', isset($contact['website']) ? $contact['website'] : '')  ?>'
 												>
