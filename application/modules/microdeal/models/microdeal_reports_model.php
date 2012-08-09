@@ -378,7 +378,9 @@ class Microdeal_Reports_Model extends Strategy_Model {
 		if (!$date_start)
 		{
 			$now = new DateTime('now');
-			$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
+			// instead of defaulting to last 2 calendaric months, let's start from campaign's evolution
+			//$date_start = $now->modify('first day of last month')->format('Y-m-d 00:00:01');
+			$date_start = $now->format('2011-01-01 00:00:00');
 		}
 	
 		if (!$date_end)

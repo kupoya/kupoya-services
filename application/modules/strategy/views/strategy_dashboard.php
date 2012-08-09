@@ -175,7 +175,7 @@ $data['campaign'] = $campaign;
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#67AA28'],
 				          hAxis: {title: 'Age groups', titleTextStyle: {color: 'black'}},
-				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
+				          vAxis: {title: 'Deal claims', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -301,7 +301,7 @@ $data['campaign'] = $campaign;
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#67AA28'],
 				          hAxis: {title: 'Day of week', titleTextStyle: {color: 'black'}},
-				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
+				          vAxis: {title: 'Deal claims', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
@@ -345,7 +345,7 @@ $data['campaign'] = $campaign;
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#67AA28'],
 				          hAxis: {title: 'Friends', titleTextStyle: {color: 'black'}},
-				          vAxis: {title: 'Deal Claims', titleTextStyle: {color: 'black'}}
+				          vAxis: {title: 'Deal claims', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
