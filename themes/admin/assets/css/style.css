@@ -1481,8 +1481,8 @@ table .actions .delete { background:url('../img/icons/icon_table_delete.png') no
 }
 .login section[role=main] > a {
 	background:url('../img/sample_logo.png') no-repeat;
-	width:148px;
-	height:31px;
+	width:228px;
+	height:110px;
 	text-indent:-9999em;
 	display:block;
 }
