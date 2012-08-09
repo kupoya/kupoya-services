@@ -66,7 +66,6 @@
 		<!-- Header with logo and headline -->
 		<header>
 			<a href="<?= base_url() ?>" title="Back to Homepage"></a>
-			<h1>advanced marketing solutions!</h1>
 			<?php //echo isset($template['partials']['header']) ? $template['partials']['header'] : '' ?>
 		</header>
 		
