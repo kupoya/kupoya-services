@@ -5,8 +5,8 @@
 					<!-- Article Header Tab Navigation -->
 					<nav>
 						<ul class="tab-switch-url">
-							<li><a href="<?=base_url().'brand/edit_brand_profile'?>" class="default-tab current" rel="tooltip" title="Switch to next tab"><?=lang('operator:profile')?></a></li>
-							<li><a href="<?=base_url().'operator/change_password'?>" rel="tooltip" title="Switch to next tab"><?=lang('operator:change_password')?></a></li>
+							<li><a href="<?=base_url().'brand/edit_brand_profile'?>" class="default-tab current" title="Switch to next tab"><?=lang('operator:profile')?></a></li>
+							<li><a href="<?=base_url().'operator/change_password'?>" title="Switch to next tab"><?=lang('operator:change_password')?></a></li>
 						</ul>
 					</nav>
 					<!-- /Article Header Tab Navigation -->
