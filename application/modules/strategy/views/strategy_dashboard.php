@@ -340,12 +340,12 @@ $data['campaign'] = $campaign;
 					  var options = {
 				          width: 550, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
-				          title: 'Deal claims grouped by friend count',
+				          title: 'Number of users grouped by friend count',
 				          legend: {position: 'none'},
 				          titleTextStyle: {fontSize: 14},
 				          colors: ['#395A99','#67AA28'],
 				          hAxis: {title: 'Friends', titleTextStyle: {color: 'black'}},
-				          vAxis: {title: 'Deal claims', titleTextStyle: {color: 'black'}}
+				          vAxis: {title: 'Number of users', titleTextStyle: {color: 'black'}}
 				        };
 				      
 				      // Instantiate and draw our chart, passing in some options.
