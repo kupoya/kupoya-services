@@ -390,7 +390,7 @@ class Microdeal_Reports_Model extends Strategy_Model {
 		}
 
 	    //$this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT(coup.purchased_time,"%c/%e") AS t, SUM(ui.friends_count) AS exposure', FALSE);
-	    $this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE(coup.purchased_time) AS t, SUM(ui.friends_count) AS exposure');
+	    $this->db->select('COUNT(coup.strategy_id) AS redemptions, DATE_FORMAT(coup.purchased_time,"%c-%e") AS t, SUM(ui.friends_count) AS exposure', FALSE);
 	    $this->db->from('coupon AS coup');
 	    $this->db->join('user AS u', 'u.id = coup.user_id');
 	    $this->db->join('user_info AS ui', 'ui.id = u.user_info_id');
