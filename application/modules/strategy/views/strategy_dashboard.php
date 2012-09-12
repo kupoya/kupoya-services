@@ -127,7 +127,7 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 550, height: 400,
+				          width: 450, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
 				          title: 'Deal claims grouped by gender',
 				          titleTextStyle: {fontSize: 14},
@@ -168,7 +168,7 @@ $data['campaign'] = $campaign;
 
 				      // Chart options
 					  var options = {
-				          width: 550, height: 400,
+				          width: 450, height: 400,
 				          //title: '<?php echo lang("strategy:requests_graph_title")?>'
 				          legend: {position: 'none'},
 				          title: 'Deal claims grouped by age',
